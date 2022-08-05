@@ -1,0 +1,31 @@
+{
+  "name": "acquire-poirot",
+  "version": "1.0.0",
+  "description": "Acquire multiplayer game",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test",
+    "start": "node .",
+    "setup": "bash bin/dev_setup.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/step-8/acquire-poirot.git"
+  },
+  "keywords": [
+    "acquire",
+    "shares",
+    "stock",
+    "stock-market",
+    "corporation",
+    "money",
+    "profit",
+    "game"
+  ],
+  "author": "poirot-team",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/step-8/acquire-poirot/issues"
+  },
+  "homepage": "https://github.com/step-8/acquire-poirot#readme"
+}
