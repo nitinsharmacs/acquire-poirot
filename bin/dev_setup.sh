@@ -5,7 +5,8 @@ echo "Creating data directory"
 
 mkdir data 2> /dev/null
 
-echo "Adding git template config"
+echo "Configuring git"
 git config --local commit.template .github/commit_template
+git config --local core.hookspath .github/hookspath
 
 echo "Done"
