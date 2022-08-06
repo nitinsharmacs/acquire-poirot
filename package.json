@@ -6,7 +6,10 @@
   "scripts": {
     "test": "mocha test",
     "start": "node .",
-    "setup": "bash bin/dev_setup.sh"
+    "dev-setup": "bash bin/dev_setup.sh",
+    "setup": "bash bin/app_setup.sh",
+    "lint": "eslint .",
+    "rec-test": "mocha -w test"
   },
   "repository": {
     "type": "git",
