@@ -3,9 +3,10 @@ const morgan = require('morgan');
 const cookieSession = require('cookie-session');
 const cookieParser = require('cookie-parser');
 const { createAuthRouter } = require('./routers/authRouter');
+const { createGame } = require('./handlers/createGame');
 
 const createApp = (config, fs) => {
-  const { root, cookieConfig, resources } = config;
+  const { root, cookieConfig, resources, templates } = config;
   const app = express();
   app.use(morgan('tiny'));
   app.use(cookieParser());
@@ -18,6 +19,7 @@ const createApp = (config, fs) => {
   const authRouter = createAuthRouter(resources, fs);
 
   app.use(authRouter);
+  app.get('/create-game', createGame(templates));
   app.use(express.static(root));
   return app;
 };
