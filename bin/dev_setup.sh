@@ -6,7 +6,7 @@ RESET="\x1b[0m"
 
 echo "Configuring git"
 git config --local commit.template .github/commit_template
-git config --local core.hookspath .github/hookspath
+git config --local core.hookspath .github/hooks
 echo -e "Configured git\n"
 
 echo "Installing vscode extensions"

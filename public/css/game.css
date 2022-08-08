@@ -26,13 +26,18 @@ body {
   height: 100vh;
   padding: 1em;
   display: flex;
+  column-gap: var(--component-gap);
 }
 
 .page>section {
   display: flex;
   flex-direction: column;
-  justify-content: stretch;
   height: 100%;
+  row-gap: var(--component-gap);
+}
+
+.page>section:nth-child(2) {
+  flex: 1;
 }
 
 /* BOARD-------------------------------------------- */
@@ -40,7 +45,7 @@ body {
   display: flex;
   border: 2px solid black;
   border-radius: var(--component-border-radius);
-  max-width: 1100px;
+  justify-content: space-between;
 }
 
 .board-tiles {
@@ -48,9 +53,10 @@ body {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: repeat(9, 1fr);
-  gap: 0.5em;
+  gap: 0.6em;
   padding: var(--component-padding);
-  flex: 1;
+  width: 1000px;
+  justify-items: center;
 }
 
 .tile-item {
@@ -58,7 +64,7 @@ body {
   aspect-ratio: 1/1;
   align-self: stretch;
   font-size: 1.5rem;
-  background-color: lightgray;
+  background-color: rgb(232, 228, 228);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -74,7 +80,7 @@ body {
 
 .branding {
   position: relative;
-  width: 100px;
+  width: 120px;
 }
 
 .branding h2 {
@@ -102,21 +108,23 @@ body {
   transform: translate(-50%, -50%) rotate(90deg);
 }
 
+/* COMMON STYLES -------------------------------------------- */
+.component-heading {
+  text-align: center;
+}
+
 /* PLAYER RESOURCES -------------------------------------------- */
 
 .player-resources {
-  margin-top: var(--component-gap);
   border-radius: var(--component-border-radius);
   padding: var(--component-padding);
   display: flex;
   column-gap: var(--component-gap);
   border: 2px solid black;
   height: 100%;
-  max-width: 1100px;
 }
 
 .player-resources>section>h3 {
-  text-align: center;
   margin-bottom: 1em;
 }
 
@@ -128,7 +136,7 @@ body {
 .player-tiles {
   border-right: 2px solid black;
   border-left: 2px solid black;
-  padding: 0 1.2em;
+  padding: 0 2em;
 }
 
 .player-tiles>div {
@@ -139,8 +147,14 @@ body {
   width: 220px;
 }
 
+.player-tiles .tile-item {
+  background-color: lightgray;
+  cursor: pointer;
+}
+
 .player-stocks {
-  flex: 1;
+  flex: 0.8;
+  margin: 0 auto;
 }
 
 .player-stocks>div {
@@ -170,4 +184,121 @@ body {
 .quantum {
   border: 2px solid var(--quantum-border);
   background-color: var(--quantum-bg);
+}
+
+/* PLAYERS ORDER -------------------------------------------- */
+
+.players {
+  border: 2px solid black;
+  padding: var(--component-padding);
+  border-radius: var(--component-border-radius);
+  display: flex;
+  flex-direction: column;
+  gap: var(--component-gap);
+  width: 200px;
+}
+
+.player-item {
+  display: flex;
+  align-items: center;
+  column-gap: var(--component-gap);
+}
+
+.highlight {
+  width: 25px;
+  height: 25px;
+  border: 2px solid black;
+  border-radius: 50%;
+}
+
+.player-item.active .highlight {
+  background-color: lightgray;
+}
+
+.player-item.active {
+  font-weight: bold;
+}
+
+.player-activities {
+  display: flex;
+  height: 50%;
+  column-gap: var(--component-gap);
+}
+
+.player-activities>div:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.player-activities header {
+  display: flex;
+  justify-content: end;
+  column-gap: var(--component-gap);
+  padding: var(--component-padding);
+  padding-top: 0;
+  padding-right: 0;
+  /* height: 15%; */
+}
+
+.player-activities header button {
+  padding: 0.5em 1em;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.activity-logs {
+  border: 2px solid black;
+  height: 100%;
+  border-radius: var(--component-border-radius);
+  padding: var(--component-padding)
+}
+
+/* STOCK MARKET ------------------------- */
+.stock-market {
+  border: 2px solid black;
+  border-radius: var(--component-border-radius);
+  padding: var(--component-padding);
+  height: 50%;
+}
+
+.corporations {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+}
+
+.corporation-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.corporation-col:first-child {
+  border-right: 2px solid black;
+}
+
+.corporation {
+  display: flex;
+  column-gap: 1em;
+  align-items: center;
+  margin: 1em 0;
+}
+
+.corporation-img {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--component-border-radius);
+}
+
+.corporation-info>p {
+  padding: 0.2em 0;
+  text-align: center;
+}
+
+.corporation-info>p:first-child {
+  border-bottom: 1px solid black;
 }

@@ -1,13 +1,52 @@
 const request = require('supertest');
 const { createApp } = require('../src/app.js');
+const assert = require('assert');
 
-const config = { root: './public' };
+const mockReadFileSync = (expected, expectedEncoding) => {
+  let index = 0;
+  return (fileName, encoding) => {
+    const { content, file } = expected[index];
+    assert.strictEqual(fileName, file);
+    assert.strictEqual(encoding, expectedEncoding);
+    index++;
+    return content;
+  };
+};
+
+const config = {
+  root: './public',
+  cookieConfig: {
+    'COOKIE_NAME': 'sessionId',
+    'COOKIE_KEY': 'hello'
+  },
+  resources: { loginTemplatePath: './login', hostTemplatePath: './host' },
+};
 
 describe('GET /', () => {
   it('should show landing page', (done) => {
-    request(createApp(config))
+
+    const fs = {
+      readFileSync: mockReadFileSync([
+        { file: './login', content: 'Login page with _MESSAGE_' },
+        { file: './host', content: 'hello' }], 'utf8')
+    };
+    request(createApp(config, fs))
       .get('/')
       .expect('Content-type', /html/)
       .expect(200, done);
+  });
+});
+
+describe('GET /create-game', () => {
+  it('should redirect to login page if session not present', (done) => {
+    const fs = {
+      readFileSync: mockReadFileSync([
+        { file: './login', content: 'Login page with _MESSAGE_' },
+        { file: './host', content: 'hello' }], 'utf8')
+    };
+    request(createApp(config, fs))
+      .get('/create-game')
+      .expect('location', '/login')
+      .expect(302, done);
   });
 });
