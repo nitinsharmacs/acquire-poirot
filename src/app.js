@@ -9,6 +9,7 @@ const createApp = (config, fs) => {
   const { root, cookieConfig, resources } = config;
   const app = express();
   app.use(morgan('tiny'));
+  app.use(express.urlencoded({ extended: true }));
   app.use(cookieParser());
 
   app.use(cookieSession({
