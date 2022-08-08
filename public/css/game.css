@@ -8,6 +8,12 @@
   --component-gap: 10px;
   --component-border-radius: 5px;
   --component-padding: 0.5em;
+  --hydra-border: #ff9433;
+  --hydra-bg: #fbe8d6;
+  --sackson-bg: #fbd3d6;
+  --sackson-border: #ff5661;
+  --quantum-bg: #d0e8ec;
+  --quantum-border: #58e0f8;
 }
 
 body {
@@ -16,9 +22,17 @@ body {
 }
 
 .page {
-  width: 100%;
+  width: 100vw;
+  height: 100vh;
   padding: 1em;
   display: flex;
+}
+
+.page>section {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  height: 100%;
 }
 
 /* BOARD-------------------------------------------- */
@@ -26,6 +40,7 @@ body {
   display: flex;
   border: 2px solid black;
   border-radius: var(--component-border-radius);
+  max-width: 1100px;
 }
 
 .board-tiles {
@@ -94,4 +109,65 @@ body {
   border-radius: var(--component-border-radius);
   padding: var(--component-padding);
   display: flex;
+  column-gap: var(--component-gap);
+  border: 2px solid black;
+  height: 100%;
+  max-width: 1100px;
+}
+
+.player-resources>section>h3 {
+  text-align: center;
+  margin-bottom: 1em;
+}
+
+.player-money {
+  width: 15%;
+  text-align: center;
+}
+
+.player-tiles {
+  border-right: 2px solid black;
+  border-left: 2px solid black;
+  padding: 0 1.2em;
+}
+
+.player-tiles>div {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 0.5em;
+  width: 220px;
+}
+
+.player-stocks {
+  flex: 1;
+}
+
+.player-stocks>div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8em;
+  justify-content: center;
+}
+
+.stock {
+  padding: 0.5em 1em;
+  border-radius: var(--component-border-radius);
+  text-align: center;
+  width: 120px;
+}
+
+.hydra {
+  border: 2px solid var(--hydra-border);
+  background-color: var(--hydra-bg);
+}
+
+.sackson {
+  border: 2px solid var(--sackson-border);
+  background-color: var(--sackson-bg);
+}
+
+.quantum {
+  border: 2px solid var(--quantum-border);
+  background-color: var(--quantum-bg);
 }
