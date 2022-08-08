@@ -18,7 +18,11 @@ const config = {
   cookieConfig: {
     sessionKey: 'hello'
   },
-  resources: { loginTemplatePath: './login', hostTemplatePath: './host', signupTemplatePath: './signup' },
+  resources: {
+    loginTemplatePath: './login',
+    hostTemplatePath: './host',
+    signupTemplatePath: './signup'
+  },
 };
 
 describe('GET /', () => {
