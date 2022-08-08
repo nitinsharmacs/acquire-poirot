@@ -21,15 +21,17 @@
 
     <div class="option-block">
 
-      <div class="options">
-        <div class="option">
-          <input type="text" name="players-no" id="players-no"
-            placeholder="Enter number of players">
+      <form action="/host" method="post">
+        <div class="options">
+          <div class="option">
+            <input type="text" name="noOfPlayers" id="players-no"
+              placeholder="Enter number of players">
+          </div>
+          <div class="option">
+            <input type="submit" value="Host Game">
+          </div>
         </div>
-        <div class="option">
-          <input type="button" value="Host Game">
-        </div>
-      </div>
+      </form>
 
     </div>
 

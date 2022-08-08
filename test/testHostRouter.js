@@ -16,22 +16,36 @@ const mockReadFileSync = (expected, expectedEncoding) => {
 const config = {
   root: './public',
   cookieConfig: {
-    sessionKey: 'hello'
+    sessionKey: 'abcd'
   },
   resources: { loginTemplatePath: './login', hostTemplatePath: './host' },
 };
 
-describe('GET /', () => {
-  it('should show landing page', (done) => {
-
+describe('GET /host', () => {
+  it('should redirect to login page if session not present', (done) => {
     const fs = {
       readFileSync: mockReadFileSync([
         { file: './login', content: 'Login page with _MESSAGE_' },
         { file: './host', content: 'hello' }], 'utf8')
     };
     request(createApp(config, fs))
-      .get('/')
-      .expect('Content-type', /html/)
-      .expect(200, done);
+      .get('/host')
+      .expect('location', '/login?ref=host')
+      .expect(302, done);
   });
 });
+
+describe('POST /host', () => {
+  it('should redirect to login page if session not present', (done) => {
+    const fs = {
+      readFileSync: mockReadFileSync([
+        { file: './login', content: 'Login page with _MESSAGE_' },
+        { file: './host', content: 'hello' }], 'utf8')
+    };
+    request(createApp(config, fs))
+      .post('/host')
+      .expect('location', '/login?ref=host')
+      .expect(302, done);
+  });
+});
+
