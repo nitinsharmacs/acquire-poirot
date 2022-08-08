@@ -16,7 +16,7 @@ const mockReadFileSync = (expected, expectedEncoding) => {
 describe('GET /login', () => {
   const appConfig = {
     root: './public',
-    cookieConfig: { cookieName: 'abc', sessionKey: 'abc' },
+    cookieConfig: { sessionKey: 'abc' },
     resources: { loginTemplatePath: './login' }
   };
 
@@ -37,7 +37,7 @@ describe('GET /login', () => {
 describe('GET /login', () => {
   const appConfig = {
     root: './public',
-    cookieConfig: { cookieName: 'abc', sessionKey: 'abc' },
+    cookieConfig: { sessionKey: 'abc' },
     resources: { loginTemplatePath: './login' }
   };
 
@@ -59,7 +59,7 @@ describe('GET /login', () => {
 describe('GET /login', () => {
   const appConfig = {
     root: './public',
-    cookieConfig: { cookieName: 'abc', sessionKey: 'abc' },
+    cookieConfig: { sessionKey: 'abc' },
     resources: { loginTemplatePath: './login' }
   };
 

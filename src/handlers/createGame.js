@@ -5,7 +5,7 @@ const serveHostPage = (req, res, hostPage) => {
 };
 
 const createGame = ({ hostTemplatePath }, fs) => (req, res) => {
-  if (!req.session.isPopulated) {
+  if (!req.session.playerId) {
     res.redirect('/login?ref=host');
     return;
   }

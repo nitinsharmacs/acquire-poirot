@@ -42,12 +42,15 @@ const validateUser = (req, res) => {
     res.cookie('errCode', 404);
     return res.redirect(`/login${queryString}`);
   }
-  req.session = { playerName: username };
-  return ref ? res.redirect(ref) : res.redirect('/');
+  req.session.playerName = username;
+  req.session.playerId = users[username].id;
+  req.session.save(() => {
+    ref ? res.redirect(ref) : res.redirect('/');
+  });
 };
 
 const redirectIfLoggedIn = (req, res, next) => {
-  if (req.session.isPopulated) {
+  if (req.session.playerId) {
     return res.redirect('/');
   }
   next();

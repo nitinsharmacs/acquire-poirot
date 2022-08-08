@@ -1,6 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
-const cookieSession = require('cookie-session');
+const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const { createAuthRouter } = require('./routers/authRouter');
 const { createGame } = require('./handlers/createGame');
@@ -11,11 +11,13 @@ const createApp = (config, fs) => {
   app.use(morgan('tiny'));
   app.use(express.urlencoded({ extended: true }));
   app.use(cookieParser());
-
-  app.use(cookieSession({
-    name: cookieConfig.cookieName,
-    keys: [cookieConfig.sessionKey]
-  }));
+  app.use(session(
+    {
+      saveUninitialized: false,
+      resave: false,
+      secret: cookieConfig.sessionKey
+    }
+  ));
 
   const authRouter = createAuthRouter(resources, fs);
 
