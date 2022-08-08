@@ -48,14 +48,14 @@
     "handle-callback-err": "error",
     "id-length": "error",
     "key-spacing": "error",
-    "max-len": "error",
+    "max-len": "off",
     "max-params": [
       "error",
       {
         "max": 4
       }
     ],
-    "max-statements": "error",
+    "max-statements": "off",
     "no-console": "off",
     "no-else-return": "error",
     "no-eval": "error",
@@ -69,7 +69,7 @@
     "max-depth": "error",
     "no-mixed-operators": "error",
     "complexity": [
-      "error",
+      "off",
       4
     ],
     "no-extra-parens": "error",
@@ -93,7 +93,7 @@
         "max": 1
       }
     ],
-    "no-unused-vars": "warn"
+    "no-unused-vars": "off"
   },
   "overrides": [
     {

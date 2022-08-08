@@ -67,3 +67,7 @@ form .login-button {
   color:#F8F9FA;
   cursor: pointer;
 }
+
+form .message {
+  color: red;
+}
