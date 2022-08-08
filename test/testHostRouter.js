@@ -18,7 +18,7 @@ const config = {
   cookieConfig: {
     sessionKey: 'abcd'
   },
-  resources: { loginTemplatePath: './login', hostTemplatePath: './host' },
+  resources: { loginTemplatePath: './login', signupTemplatePath: './signup', hostTemplatePath: './host' },
 };
 
 describe('GET /host', () => {
@@ -26,6 +26,7 @@ describe('GET /host', () => {
     const fs = {
       readFileSync: mockReadFileSync([
         { file: './login', content: 'Login page with _MESSAGE_' },
+        { file: './signup', content: 'Signup page with _MESSAGE_' },
         { file: './host', content: 'hello' }], 'utf8')
     };
     request(createApp(config, fs))
@@ -40,6 +41,7 @@ describe('POST /host', () => {
     const fs = {
       readFileSync: mockReadFileSync([
         { file: './login', content: 'Login page with _MESSAGE_' },
+        { file: './signup', content: 'Signup page with _MESSAGE_' },
         { file: './host', content: 'hello' }], 'utf8')
     };
     request(createApp(config, fs))

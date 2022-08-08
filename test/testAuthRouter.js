@@ -16,15 +16,18 @@ const mockReadFileSync = (expected, expectedEncoding) => {
 describe('GET /login', () => {
   const appConfig = {
     root: './public',
-    cookieConfig: { sessionKey: 'abc' },
-    resources: { loginTemplatePath: './login' }
+    cookieConfig: {
+      sessionKey: 'hello'
+    },
+    resources: { loginTemplatePath: './login', hostTemplatePath: './host', signupTemplatePath: './signup' },
   };
 
   it('should serve login page', (done) => {
 
     const fs = {
       readFileSync: mockReadFileSync([
-        { file: './login', content: 'Login page with _MESSAGE_' }], 'utf8')
+        { file: './login', content: 'Login page with _MESSAGE_' },
+        { file: './signup', content: 'Signup page with _MESSAGE_' }], 'utf8')
     };
 
     const req = request(createApp(appConfig, fs));
@@ -38,14 +41,15 @@ describe('GET /login', () => {
   const appConfig = {
     root: './public',
     cookieConfig: { sessionKey: 'abc' },
-    resources: { loginTemplatePath: './login' }
+    resources: { loginTemplatePath: './login', signupTemplatePath: './signup' }
   };
 
   it('should serve login page with apt error message 404(invalid credentials)', (done) => {
 
     const fs = {
       readFileSync: mockReadFileSync([
-        { file: './login', content: 'Login page with _MESSAGE_' }], 'utf8')
+        { file: './login', content: 'Login page with _MESSAGE_' },
+        { file: './signup', content: 'Signup page with _MESSAGE_' }], 'utf8')
     };
 
     const req = request(createApp(appConfig, fs));
@@ -60,14 +64,15 @@ describe('GET /login', () => {
   const appConfig = {
     root: './public',
     cookieConfig: { sessionKey: 'abc' },
-    resources: { loginTemplatePath: './login' }
+    resources: { loginTemplatePath: './login', signupTemplatePath: './signup' }
   };
 
   it('should serve login page with apt error message 401(fields cannot be empty)', (done) => {
 
     const fs = {
       readFileSync: mockReadFileSync([
-        { file: './login', content: 'Login page with _MESSAGE_' }], 'utf8')
+        { file: './login', content: 'Login page with _MESSAGE_' },
+        { file: './signup', content: 'Signup page with _MESSAGE_' }], 'utf8')
     };
 
     const req = request(createApp(appConfig, fs));
@@ -82,13 +87,14 @@ describe('POST /login', () => {
   const appConfig = {
     root: './public',
     cookieConfig: { sessionKey: 'abc' },
-    resources: { loginTemplatePath: './login' }
+    resources: { loginTemplatePath: './login', signupTemplatePath: './signup' }
   };
 
   it('should log the user in and set cookie', (done) => {
     const fs = {
       readFileSync: mockReadFileSync([
-        { file: './login', content: 'Login page with _MESSAGE_' }], 'utf8')
+        { file: './login', content: 'Login page with _MESSAGE_' },
+        { file: './signup', content: 'Signup page with _MESSAGE_' }], 'utf8')
     };
     const req = request(createApp(appConfig, fs));
     req.post('/login')
@@ -100,7 +106,8 @@ describe('POST /login', () => {
   it('should redirect to /host', (done) => {
     const fs = {
       readFileSync: mockReadFileSync([
-        { file: './login', content: 'Login page with _MESSAGE_' }], 'utf8')
+        { file: './login', content: 'Login page with _MESSAGE_' },
+        { file: './signup', content: 'Signup page with _MESSAGE_' }], 'utf8')
     };
     const req = request(createApp(appConfig, fs));
     req.post('/login?ref=/host')
@@ -112,7 +119,8 @@ describe('POST /login', () => {
   it('should redirect to /join/1', (done) => {
     const fs = {
       readFileSync: mockReadFileSync([
-        { file: './login', content: 'Login page with _MESSAGE_' }], 'utf8')
+        { file: './login', content: 'Login page with _MESSAGE_' },
+        { file: './signup', content: 'Signup page with _MESSAGE_' }], 'utf8')
     };
     const req = request(createApp(appConfig, fs));
     req.post('/login?ref=/join/1')

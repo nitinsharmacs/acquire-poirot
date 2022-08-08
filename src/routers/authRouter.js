@@ -23,6 +23,10 @@ const serveLoginPage = loginTemplate => (req, res) => {
   res.end(updatedTemplate);
 };
 
+const serveSignupPage = signupTemplate => (req, res) => {
+  return res.end(signupTemplate);
+};
+
 const invalidCredentials = (users, username, password) => {
   return !users[username] || users[username].password !== password;
 };
@@ -56,15 +60,15 @@ const redirectIfLoggedIn = (req, res, next) => {
   next();
 };
 
-const createAuthRouter = ({ loginTemplatePath }, fs) => {
+const createAuthRouter = ({ loginTemplatePath, signupTemplatePath }, fs) => {
   const loginTemplate = fs.readFileSync(loginTemplatePath, 'utf8');
+  const signupTemplate = fs.readFileSync(signupTemplatePath, 'utf8');
+
   const router = express.Router();
   router.use(['/login', '/sign-up'], redirectIfLoggedIn);
   router.get('/login', serveLoginPage(loginTemplate));
   router.post('/login', validateUser);
-  router.get('/sign-up', (req, res) => {
-    res.end('Mocked signup');
-  });
+  router.get('/sign-up', serveSignupPage(signupTemplate));
   return router;
 };
 

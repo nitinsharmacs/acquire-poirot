@@ -18,7 +18,7 @@ const config = {
   cookieConfig: {
     sessionKey: 'hello'
   },
-  resources: { loginTemplatePath: './login', hostTemplatePath: './host' },
+  resources: { loginTemplatePath: './login', hostTemplatePath: './host', signupTemplatePath: './signup' },
 };
 
 describe('GET /', () => {
@@ -27,6 +27,7 @@ describe('GET /', () => {
     const fs = {
       readFileSync: mockReadFileSync([
         { file: './login', content: 'Login page with _MESSAGE_' },
+        { file: './signup', content: 'Signup page with _MESSAGE_' },
         { file: './host', content: 'hello' }], 'utf8')
     };
     request(createApp(config, fs))
