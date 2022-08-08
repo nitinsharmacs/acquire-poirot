@@ -1,6 +1,8 @@
 #! /bin/bash
 
 echo "Setting up the project"
-echo "Creating data directory"
-
+echo -e "Creating data directory\n"
 mkdir data 2> /dev/null
+
+echo "Installing dependencies"
+npm install
