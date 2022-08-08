@@ -21,6 +21,9 @@ const createApp = (config, fs) => {
 
   app.use(authRouter);
   app.get('/host', createGame(resources, fs));
+  app.get('/join/:id', (req, res) => {
+    res.end('Mocked join');
+  });
   app.use(express.static(root));
   return app;
 };

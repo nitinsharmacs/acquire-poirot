@@ -47,11 +47,22 @@ const validateUser = (req, res) => {
   return res.redirect('/');
 };
 
+const redirectIfLoggedIn = (req, res, next) => {
+  if (req.session.isPopulated) {
+    return res.redirect('/');
+  }
+  next();
+};
+
 const createAuthRouter = ({ loginTemplatePath }, fs) => {
   const loginTemplate = fs.readFileSync(loginTemplatePath, 'utf8');
   const router = express.Router();
+  router.use(['/login', '/sign-up'], redirectIfLoggedIn);
   router.get('/login', serveLoginPage(loginTemplate));
   router.post('/login', validateUser);
+  router.get('/sign-up', (req, res) => {
+    res.end('Mocked signup');
+  });
   return router;
 };
 
