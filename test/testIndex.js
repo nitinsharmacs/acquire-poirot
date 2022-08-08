@@ -37,7 +37,7 @@ describe('GET /', () => {
   });
 });
 
-describe('GET /create-game', () => {
+describe('GET /host', () => {
   it('should redirect to login page if session not present', (done) => {
     const fs = {
       readFileSync: mockReadFileSync([
@@ -45,8 +45,8 @@ describe('GET /create-game', () => {
         { file: './host', content: 'hello' }], 'utf8')
     };
     request(createApp(config, fs))
-      .get('/create-game')
-      .expect('location', '/login')
+      .get('/host')
+      .expect('location', '/login?ref=host')
       .expect(302, done);
   });
 });

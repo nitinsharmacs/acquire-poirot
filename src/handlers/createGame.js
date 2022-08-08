@@ -5,8 +5,8 @@ const serveHostPage = (req, res, hostPage) => {
 };
 
 const createGame = ({ hostTemplatePath }, fs) => (req, res) => {
-  if (!req.session.sessionId) {
-    res.redirect('/login');
+  if (!req.session.isPopulated) {
+    res.redirect('/login?ref=host');
     return;
   }
   const hostPage = fs.readFileSync(hostTemplatePath, 'utf8');

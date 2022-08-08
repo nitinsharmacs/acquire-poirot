@@ -20,7 +20,7 @@ const createApp = (config, fs) => {
   const authRouter = createAuthRouter(resources, fs);
 
   app.use(authRouter);
-  app.get('/create-game', createGame(resources, fs));
+  app.get('/host', createGame(resources, fs));
   app.use(express.static(root));
   return app;
 };
