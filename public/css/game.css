@@ -1,0 +1,97 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --component-gap: 10px;
+  --component-border-radius: 5px;
+  --component-padding: 0.5em;
+}
+
+body {
+  font-family: 'Recursive';
+  font-size: 18px;
+}
+
+.page {
+  width: 100%;
+  padding: 1em;
+  display: flex;
+}
+
+/* BOARD-------------------------------------------- */
+.board {
+  display: flex;
+  border: 2px solid black;
+  border-radius: var(--component-border-radius);
+}
+
+.board-tiles {
+  width: fit-content;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(9, 1fr);
+  gap: 0.5em;
+  padding: var(--component-padding);
+  flex: 1;
+}
+
+.tile-item {
+  width: 65px;
+  aspect-ratio: 1/1;
+  align-self: stretch;
+  font-size: 1.5rem;
+  background-color: lightgray;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  letter-spacing: 0.05rem;
+  box-shadow: 1px 1px 1px 1px black;
+  border-radius: 2px;
+}
+
+.letter {
+  font-size: 1rem;
+  margin-top: 0.3rem;
+}
+
+.branding {
+  position: relative;
+  width: 100px;
+}
+
+.branding h2 {
+  font-weight: 200;
+  position: absolute;
+  font-size: 3rem;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.branding.left {
+  border-right: 2px solid black;
+}
+
+.branding.right {
+  border-left: 2px solid black;
+}
+
+.branding.left h2 {
+  transform: translate(-50%, -50%) rotate(-90deg);
+}
+
+.branding.right h2 {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+/* PLAYER RESOURCES -------------------------------------------- */
+
+.player-resources {
+  margin-top: var(--component-gap);
+  border-radius: var(--component-border-radius);
+  padding: var(--component-padding);
+  display: flex;
+}
