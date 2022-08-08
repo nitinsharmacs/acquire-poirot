@@ -3,7 +3,7 @@ const morgan = require('morgan');
 const cookieSession = require('cookie-session');
 const cookieParser = require('cookie-parser');
 const { createAuthRouter } = require('./routers/authRouter');
-const { createGame } = require('./handlers/createGame');
+const { createHostRouter } = require('./routers/hostRouter');
 
 const createApp = (config, fs) => {
   const { root, cookieConfig, resources } = config;
@@ -18,9 +18,11 @@ const createApp = (config, fs) => {
   }));
 
   const authRouter = createAuthRouter(resources, fs);
-
   app.use(authRouter);
-  app.get('/host', createGame(resources, fs));
+
+  const hostRouter = createHostRouter(resources, fs);
+  app.use(hostRouter);
+
   app.use(express.static(root));
   return app;
 };
