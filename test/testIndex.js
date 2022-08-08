@@ -16,8 +16,7 @@ const mockReadFileSync = (expected, expectedEncoding) => {
 const config = {
   root: './public',
   cookieConfig: {
-    'COOKIE_NAME': 'sessionId',
-    'COOKIE_KEY': 'hello'
+    sessionKey: 'hello'
   },
   resources: { loginTemplatePath: './login', hostTemplatePath: './host' },
 };
