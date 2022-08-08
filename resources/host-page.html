@@ -1,36 +1,33 @@
-<html>
-
 <head>
-  <title>Acquire</title>
+  <title>Host</title>
   <link rel="stylesheet" href="/css/index.css">
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css?family=Recursive:regular,bold,bolditalic">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"
+    integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
 
   <div class="main">
-    <div class="header">
+    <div class="host-header">
       <div class="heading">
         Acquire
       </div>
-      <div class="adv">plan, build and own the next super city</div>
+      <a href="/" class="fa-solid fa-house-chimney"></a>
     </div>
 
     <div class="option-block">
 
-      <div class="avatar">
-        <img src="/images/hand_share.jpeg" alt="hand-share"
-          class="acquire-avatar">
-      </div>
-
       <div class="options">
         <div class="option">
-          <a href="/create-game">Create game</a>
-          <!-- <a href="/host-page.html">Create game</a> -->
+          <input type="text" name="players-no" id="players-no"
+            placeholder="Enter number of players">
         </div>
         <div class="option">
-          <a href="/guide-page.html">How to play</a>
+          <input type="button" value="Host Game">
         </div>
       </div>
 

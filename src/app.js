@@ -2,13 +2,11 @@ const express = require('express');
 const morgan = require('morgan');
 const cookieSession = require('cookie-session');
 const cookieParser = require('cookie-parser');
-const { createAuthRouter } = require('./routers/authRouter.js');
-const { urlencoded } = require('express');
+const { createAuthRouter } = require('./routers/authRouter');
 
 const createApp = (config, fs) => {
   const { root, cookieConfig, resources } = config;
   const app = express();
-  app.use(urlencoded({ extended: true }));
   app.use(morgan('tiny'));
   app.use(cookieParser());
 
