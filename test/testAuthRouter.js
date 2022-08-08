@@ -77,3 +77,47 @@ describe('GET /login', () => {
       .expect(200, 'Login page with Fields cannot be empty', done);
   });
 });
+
+describe('POST /login', () => {
+  const appConfig = {
+    root: './public',
+    cookieConfig: { sessionKey: 'abc' },
+    resources: { loginTemplatePath: './login' }
+  };
+
+  it('should log the user in and set cookie', (done) => {
+    const fs = {
+      readFileSync: mockReadFileSync([
+        { file: './login', content: 'Login page with _MESSAGE_' }], 'utf8')
+    };
+    const req = request(createApp(appConfig, fs));
+    req.post('/login')
+      .send('username=raju&password=abc')
+      .expect('location', '/')
+      .expect(302, done);
+  });
+
+  it('should redirect to /host', (done) => {
+    const fs = {
+      readFileSync: mockReadFileSync([
+        { file: './login', content: 'Login page with _MESSAGE_' }], 'utf8')
+    };
+    const req = request(createApp(appConfig, fs));
+    req.post('/login?ref=/host')
+      .send('username=raju&password=abc')
+      .expect('location', '/host')
+      .expect(302, done);
+  });
+
+  it('should redirect to /join/1', (done) => {
+    const fs = {
+      readFileSync: mockReadFileSync([
+        { file: './login', content: 'Login page with _MESSAGE_' }], 'utf8')
+    };
+    const req = request(createApp(appConfig, fs));
+    req.post('/login?ref=/join/1')
+      .send('username=raju&password=abc')
+      .expect('location', '/join/1')
+      .expect(302, done);
+  });
+});
