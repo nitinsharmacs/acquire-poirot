@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const lobbyPage = (noOfPlayers, gameId, gameLink) => {
   return `<html>
     <body> 
@@ -13,14 +15,22 @@ const createGameLink = (host, gameId) => {
   return `http://${host}/lobby/${gameId}`;
 };
 
-const hostGame = (req, res) => {
-  if (!req.session.isPopulated) {
+const hostGame = ({ hostTemplatePath }) => (req, res) => {
+  if (!req.session.playerId) {
     res.redirect('/login?ref=host');
     return;
   }
-
-  const { noOfPlayers } = req.body;
   const { host } = req.headers;
+  const { noOfPlayers } = req.body;
+
+  if (!noOfPlayers) {
+    const hostPage = fs.readFileSync(hostTemplatePath, 'utf8');
+    const errorHost = hostPage.replace('_MESSAGE_', 'Please enter no of players');
+    res.type('text/html');
+    res.end(errorHost);
+    return;
+  }
+
   const gameId = new Date().getTime();
   const gameLink = createGameLink(host, gameId);
   res.type('text/html');

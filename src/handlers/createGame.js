@@ -1,8 +1,9 @@
 const fs = require('fs');
 
 const serveHostPage = (req, res, hostPage) => {
+  const pageContent = hostPage.replace('_MESSAGE_', '');
   res.type('text/html');
-  res.end(hostPage);
+  res.end(pageContent);
   return true;
 };
 
