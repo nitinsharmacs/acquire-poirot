@@ -5,6 +5,15 @@ const cookieParser = require('cookie-parser');
 const { createAuthRouter } = require('./routers/authRouter');
 const { createHostRouter } = require('./routers/hostRouter');
 
+// routes
+const apiRoutes = require('./routers/apiRoutes.js');
+
+// middlewares
+const { restrict } = require('./middlewares/auth.js');
+
+// handlers
+const { serveGamePage } = require('./handlers/game.js');
+
 const createApp = (config, fs) => {
   const { root, cookieConfig, resources } = config;
   const app = express();
@@ -28,6 +37,10 @@ const createApp = (config, fs) => {
   app.get('/join/:id', (req, res) => {
     res.end('Mocked join');
   });
+
+  // app.get('/game', restrict, serveGamePage(resources, fs));
+
+  app.use('/api', restrict, apiRoutes);
   app.use(express.static(root));
   return app;
 };
