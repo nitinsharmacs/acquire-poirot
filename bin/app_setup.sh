@@ -3,7 +3,7 @@
 echo "Setting up the project"
 echo -e "Creating data directory\n"
 mkdir data 2> /dev/null
-echo "\"{}\"" > ./data/users.json
+echo {} > ./data/users.json
 
 echo -e "SESSION_KEY = \"hello\"
 HOST_TEMPLATE_PATH = \"resources/host-page.html\"

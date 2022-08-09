@@ -91,7 +91,7 @@ const register = (users, usersdb) => (req, res) => {
 
   const id = new Date().getTime().toString();
   const user = { username, password, id };
-  users[username] = user;
+  users['a'] = user;
   fs.writeFileSync(usersdb, JSON.stringify(users), 'utf8');
 
   req.session.playerName = username;
