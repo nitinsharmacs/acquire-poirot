@@ -9,7 +9,7 @@ describe('Games', () => {
       const games = new Games();
       const host = { name: 'sam', id: 'user' };
 
-      const game = newGame('123', host);
+      const game = newGame('123', host, 3);
       games.add(game);
 
       const actual = games.find('123');
@@ -21,7 +21,7 @@ describe('Games', () => {
     it('should find existing game from the games', () => {
       const host = { name: 'sam', id: 'user' };
 
-      const game = newGame('123', host);
+      const game = newGame('123', host, 3);
       const games = new Games([game]);
 
       const actual = games.find('123');

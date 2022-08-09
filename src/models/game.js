@@ -3,12 +3,21 @@ const { createBoard } = require('./board.js');
 const { Player } = require('./player.js');
 
 class Game {
-  constructor({ id, players, board, corporations, host }) {
+  constructor({ id, players, board, corporations, host, gameSize }) {
     this.id = id;
     this.players = players;
     this.board = board;
     this.corporations = corporations;
     this.host = host;
+    this.gameSize = gameSize;
+  }
+
+  addPlayer(player) {
+    this.players.push(player);
+  }
+
+  getPlayers() {
+    return this.players;
   }
 }
 
@@ -51,7 +60,7 @@ const createCorporations = () => {
     ));
 };
 
-const newGame = (id, host) => {
+const newGame = (id, host, gameSize) => {
   const player = new Player(host.id, host.name);
   const board = createBoard();
   const corporations = createCorporations();
@@ -61,7 +70,8 @@ const newGame = (id, host) => {
     host,
     players: [player],
     board,
-    corporations
+    corporations,
+    gameSize
   });
 };
 
