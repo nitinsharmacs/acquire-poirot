@@ -1,10 +1,12 @@
+const fs = require('fs');
+
 const serveHostPage = (req, res, hostPage) => {
   res.type('text/html');
   res.end(hostPage);
   return true;
 };
 
-const createGame = ({ hostTemplatePath }, fs) => (req, res) => {
+const createGame = ({ hostTemplatePath }) => (req, res) => {
   if (!req.session.playerId) {
     res.redirect('/login?ref=host');
     return;

@@ -14,8 +14,8 @@ const { restrict } = require('./middlewares/auth.js');
 // handlers
 const { serveGamePage } = require('./handlers/game.js');
 
-const createApp = (config, fs) => {
-  const { root, cookieConfig, resources } = config;
+const createApp = (config) => {
+  const { root, cookieConfig, resources, db } = config;
   const app = express();
   app.use(morgan('tiny'));
   app.use(express.urlencoded({ extended: true }));
@@ -28,10 +28,10 @@ const createApp = (config, fs) => {
     }
   ));
 
-  const authRouter = createAuthRouter(resources, fs);
+  const authRouter = createAuthRouter(resources, db.usersdbPath);
   app.use(authRouter);
 
-  const hostRouter = createHostRouter(resources, fs);
+  const hostRouter = createHostRouter(resources);
   app.use(hostRouter);
 
   app.get('/join/:id', (req, res) => {
