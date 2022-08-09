@@ -74,7 +74,7 @@ const redirectIfLoggedIn = (req, res, next) => {
   next();
 };
 
-const register = (users, usersdb) => (req, res) => {
+const register = (users, dataStore) => (req, res) => {
   const { username, password } = req.body;
   const { ref } = req.query;
   const queryString = ref ? '?ref=' + ref : '';
@@ -92,7 +92,7 @@ const register = (users, usersdb) => (req, res) => {
   const id = new Date().getTime().toString();
   const user = { username, password, id };
   users[username] = user;
-  fs.writeFileSync(usersdb, JSON.stringify(users), 'utf8');
+  dataStore.saveJSON('USERS_DB_PATH', users);
 
   req.session.playerName = username;
   req.session.playerId = id;
@@ -101,17 +101,17 @@ const register = (users, usersdb) => (req, res) => {
   });
 };
 
-const createAuthRouter = ({ loginTemplatePath, signupTemplatePath }, usersdbPath) => {
-  const loginTemplate = fs.readFileSync(loginTemplatePath, 'utf8');
-  const signupTemplate = fs.readFileSync(signupTemplatePath, 'utf8');
-  const users = JSON.parse(fs.readFileSync(usersdbPath, 'utf8'));
+const createAuthRouter = (dataStore) => {
+  const loginTemplate = dataStore.load('LOGIN_TEMPLATE');
+  const signupTemplate = dataStore.load('SIGNUP_TEMPLATE');
+  const users = dataStore.loadJSON('USERS_DB_PATH');
 
   const router = express.Router();
   router.use(['/login', '/sign-up'], redirectIfLoggedIn);
   router.get('/login', serveLoginPage(loginTemplate));
   router.post('/login', validateUser(users));
   router.get('/sign-up', serveSignupPage(signupTemplate));
-  router.post('/sign-up', register(users, usersdbPath));
+  router.post('/sign-up', register(users, dataStore));
   return router;
 };
 

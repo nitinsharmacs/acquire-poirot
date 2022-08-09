@@ -1,6 +1,6 @@
-const assert = require('assert');
 const request = require('supertest');
 const { createApp } = require('../../src/app.js');
+const Sinon = require('sinon');
 
 const session = () => (req, res, next) => {
   req.session = {};
@@ -13,23 +13,20 @@ const session = () => (req, res, next) => {
   next();
 };
 
-describe('GET /api/loadgame', () => {
-  const appConfig = {
-    root: './public',
-    session,
-    cookieConfig: {
-      sessionKey: 'hello'
-    },
-    resources: {
-      loginTemplatePath: './resources/login.html',
-      hostTemplatePath: './resources/host-page.html',
-      signupTemplatePath: './resources/sign-up.html',
-      gameTemplatePath: './resources/game.html'
-    },
-    db: { usersdbPath: './test/testData/users.json' }
+const initApp = (session) => {
+  const config = { session, root: './public' };
+  const dataStore = {
+    load: Sinon.stub(),
+    loadJSON: Sinon.stub()
   };
+  dataStore.load.withArgs('LOGIN_TEMPLATE').returns('_MESSAGE_');
+  dataStore.load.withArgs('SIGNUP_TEMPLATE').returns('_MESSAGE_');
+  dataStore.load.withArgs('HOST_TEMPLATE_PATH').returns('_MESSAGE_');
+  return createApp(config, dataStore);
+};
 
-  const app = createApp(appConfig);
+describe('GET /api/loadgame', () => {
+  const app = initApp(session);
   it('should response with game data', (done) => {
     request(app)
       .get('/api/loadgame/12')

@@ -1,7 +1,6 @@
 const request = require('supertest');
 const { createApp } = require('../src/app.js');
-const fs = require('fs');
-
+const Sinon = require('sinon');
 const session = () => (req, res, next) => {
   req.session = {};
   req.session.save = function (cb) {
@@ -12,24 +11,31 @@ const session = () => (req, res, next) => {
   next();
 };
 
-describe('GET /login', () => {
-  const appConfig = {
-    root: './public',
-    session,
-    cookieConfig: {
-      sessionKey: 'hello'
-    },
-    resources: {
-      loginTemplatePath: './resources/login.html',
-      hostTemplatePath: './resources/host-page.html',
-      signupTemplatePath: './resources/sign-up.html',
-      gameTemplatePath: './resources/game.html'
-    },
-    db: { usersdbPath: './test/testData/users.json' }
+const initApp = () => {
+  const config = { session, root: './public' };
+  const dataStore = {
+    load: Sinon.stub(),
+    loadJSON: Sinon.stub(),
+    saveJSON: Sinon.stub()
   };
+  const mockUsers = {
+    raju: { username: 'raju', password: 'abc', id: '127824693' }
+  };
+  dataStore.load.withArgs('LOGIN_TEMPLATE').returns('_MESSAGE_');
+  dataStore.load.withArgs('SIGNUP_TEMPLATE').returns('_MESSAGE_');
+  dataStore.load.withArgs('HOST_TEMPLATE_PATH').returns('_MESSAGE_');
+  dataStore.loadJSON.withArgs('USERS_DB_PATH').returns(mockUsers);
+  return createApp(config, dataStore);
+};
+
+describe('GET /login', () => {
+  let app;
+  beforeEach(() => {
+    app = initApp();
+  });
 
   it('should serve login page', (done) => {
-    const req = request(createApp(appConfig));
+    const req = request(app);
     req.get('/login')
       .expect('content-type', /html/)
       .expect(200, done);
@@ -37,8 +43,7 @@ describe('GET /login', () => {
 
   it('should serve login page with apt error message 404(invalid credentials)',
     (done) => {
-
-      const req = request(createApp(appConfig));
+      const req = request(app);
       req.get('/login')
         .set('Cookie', 'errCode=404')
         .expect('content-type', /html/)
@@ -48,7 +53,7 @@ describe('GET /login', () => {
   it('should serve login page with apt error msg 401(fields cannot be empty)',
     (done) => {
 
-      const req = request(createApp(appConfig));
+      const req = request(app);
       req.get('/login')
         .set('Cookie', 'errCode=401')
         .expect('content-type', /html/)
@@ -57,34 +62,12 @@ describe('GET /login', () => {
 });
 
 describe('POST /login', () => {
-  // beforeEach(done => {
-  //   const users = {
-  //     raju:
-  //       { username: 'raju', password: 'abc', id: '127824693' }
-  //   };
-
-  //   fs.writeFileSync('./test/testData/users.json',
-  //     JSON.stringify(users), 'utf8');
-  //   done();
-  // });
-
-  const appConfig = {
-    root: './public',
-    session,
-    cookieConfig: {
-      sessionKey: 'hello'
-    },
-    resources: {
-      loginTemplatePath: './resources/login.html',
-      hostTemplatePath: './resources/host-page.html',
-      signupTemplatePath: './resources/sign-up.html',
-      gameTemplatePath: './resources/game.html'
-    },
-    db: { usersdbPath: './test/testData/users.json' }
-  };
-
+  let app;
+  beforeEach(() => {
+    app = initApp();
+  });
   it('should log the user in and set cookie', (done) => {
-    const req = request(createApp(appConfig));
+    const req = request(app);
     req.post('/login')
       .send('username=raju&password=abc')
       .expect('location', '/')
@@ -92,7 +75,7 @@ describe('POST /login', () => {
   });
 
   it('should redirect to /host', (done) => {
-    const req = request(createApp(appConfig));
+    const req = request(app);
     req.post('/login?ref=/host')
       .send('username=raju&password=abc')
       .expect('location', '/host')
@@ -100,7 +83,7 @@ describe('POST /login', () => {
   });
 
   it('should redirect to /join/1', (done) => {
-    const req = request(createApp(appConfig));
+    const req = request(app);
     req.post('/login?ref=/join/1')
       .send('username=raju&password=abc')
       .expect('location', '/join/1')
@@ -109,23 +92,12 @@ describe('POST /login', () => {
 });
 
 describe('GET /sign-up', () => {
-  const appConfig = {
-    root: './public',
-    session,
-    cookieConfig: {
-      sessionKey: 'hello'
-    },
-    resources: {
-      loginTemplatePath: './resources/login.html',
-      hostTemplatePath: './resources/host-page.html',
-      signupTemplatePath: './resources/sign-up.html',
-      gameTemplatePath: './resources/game.html'
-    },
-    db: { usersdbPath: './test/testData/users.json' }
-  };
-
+  let app;
+  beforeEach(() => {
+    app = initApp();
+  });
   it('should serve signup page', (done) => {
-    const req = request(createApp(appConfig));
+    const req = request(app);
     req.get('/sign-up')
       .expect('content-type', /html/)
       .expect(200, done);
@@ -133,7 +105,7 @@ describe('GET /sign-up', () => {
 
   it('should serve login page with apt error message 409(user already exists)',
     (done) => {
-      const req = request(createApp(appConfig));
+      const req = request(app);
       req.get('/sign-up')
         .set('Cookie', 'errCode=409')
         .expect('content-type', /html/)
@@ -142,7 +114,7 @@ describe('GET /sign-up', () => {
 
   it('should serve login page with apt error msg 401(fields cannot be empty)',
     (done) => {
-      const req = request(createApp(appConfig));
+      const req = request(app);
       req.get('/sign-up')
         .set('Cookie', 'errCode=401')
         .expect('content-type', /html/)
@@ -151,40 +123,13 @@ describe('GET /sign-up', () => {
 });
 
 describe('POST /sign-up', () => {
-  beforeEach(done => {
-    fs.writeFileSync('./test/testData/users.json',
-      JSON.stringify({}), 'utf8');
-    done();
+  let app;
+  beforeEach(() => {
+    app = initApp();
   });
-
-  after(done => {
-    const users = {
-      raju:
-        { username: 'raju', password: 'abc', id: '127824693' }
-    };
-
-    fs.writeFileSync('./test/testData/users.json',
-      JSON.stringify(users), 'utf8');
-    done();
-  });
-
-  const appConfig = {
-    root: './public',
-    session,
-    cookieConfig: {
-      sessionKey: 'hello'
-    },
-    resources: {
-      loginTemplatePath: './resources/login.html',
-      hostTemplatePath: './resources/host-page.html',
-      signupTemplatePath: './resources/sign-up.html',
-      gameTemplatePath: './resources/game.html'
-    },
-    db: { usersdbPath: './test/testData/users.json' }
-  };
 
   it('should register and log the user in and set cookie', (done) => {
-    const req = request(createApp(appConfig));
+    const req = request(app);
     req.post('/sign-up')
       .send('username=rani&password=abc123')
       .expect('location', '/')
@@ -192,15 +137,15 @@ describe('POST /sign-up', () => {
   });
 
   it('should redirect to /host', (done) => {
-    const req = request(createApp(appConfig));
+    const req = request(app);
     req.post('/sign-up?ref=/host')
-      .send('username=raju&password=abc')
+      .send('username=newraju&password=abc')
       .expect('location', '/host')
       .expect(302, done);
   });
 
   it('should redirect to /join/1', (done) => {
-    const req = request(createApp(appConfig));
+    const req = request(app);
     req.post('/sign-up?ref=/join/1')
       .send('username=diamond&password=die')
       .expect('location', '/join/1')

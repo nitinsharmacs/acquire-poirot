@@ -7,12 +7,12 @@ const serveHostPage = (req, res, hostPage) => {
   return true;
 };
 
-const createGame = ({ hostTemplatePath }) => (req, res) => {
+const createGame = (dataStore) => (req, res) => {
   if (!req.session.playerId) {
     res.redirect('/login?ref=host');
     return;
   }
-  const hostPage = fs.readFileSync(hostTemplatePath, 'utf8');
+  const hostPage = dataStore.load('HOST_TEMPLATE_PATH');
   serveHostPage(req, res, hostPage);
 };
 

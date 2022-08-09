@@ -1,5 +1,6 @@
 const request = require('supertest');
 const { createApp } = require('../src/app.js');
+const Sinon = require('sinon');
 
 const session = () => (req, res, next) => {
   req.session = {};
@@ -11,25 +12,21 @@ const session = () => (req, res, next) => {
 
   next();
 };
+const initApp = (session) => {
+  const config = { session, root: './public' };
+  const dataStore = {
+    load: Sinon.stub(),
+    loadJSON: Sinon.stub()
+  };
+  dataStore.load.withArgs('LOGIN_TEMPLATE').returns('_MESSAGE_');
+  dataStore.load.withArgs('SIGNUP_TEMPLATE').returns('_MESSAGE_');
+  dataStore.load.withArgs('HOST_TEMPLATE_PATH').returns('_MESSAGE_');
+  return createApp(config, dataStore);
+};
 
 describe('GET /', () => {
-  const appConfig = {
-    root: './public',
-    session,
-    cookieConfig: {
-      sessionKey: 'hello'
-    },
-    resources: {
-      loginTemplatePath: './resources/login.html',
-      hostTemplatePath: './resources/host-page.html',
-      signupTemplatePath: './resources/sign-up.html',
-      gameTemplatePath: './resources/game.html'
-    },
-    db: { usersdbPath: './test/testData/users.json' }
-  };
-
   it('should show landing page', (done) => {
-    request(createApp(appConfig))
+    request(initApp(session))
       .get('/')
       .expect('Content-type', /html/)
       .expect(200, done);

@@ -1,7 +1,5 @@
-const fs = require('fs');
-
-const serveGamePage = ({ gameTemplatePath }) => {
-  const gamePage = fs.readFileSync(gameTemplatePath, 'utf8');
+const serveGamePage = (dataStore) => {
+  const gamePage = dataStore.load('GAME_TEMPLATE_PATH');
 
   return (req, res, next) => {
     res.type('text/html');
