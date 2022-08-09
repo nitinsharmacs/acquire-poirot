@@ -6,6 +6,7 @@ const sessionKey = process.env.SESSION_KEY;
 const loginTemplatePath = process.env.LOGIN_TEMPLATE;
 const signupTemplatePath = process.env.SIGNUP_TEMPLATE;
 const hostTemplatePath = process.env.HOST_TEMPLATE_PATH;
+const usersdbPath = process.env.USERS_DB_PATH;
 const gameTemplatePath = './resources/game.html';
 
 const config = {
@@ -16,7 +17,9 @@ const config = {
     hostTemplatePath,
     signupTemplatePath,
     gameTemplatePath
-  }
+  },
+  db: { usersdbPath },
+  session
 };
 
 const app = createApp(config);
