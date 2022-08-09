@@ -254,6 +254,7 @@ body {
   display: flex;
   height: 50%;
   column-gap: var(--component-gap);
+  position: relative;
 }
 
 .player-activities>div:nth-child(2) {
@@ -337,4 +338,21 @@ body {
 
 .corporation-info>p:first-child {
   border-bottom: 1px solid black;
+}
+
+/* INFO CARD --------------------- */
+
+.info-card {
+  width: 350px;
+  height: 400px;
+  position: absolute;
+  background-image: url('/images/infocard.jpeg');
+  background-size: cover;
+  transform: translateX(0px);
+  transition: 0.3s linear;
+  top: 30px;
+}
+
+.info-card.hide {
+  transform: translateX(1000px);
 }

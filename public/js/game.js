@@ -125,6 +125,13 @@ const main = () => {
   const playerId = 'player1';
   const gameId = '12';
   loadGame(gameId);
+
+  const infoCard = document.getElementById('info-card');
+  const infoCardBtn = document.getElementById('info-card-btn');
+
+  infoCardBtn.onclick = () => {
+    infoCard.classList.toggle('hide');
+  };
 };
 
 window.onload = main;
