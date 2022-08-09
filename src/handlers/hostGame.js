@@ -22,7 +22,6 @@ const hostGame = ({ hostTemplatePath }) => (req, res) => {
   }
   const { host } = req.headers;
   const { noOfPlayers } = req.body;
-  console.log('ddddd', host, noOfPlayers);
 
   if (!noOfPlayers) {
     const hostPage = fs.readFileSync(hostTemplatePath, 'utf8');
