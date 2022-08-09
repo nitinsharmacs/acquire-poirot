@@ -14,6 +14,14 @@
   --sackson-border: #ff5661;
   --quantum-bg: #d0e8ec;
   --quantum-border: #58e0f8;
+  --america-bg: #d2e4f4;
+  --america-border: #1c7ed6;
+  --fusion-bg: #d7eddb;
+  --fusion-border: #36b24d;
+  --phoneix-bg: #e2daf8;
+  --phoneix-border: #7746f1;
+  --zeta-bg: #fbf1d7;
+  --zeta-border: #ffc936;
 }
 
 body {
@@ -21,7 +29,7 @@ body {
   font-size: 18px;
 }
 
-.page {
+.game-page {
   width: 100vw;
   height: 100vh;
   padding: 1em;
@@ -29,14 +37,14 @@ body {
   column-gap: var(--component-gap);
 }
 
-.page>section {
+.game-page>section {
   display: flex;
   flex-direction: column;
   height: 100%;
   row-gap: var(--component-gap);
 }
 
-.page>section:nth-child(2) {
+.game-page>section:nth-child(2) {
   flex: 1;
 }
 
@@ -171,19 +179,39 @@ body {
   width: 120px;
 }
 
-.hydra {
+#hydra {
   border: 2px solid var(--hydra-border);
   background-color: var(--hydra-bg);
 }
 
-.sackson {
+#sackson {
   border: 2px solid var(--sackson-border);
   background-color: var(--sackson-bg);
 }
 
-.quantum {
+#quantum {
   border: 2px solid var(--quantum-border);
   background-color: var(--quantum-bg);
+}
+
+#america {
+  border: 2px solid var(--america-border);
+  background-color: var(--america-bg);
+}
+
+#zeta {
+  border: 2px solid var(--zeta-border);
+  background-color: var(--zeta-bg);
+}
+
+#phoneix {
+  border: 2px solid var(--phoneix-border);
+  background-color: var(--phoneix-bg);
+}
+
+#fusion {
+  border: 2px solid var(--fusion-border);
+  background-color: var(--fusion-bg);
 }
 
 /* PLAYERS ORDER -------------------------------------------- */
@@ -192,10 +220,13 @@ body {
   border: 2px solid black;
   padding: var(--component-padding);
   border-radius: var(--component-border-radius);
+  width: 200px;
+}
+
+.players-list {
   display: flex;
   flex-direction: column;
   gap: var(--component-gap);
-  width: 200px;
 }
 
 .player-item {
@@ -286,12 +317,17 @@ body {
   column-gap: 1em;
   align-items: center;
   margin: 1em 0;
+  width: 180px;
 }
 
 .corporation-img {
   width: 60px;
   height: 60px;
   border-radius: var(--component-border-radius);
+}
+
+.corporation-info {
+  flex: 1;
 }
 
 .corporation-info>p {

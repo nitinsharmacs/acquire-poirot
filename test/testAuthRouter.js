@@ -22,7 +22,8 @@ describe('GET /login', () => {
     resources: {
       loginTemplatePath: './resources/login.html',
       hostTemplatePath: './resources/host-page.html',
-      signupTemplatePath: './resources/sign-up.html'
+      signupTemplatePath: './resources/sign-up.html',
+      gameTemplatePath: './resources/game.html'
     },
     db: { usersdbPath: './test/testData/users.json' }
   };
@@ -76,7 +77,8 @@ describe('POST /login', () => {
     resources: {
       loginTemplatePath: './resources/login.html',
       hostTemplatePath: './resources/host-page.html',
-      signupTemplatePath: './resources/sign-up.html'
+      signupTemplatePath: './resources/sign-up.html',
+      gameTemplatePath: './resources/game.html'
     },
     db: { usersdbPath: './test/testData/users.json' }
   };
@@ -116,7 +118,8 @@ describe('GET /sign-up', () => {
     resources: {
       loginTemplatePath: './resources/login.html',
       hostTemplatePath: './resources/host-page.html',
-      signupTemplatePath: './resources/sign-up.html'
+      signupTemplatePath: './resources/sign-up.html',
+      gameTemplatePath: './resources/game.html'
     },
     db: { usersdbPath: './test/testData/users.json' }
   };
@@ -174,7 +177,8 @@ describe('POST /sign-up', () => {
     resources: {
       loginTemplatePath: './resources/login.html',
       hostTemplatePath: './resources/host-page.html',
-      signupTemplatePath: './resources/sign-up.html'
+      signupTemplatePath: './resources/sign-up.html',
+      gameTemplatePath: './resources/game.html'
     },
     db: { usersdbPath: './test/testData/users.json' }
   };

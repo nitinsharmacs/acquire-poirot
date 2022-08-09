@@ -37,7 +37,7 @@ const createApp = (config) => {
     res.end('Mocked join');
   });
 
-  // app.get('/game', restrict, serveGamePage(resources, fs));
+  app.get('/game', restrict, serveGamePage(resources));
 
   app.use('/api', restrict, apiRoutes);
   app.use(express.static(root));

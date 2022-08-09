@@ -1,4 +1,6 @@
-const serveGamePage = ({ gameTemplatePath }, fs) => {
+const fs = require('fs');
+
+const serveGamePage = ({ gameTemplatePath }) => {
   const gamePage = fs.readFileSync(gameTemplatePath, 'utf8');
 
   return (req, res, next) => {

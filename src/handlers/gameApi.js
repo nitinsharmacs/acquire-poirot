@@ -40,10 +40,63 @@ const player2 = {
 
 const players = [player1, player2];
 
+const corporations = [
+  {
+    id: 'america',
+    name: 'America',
+    active: false, //Boolean,
+    stocksLeft: 25,
+    tiles: []
+  },
+  {
+    id: 'hydra',
+    name: 'Hydra',
+    active: true, //Boolean
+    stocksLeft: 25,
+    tiles: []
+  },
+  {
+    id: 'fusion',
+    name: 'Fusion',
+    active: true, //Boolean
+    stocksLeft: 25,
+    tiles: []
+  },
+  {
+    id: 'zeta',
+    name: 'Zeta',
+    active: true, //Boolean
+    stocksLeft: 25,
+    tiles: []
+  },
+  {
+    id: 'quantum',
+    name: 'Quantum',
+    active: true, //Boolean
+    stocksLeft: 25,
+    tiles: []
+  },
+  {
+    id: 'phoneix',
+    name: 'Phoneix',
+    active: true, //Boolean
+    stocksLeft: 25,
+    tiles: []
+  },
+  {
+    id: 'sackson',
+    name: 'Sackson',
+    active: true, //Boolean
+    stocksLeft: 25,
+    tiles: []
+  }
+];
+
 const game = {
   gameId: '12',
   players,
-  currentPlayer: player1
+  currentPlayer: player2,
+  corporations
 };
 
 const loadGame = (req, res) => {
