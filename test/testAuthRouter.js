@@ -108,6 +108,7 @@ describe('POST /login', () => {
 describe('GET /sign-up', () => {
   const appConfig = {
     root: './public',
+    session,
     cookieConfig: {
       sessionKey: 'hello'
     },
@@ -154,6 +155,7 @@ describe('POST /sign-up', () => {
 
   const appConfig = {
     root: './public',
+    session,
     cookieConfig: {
       sessionKey: 'hello'
     },

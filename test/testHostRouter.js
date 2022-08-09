@@ -87,8 +87,80 @@ describe('GET /host', () => {
   it('should give host page is session present', (done) => {
     request(app)
       .get('/host')
-      // .expect('hi')
-      // .expect('content-type', /html/)
+      .expect('content-type', /html/)
+      .expect(200, done);
+  });
+});
+
+describe('POST /host', () => {
+
+  const session = () => (req, res, next) => {
+    req.session = {};
+    req.session.playerId = '1123';
+    req.session.save = function (cb) {
+      res.setHeader('set-cookie', 'connect.sid=23232');
+      cb();
+    };
+
+    next();
+  };
+
+  const app = createApp({
+    root: './public',
+    session,
+    cookieConfig: {
+      sessionKey: 'hello'
+    },
+    resources: {
+      loginTemplatePath: './resources/login.html',
+      hostTemplatePath: './resources/host-page.html',
+      signupTemplatePath: './resources/sign-up.html'
+    },
+    db: { usersdbPath: './test/testData/users.json' }
+  });
+
+  it('should show lobby when host enter no of players and host a game', (done) => {
+    request(app)
+      .post('/host')
+      .send('host=localhost&noOfPlayers=4')
+      .expect('content-type', /html/)
+      .expect(200, done);
+  });
+});
+
+describe('POST /host', () => {
+
+  const session = () => (req, res, next) => {
+    req.session = {};
+    req.session.playerId = '1123';
+    req.session.save = function (cb) {
+      res.setHeader('set-cookie', 'connect.sid=23232');
+      cb();
+    };
+
+    next();
+  };
+
+  const app = createApp({
+    root: './public',
+    session,
+    cookieConfig: {
+      sessionKey: 'hello'
+    },
+    resources: {
+      loginTemplatePath: './resources/login.html',
+      hostTemplatePath: './resources/host-page.html',
+      signupTemplatePath: './resources/sign-up.html'
+    },
+    db: { usersdbPath: './test/testData/users.json' }
+  });
+
+  it('should show error in host page when host did not enter no of players and host a game', (done) => {
+    request(app)
+      .post('/host')
+      .send('host=localhost')
+      .expect('content-type', /html/)
+      .expect(/Please enter no of players/)
       .expect(200, done);
   });
 });
