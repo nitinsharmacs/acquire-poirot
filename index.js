@@ -1,4 +1,5 @@
 const { createApp } = require('./src/app.js');
+const session = require('express-session');
 require('dotenv').config();
 
 const sessionKey = process.env.SESSION_KEY;
@@ -11,7 +12,8 @@ const config = {
   root: './public',
   cookieConfig: { sessionKey },
   resources: { loginTemplatePath, hostTemplatePath, signupTemplatePath },
-  db: { usersdbPath }
+  db: { usersdbPath },
+  session
 };
 
 const app = createApp(config);

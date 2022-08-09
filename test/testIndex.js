@@ -1,9 +1,21 @@
 const request = require('supertest');
 const { createApp } = require('../src/app.js');
 
+const session = () => (req, res, next) => {
+  req.session = {};
+  req.session.playerId = '1123';
+  req.session.save = function (cb) {
+    res.setHeader('set-cookie', 'connect.sid=23232');
+    cb();
+  };
+
+  next();
+};
+
 describe('GET /', () => {
   const appConfig = {
     root: './public',
+    session,
     cookieConfig: {
       sessionKey: 'hello'
     },

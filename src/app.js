@@ -1,6 +1,5 @@
 const express = require('express');
 const morgan = require('morgan');
-const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const { createAuthRouter } = require('./routers/authRouter');
 const { createHostRouter } = require('./routers/hostRouter');
@@ -15,7 +14,7 @@ const { restrict } = require('./middlewares/auth.js');
 const { serveGamePage } = require('./handlers/game.js');
 
 const createApp = (config) => {
-  const { root, cookieConfig, resources, db } = config;
+  const { root, cookieConfig, resources, db, session } = config;
   const app = express();
   app.use(morgan('tiny'));
   app.use(express.urlencoded({ extended: true }));

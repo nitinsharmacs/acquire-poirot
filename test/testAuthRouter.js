@@ -2,9 +2,20 @@ const request = require('supertest');
 const { createApp } = require('../src/app.js');
 const fs = require('fs');
 
+const session = () => (req, res, next) => {
+  req.session = {};
+  req.session.save = function (cb) {
+    res.setHeader('set-cookie', 'connect.sid=23232');
+    cb();
+  };
+
+  next();
+};
+
 describe('GET /login', () => {
   const appConfig = {
     root: './public',
+    session,
     cookieConfig: {
       sessionKey: 'hello'
     },
@@ -57,6 +68,7 @@ describe('POST /login', () => {
   });
   const appConfig = {
     root: './public',
+    session,
     cookieConfig: {
       sessionKey: 'hello'
     },
