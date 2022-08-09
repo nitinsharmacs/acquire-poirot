@@ -165,7 +165,7 @@ describe('POST /host', () => {
       .post('/host')
       .send('host=localhost')
       .expect('content-type', /html/)
-      .expect(/Please enter no of players/)
+      .expect(/Please enter valid number of players/)
       .expect(200, done);
   });
 });

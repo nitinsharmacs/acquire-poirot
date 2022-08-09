@@ -23,9 +23,9 @@ const hostGame = ({ hostTemplatePath }) => (req, res) => {
   const { host } = req.headers;
   const { noOfPlayers } = req.body;
 
-  if (!noOfPlayers) {
+  if (!noOfPlayers || !isFinite(noOfPlayers)) {
     const hostPage = fs.readFileSync(hostTemplatePath, 'utf8');
-    const errorHost = hostPage.replace('_MESSAGE_', 'Please enter no of players');
+    const errorHost = hostPage.replace('_MESSAGE_', 'Please enter valid number of players');
     res.type('text/html');
     res.end(errorHost);
     return;
