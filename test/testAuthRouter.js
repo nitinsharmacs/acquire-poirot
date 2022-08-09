@@ -56,16 +56,17 @@ describe('GET /login', () => {
 });
 
 describe('POST /login', () => {
-  beforeEach(done => {
-    const users = {
-      raju:
-        { username: 'raju', password: 'abc', id: '127824693' }
-    };
+  // beforeEach(done => {
+  //   const users = {
+  //     raju:
+  //       { username: 'raju', password: 'abc', id: '127824693' }
+  //   };
 
-    fs.writeFileSync('./test/testData/users.json',
-      JSON.stringify(users), 'utf8');
-    done();
-  });
+  //   fs.writeFileSync('./test/testData/users.json',
+  //     JSON.stringify(users), 'utf8');
+  //   done();
+  // });
+
   const appConfig = {
     root: './public',
     session,
@@ -150,6 +151,17 @@ describe('POST /sign-up', () => {
   beforeEach(done => {
     fs.writeFileSync('./test/testData/users.json',
       JSON.stringify({}), 'utf8');
+    done();
+  });
+
+  after(done => {
+    const users = {
+      raju:
+        { username: 'raju', password: 'abc', id: '127824693' }
+    };
+
+    fs.writeFileSync('./test/testData/users.json',
+      JSON.stringify(users), 'utf8');
     done();
   });
 
