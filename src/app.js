@@ -38,7 +38,7 @@ const appConfig = {
 };
 
 const createApp = (config = appConfig, dataStore = new DataStore(resources)) => {
-  const { root, sessionKey, session } = config;
+  const { root, sessionKey, session, games } = config;
   const app = express();
   app.use(morgan('tiny'));
   app.use(express.urlencoded({ extended: true }));

@@ -100,10 +100,11 @@ const game = {
 };
 
 const loadGame = (req, res) => {
-  const { gameId } = req.params;
-
-  if (gameId !== game.gameId) {
-    return res.status(404).json({ message: 'game not found' });
+  const { gameId } = req.session;
+  console.log(gameId);
+  const game = req.app.games.find(gameId);
+  if (!game) {
+    return res.status(404).send('Game not found');
   }
 
   res.json(game);
