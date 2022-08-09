@@ -11,9 +11,12 @@ const apiRoutes = require('./routers/apiRoutes.js');
 const { restrict } = require('./middlewares/auth.js');
 
 // handlers
-const { serveGamePage } = require('./handlers/game.js');
+const { serveGamePage, joinGame, serveLobby } = require('./handlers/game.js');
 const session = require('express-session');
 const DataStore = require('./dataStore.js');
+const { Game, newGame } = require('./models/game');
+const { Player } = require('./models/player');
+const { Games } = require('./models/games');
 
 const { LOGIN_TEMPLATE,
   SIGNUP_TEMPLATE,
@@ -31,10 +34,14 @@ const resources = {
   GAME_TEMPLATE_PATH
 };
 
+const game = newGame('game123', new Player('user123', 'sam'), 2);
+const games = new Games([game]);
+
 const appConfig = {
   root: './public',
   sessionKey: SESSION_KEY,
-  session
+  session,
+  games
 };
 
 const createApp = (config = appConfig, dataStore = new DataStore(resources)) => {
@@ -51,15 +58,17 @@ const createApp = (config = appConfig, dataStore = new DataStore(resources)) => 
     }
   ));
 
+  // injecting games to app
+  app.games = games;
+
   const authRouter = createAuthRouter(dataStore);
   app.use(authRouter);
 
   const hostRouter = createHostRouter(dataStore);
   app.use(hostRouter);
 
-  app.get('/join/:id', (req, res) => {
-    res.end('Mocked join');
-  });
+  app.get('/join/:id', restrict, joinGame);
+  app.get('/lobby/:id', restrict, serveLobby);
 
   app.get('/game', restrict, serveGamePage(dataStore));
 

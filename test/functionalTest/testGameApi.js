@@ -34,7 +34,7 @@ const initApp = (session) => {
   return createApp(config, dataStore);
 };
 
-describe.only('GET /api/loadgame', () => {
+describe('GET /api/loadgame', () => {
   const app = initApp(session);
   it('should response with game data', (done) => {
     request(app)

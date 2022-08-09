@@ -1,18 +1,9 @@
 const fs = require('fs');
+const { newGame } = require('../models/game.js');
+const { Player } = require('../models/player.js');
 
-const lobbyPage = (noOfPlayers, gameId, gameLink) => {
-  return `<html>
-    <body> 
-      <p> No. of Players : ${noOfPlayers} </P>
-      <p> Game Id : ${gameId} </P>
-      <p> Game Link: ${gameLink} </P>
-    </body>
-  </html>
-  `;
-};
-
-const createGameLink = (host, gameId) => {
-  return `http://${host}/lobby/${gameId}`;
+const generateId = () => {
+  return new Date().getTime().toString(16);
 };
 
 const hostGame = (dataStore) => (req, res) => {
@@ -20,8 +11,9 @@ const hostGame = (dataStore) => (req, res) => {
     res.redirect('/login?ref=host');
     return;
   }
-  const { host } = req.headers;
+
   const { noOfPlayers } = req.body;
+  const { playerName, playerId } = req.session;
 
   if (!noOfPlayers || !isFinite(noOfPlayers)) {
     const hostPage = dataStore.load('HOST_TEMPLATE_PATH');
@@ -31,10 +23,14 @@ const hostGame = (dataStore) => (req, res) => {
     return;
   }
 
-  const gameId = new Date().getTime();
-  const gameLink = createGameLink(host, gameId);
-  res.type('text/html');
-  res.end(lobbyPage(noOfPlayers, gameId, gameLink));
+  const gameHost = new Player(playerId, playerName);
+  const game = newGame(generateId(), gameHost, +noOfPlayers);
+  req.app.games.add(game);
+
+  req.session.gameId = game.id;
+  req.session.save(() => {
+    res.redirect('/lobby/' + game.id);
+  });
 };
 
 module.exports = { hostGame };

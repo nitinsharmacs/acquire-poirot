@@ -1,6 +1,10 @@
 const request = require('supertest');
 const { createApp } = require('../src/app.js');
+
 const Sinon = require('sinon');
+const { Games } = require('../src/models/games.js');
+const { newGame } = require('../src/models/game.js');
+const { Player } = require('../src/models/player.js');
 
 const session = () => (req, res, next) => {
   req.session = {};
@@ -13,7 +17,13 @@ const session = () => (req, res, next) => {
 };
 
 const initApp = (session) => {
-  const config = { session, root: './public' };
+  const games = new Games();
+  const host = { name: 'sam', id: 'user' };
+
+  const game = newGame('1123', host, 3);
+  games.add(game);
+
+  const config = { session, root: './public', games };
   const dataStore = {
     load: Sinon.stub(),
     loadJSON: Sinon.stub()
@@ -83,9 +93,9 @@ describe('POST /host', () => {
     (done) => {
       request(app)
         .post('/host')
-        .send('host=localhost&noOfPlayers=4')
-        .expect('content-type', /html/)
-        .expect(200, done);
+        .send('noOfPlayers=4')
+        .expect('location', /^\/lobby*/)
+        .expect(302, done);
     });
 
   it('should show error in host page when host did not enter no of players and host a game', (done) => {

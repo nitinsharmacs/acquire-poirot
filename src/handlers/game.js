@@ -29,7 +29,7 @@ const joinGame = (req, res) => {
 };
 
 const createGameLink = (host, gameId) => {
-  return `http://${host}/lobby/${gameId}`;
+  return `http://${host}/join/${gameId}`;
 };
 
 const serveLobby = (req, res) => {
