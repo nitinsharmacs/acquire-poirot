@@ -35,6 +35,7 @@ body {
   padding: 1em;
   display: flex;
   column-gap: var(--component-gap);
+  overflow: hidden;
 }
 
 .game-page>section {
@@ -139,6 +140,11 @@ body {
 .player-money {
   width: 15%;
   text-align: center;
+}
+
+.player-money p {
+  margin-top: 40%;
+  font-size: 2rem;
 }
 
 .player-tiles {
@@ -347,10 +353,11 @@ body {
   height: 400px;
   position: absolute;
   background-image: url('/images/infocard.jpeg');
-  background-size: cover;
+  background-size: contain;
   transform: translateX(0px);
   transition: 0.3s linear;
   top: 30px;
+  background-repeat: no-repeat;
 }
 
 .info-card.hide {
