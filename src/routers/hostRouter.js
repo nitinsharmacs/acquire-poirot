@@ -5,7 +5,7 @@ const { hostGame } = require('../handlers/hostGame');
 const createHostRouter = (resources) => {
   const router = express.Router();
   router.get('/host', createGame(resources));
-  router.post('/host', hostGame);
+  router.post('/host', hostGame(resources));
   return router;
 };
 
