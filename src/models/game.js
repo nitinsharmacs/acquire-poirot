@@ -1,27 +1,25 @@
+const lodash = require('lodash');
 const { Corporation } = require('./corporation.js');
 const { createBoard } = require('./board.js');
 const { createTiles } = require('../utils/createTiles.js');
 
-const tileLetter = (tile) => tile.id.slice(-1);
-const tileNumber = (tile) => +tile.id.slice(0, -1);
+const getSameRowTiles = (letter, tiles) => {
+  return tiles.filter(tile => tile.id.includes(letter));
+};
 
 const findNearestTile = (tiles) => {
-  return tiles.reduce((firstTile, tile) => {
-    const prevLetter = tileLetter(firstTile).charCodeAt();
-    const prevNumber = tileNumber(firstTile);
-    const nextLetter = tileLetter(tile).charCodeAt();
-    const nextNumber = tileNumber(tile);
-
-    if (prevLetter > nextLetter) {
-      return tile;
-    }
-
-    if (prevLetter === nextLetter && prevNumber > nextNumber) {
-      return tile;
-    }
-
-    return firstTile;
+  const sortedTilesByLetter = lodash.sortBy(tiles, ({ id }) => {
+    const letter = id.slice(-1);
+    return letter;
   });
+
+  const nearestLetter = sortedTilesByLetter[0].id.slice(-1);
+  const sameRowTiles = getSameRowTiles(nearestLetter, sortedTilesByLetter);
+  const sortedTiles = lodash.sortBy(sameRowTiles, ({ id }) => {
+    const num = +id.slice(0, id.length - 1);
+    return num;
+  });
+  return sortedTiles[0];
 };
 
 class Game {
@@ -52,8 +50,9 @@ class Game {
   }
 
   reorder() {
-    const nearestTile = findNearestTile(this.cluster);
-    const nearestTilePos = this.cluster.find(({ id }) => id === nearestTile.id);
+    const playersTiles = this.players.map(player => player.tiles[0]);
+    const nearestTile = findNearestTile(playersTiles);
+    const nearestTilePos = playersTiles.findIndex((tile) => tile.id === nearestTile.id);
     this.players = this.players.slice(nearestTilePos).concat(this.players.slice(0, nearestTilePos));
     this.currentPlayer = this.players[0];
   }
