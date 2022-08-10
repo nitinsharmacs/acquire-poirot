@@ -19,6 +19,12 @@ const joinGame = (req, res) => {
     return res.status(404).send('Game not found');
   }
 
+  const playerExists = game.players.find(player => player.id === playerId);
+
+  if (playerExists) {
+    return res.redirect('/lobby/' + id);
+  }
+
   const player = new Player(playerId, playerName, game);
   game.addPlayer(player);
 
