@@ -1,8 +1,5 @@
-const lodash = require('lodash');
-
 const { Corporation } = require('./corporation.js');
 const { createBoard } = require('./board.js');
-const { Player } = require('./player.js');
 const { createTiles } = require('../utils/createTiles.js');
 
 const tileLetter = (tile) => tile.id.slice(-1);
@@ -44,7 +41,6 @@ class Game {
     this.host = host;
     this.gameSize = gameSize;
     this.logs = [];
-    // this.currentPlayer = new Player('');
   }
 
   addPlayer(player) {
