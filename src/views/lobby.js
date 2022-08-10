@@ -30,7 +30,7 @@ const lobbyPage = (game, gameLink) => `
 
       <div class="link-box">
         <h2 class="share-header">Share with your friends</h2>
-        <h3>${gameLink}</h3>
+        <h3 id="game-link">${gameLink}</h3>
       </div>
 
     </section>

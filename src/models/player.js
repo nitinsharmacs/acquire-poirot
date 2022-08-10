@@ -16,6 +16,8 @@ class Player {
     const tile = this.game.cluster[tilePos];
     this.game.cluster.splice(tilePos, 1);
     this.tiles.push(tile);
+
+    return tile;
   }
 
   placeTile() {

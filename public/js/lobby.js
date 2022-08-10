@@ -1,10 +1,14 @@
-
-// <div class="player">
-//   <div class="player-avatar">
-//     <img src="/images/usericon.png" alt="avatar">
-//   </div>
-//   <div class="player-name">Sam</div>
-// </div>
+const copyGameLink = (event) => {
+  const textarea = document.createElement('textarea');
+  document.body.appendChild(textarea);
+  textarea.style.display = 'hidden';
+  textarea.innerText = event.target.innerText;
+  textarea.focus();
+  textarea.select();
+  document.execCommand('copy');
+  textarea.remove();
+  alert('copied to clipboard');
+};
 
 const createPlayer = (player) => {
   return ['div', { class: 'player' }, {},
@@ -49,6 +53,8 @@ const loadGame = () => {
 
 const main = () => {
   loadGame();
+  document.getElementById('game-link').onclick = copyGameLink;
+
 };
 
 window.onload = main;
