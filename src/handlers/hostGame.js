@@ -29,7 +29,6 @@ const hostGame = (dataStore) => (req, res) => {
 
   const games = req.app.games.games;
   const existingGame = games.find(game => game.host.id === playerId);
-  console.log('games', games);
   if (existingGame) {
     return res.redirect('/lobby/' + existingGame.id);
   }
