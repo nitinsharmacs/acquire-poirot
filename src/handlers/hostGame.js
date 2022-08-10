@@ -1,4 +1,3 @@
-const fs = require('fs');
 const { newGame } = require('../models/game.js');
 const { Player } = require('../models/player.js');
 
@@ -23,15 +22,17 @@ const hostGame = (dataStore) => (req, res) => {
     return;
   }
 
-  const game = newGame(generateId(),
-    {
-      name: playerName,
-      id: playerId
-    },
+  const game = newGame(generateId(), { name: playerName, id: playerId },
     +noOfPlayers);
   const gameHost = new Player(playerId, playerName, game);
   game.addPlayer(gameHost);
 
+  const games = req.app.games.games;
+  const existingGame = games.find(game => game.host.id === playerId);
+  console.log('games', games);
+  if (existingGame) {
+    return res.redirect('/lobby/' + existingGame.id);
+  }
   req.app.games.add(game);
 
   req.session.gameId = game.id;
