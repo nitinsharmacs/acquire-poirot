@@ -8,6 +8,7 @@ class Player {
     this.name = name;
     this.game = game;
     this.tiles = [];
+    this.money = 0;
   }
 
   getTile() {
@@ -20,6 +21,7 @@ class Player {
   placeTile() {
     const [tile] = this.tiles;
     this.game.board.placeTile(tile);
+    this.game.logs.push(`${this.name} placed ${tile.id}`);
     this.tiles.splice(0, 1);
   }
 }

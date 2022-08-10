@@ -35,10 +35,12 @@ const loadGame = () => {
     fetchReq('/api/loadgame', {
       method: 'get'
     }, (res) => {
-      const game = res.body;
+      const { game } = res.body;
       renderPlayers(game);
       if (game.gameSize === game.players.length) {
         clearInterval(loadInterval);
+        fetchReq('/api/start-game', { method: 'POST' },
+          (res) => { });
         startGame();
       }
     });

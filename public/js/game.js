@@ -1,30 +1,14 @@
-const store = {
-  playerId: 'player1',
-  gameId: '12'
+const getplayer = (players, playerId) => {
+  return players.find(player => player.id === playerId);
 };
 
-const getplayer = ({ players }) => {
-  return players.find(player => player.id === store.playerId);
+const isPlaying = (player, playerId) => {
+  return player.id === playerId;
 };
 
-const loadGame = (gameId) => {
-  fetchReq(`/api/loadgame/${gameId}`, {
-    method: 'get'
-  }, (res) => {
-    store.game = res.body;
-    renderPlayers(store.game);
-    renderPlayerResources(getplayer(store.game));
-    renderStockMarket(store.game);
-  });
-};
-
-const isPlaying = (player) => {
-  return player.id === store.playerId;
-};
-
-const createPlayerItem = (player) => {
-  const activeClass = player.id === store.game.currentPlayer.id ? 'active' : '';
-  const activeTag = isPlaying(player) ? '(You)' : '';
+const createPlayerItem = (game, player, playerId) => {
+  const activeClass = player.id === game.currentPlayer.id ? 'active' : '';
+  const activeTag = isPlaying(player, playerId) ? '(You)' : '';
 
   return ['div',
     { class: `player-item ${activeClass}` },
@@ -34,16 +18,34 @@ const createPlayerItem = (player) => {
   ];
 };
 
-const createPlayers = (players) => {
-  const playersList = players.map(createPlayerItem);
+const createPlayers = (game, playerId) => {
+  const playersList = game.players.map((player) => {
+    return createPlayerItem(game, player, playerId);
+  });
 
   return createElements(playersList);
 };
 
-const renderPlayers = ({ players }) => {
+const renderPlayers = (game, playerId) => {
   const playersList = document.querySelector('#players-list');
-  const playersHtml = createPlayers(players);
+  const playersHtml = createPlayers(game, playerId);
   playersList.append(...playersHtml);
+};
+
+const renderBoard = (tiles) => {
+  const boardElement = document.querySelector('.board-tiles');
+  const tilesTemplate = tiles.map(tile => {
+    const colIndex = tile.label.slice(0, tile.label.length - 1);
+    const rowIndex = tile.label.slice(-1);
+    const placed = tile.placed ? 'placed' : '';
+    return ['div',
+      { class: `tile-item ${placed}`, id: `tile-${colIndex}` }, {},
+      `${colIndex}`,
+      ['span', { class: 'letter' }, {}, `${rowIndex}`]
+    ];
+  });
+  const tilesHTML = createElements(tilesTemplate);
+  boardElement.replaceChildren(...tilesHTML);
 };
 
 const tileLabel = ({ label }) => {
@@ -72,7 +74,7 @@ const renderPlayerResources = (player) => {
   const resourcesElements = [
     ['section', { class: 'player-money' }, {},
       ['h3', { class: 'component-heading' }, {}, 'Money'],
-      ['p', {}, {}, `$${player.money}`]
+      ['p', {}, {}, `${player.money}`]
     ],
     ['section', { class: 'player-tiles' }, {},
       ['h3', { class: 'component-heading' }, {}, 'Tiles'],
@@ -121,10 +123,22 @@ const renderStockMarket = ({ corporations }) => {
   stockMarket.append(...createElements(elements));
 };
 
+const renderLogs = ({ logs }) => {
+  const logElement = document.querySelector('.activity-logs');
+  const logsHTML = logs.map(log => ['div', {}, {}, log]);
+  logElement.replaceChildren(...createElements(logsHTML));
+};
+
 const main = () => {
-  const playerId = 'player1';
-  const gameId = '12';
-  loadGame(gameId);
+  fetchReq('/api/loadgame', { method: 'GET' },
+    (res) => {
+      const { game, playerId } = res.body;
+      renderBoard(game.board.tiles);
+      renderPlayers(game, playerId);
+      renderPlayerResources(getplayer(game.players, playerId));
+      renderStockMarket(game);
+      renderLogs(game);
+    });
 
   const infoCard = document.getElementById('info-card');
   const infoCardBtn = document.getElementById('info-card-btn');

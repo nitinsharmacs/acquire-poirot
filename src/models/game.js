@@ -42,7 +42,8 @@ class Game {
     this.corporations = corporations;
     this.host = host;
     this.gameSize = gameSize;
-    this.currentPlayer = this.players[0];
+    this.logs = [];
+    // this.currentPlayer = new Player('');
   }
 
   addPlayer(player) {
