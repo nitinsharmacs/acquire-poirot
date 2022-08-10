@@ -56,12 +56,12 @@ __INSTALLATION__
   #### __Execute npm install command__
 
  ```
- npm run install
+ npm install
  ```
 
  #### __Execute npm setup command__
  ```
- npm setup
+ npm run setup
  ```
 <br>
 
@@ -71,17 +71,14 @@ __RUN__
 ---
 
 ##### __GAME__
-<br>
 
   #### __Execute npm start command to run the game__
 
  ```
  npm start
  ```
-<br>
 
 ##### __TEST__
-<br>
 
   #### __Execute npm test command to run the tests__
 
