@@ -19,7 +19,7 @@ const joinGame = (req, res) => {
     return res.status(404).send('Game not found');
   }
 
-  const player = new Player(playerId, playerName);
+  const player = new Player(playerId, playerName, game);
   game.addPlayer(player);
 
   req.session.gameId = id;

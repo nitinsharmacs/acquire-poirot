@@ -3,10 +3,11 @@ const { createApp } = require('../../src/app.js');
 const Sinon = require('sinon');
 const { newGame } = require('../../src/models/game.js');
 const { Games } = require('../../src/models/games.js');
+const { Player } = require('../../src/models/player.js');
 
 const session = () => (req, res, next) => {
   req.session = {};
-  req.session.playerId = '1123';
+  req.session.playerId = 'user';
   req.session.gameId = '123';
   req.session.save = function (cb) {
     res.setHeader('set-cookie', 'connect.sid=23232');
@@ -20,8 +21,12 @@ const initApp = (session) => {
   const games = new Games();
   const host = { name: 'sam', id: 'user' };
 
-  const game = newGame('123', host, 3);
+  const game = newGame('123', host, 4);
   games.add(game);
+  game.addPlayer(new Player('user', 'sam', game));
+  game.addPlayer(new Player('user-2', 'harry', game));
+  game.addPlayer(new Player('user-3', 'nilam', game));
+  game.addPlayer(new Player('user-4', 'peter', game));
 
   const config = { session, root: './public', games };
   const dataStore = {
@@ -41,5 +46,15 @@ describe('GET /api/loadgame', () => {
       .get('/api/loadgame')
       .expect(200)
       .expect('content-type', /^application\/json/, done);
+  });
+});
+
+describe('POST /api/start-game', () => {
+  const app = initApp(session);
+  it('should reorder the player, place tiles and start the game', (done) => {
+    request(app)
+      .post('/api/start-game')
+      .expect('content-type', /json/)
+      .expect(200, done);
   });
 });

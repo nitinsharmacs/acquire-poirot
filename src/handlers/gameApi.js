@@ -101,13 +101,39 @@ const game = {
 
 const loadGame = (req, res) => {
   const { gameId } = req.session;
-  console.log(gameId);
+
   const game = req.app.games.find(gameId);
   if (!game) {
     return res.status(404).send('Game not found');
   }
 
-  res.json(game);
+  res.json({
+    ...game,
+    players: game.players.map(player => {
+      return { ...player, game: undefined };
+    })
+  });
 };
 
-module.exports = { loadGame };
+const startGame = (req, res) => {
+  const { gameId } = req.session;
+
+  const game = req.app.games.find(gameId);
+  if (!game) {
+    return res.status(404).send('Game not found');
+  }
+
+  game.players.forEach(player => {
+    player.getTile();
+  });
+
+  game.reorder();
+
+  game.players.forEach(player => {
+    player.placeTile();
+  });
+
+  res.json({ message: 'success' });
+};
+
+module.exports = { loadGame, startGame };

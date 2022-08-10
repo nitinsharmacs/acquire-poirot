@@ -61,6 +61,7 @@ const createApp = (config = appConfig, dataStore = new DataStore(resources)) => 
   // injecting games to app
   app.games = games;
 
+  // TODO : Inject game into the req
   const authRouter = createAuthRouter(dataStore);
   app.use(authRouter);
 

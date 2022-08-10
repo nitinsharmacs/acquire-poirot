@@ -23,8 +23,15 @@ const hostGame = (dataStore) => (req, res) => {
     return;
   }
 
-  const gameHost = new Player(playerId, playerName);
-  const game = newGame(generateId(), gameHost, +noOfPlayers);
+  const game = newGame(generateId(),
+    {
+      name: playerName,
+      id: playerId
+    },
+    +noOfPlayers);
+  const gameHost = new Player(playerId, playerName, game);
+  game.addPlayer(gameHost);
+
   req.app.games.add(game);
 
   req.session.gameId = game.id;
