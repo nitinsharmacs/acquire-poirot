@@ -18,6 +18,12 @@ const loadGame = (req, res) => {
   });
 };
 
+const getInitialTiles = (player) => {
+  for (let index = 0; index < 6; index++) {
+    player.getTile();
+  }
+};
+
 const startGame = (req, res) => {
   const { gameId } = req.session;
 
@@ -36,6 +42,7 @@ const startGame = (req, res) => {
     game.players.forEach(player => {
       player.placeTile();
       player.money = 6000;
+      getInitialTiles(player);
     });
   }
   res.json({ message: 'success' });
