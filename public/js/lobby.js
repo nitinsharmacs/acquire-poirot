@@ -1,8 +1,8 @@
-const copyGameLink = (event) => {
+const copyGameLink = () => {
   const textarea = document.createElement('textarea');
   document.body.appendChild(textarea);
   textarea.style.display = 'hidden';
-  textarea.innerText = event.target.innerText;
+  textarea.innerText = document.getElementById('game-link').value;
   textarea.focus();
   textarea.select();
   document.execCommand('copy');
@@ -53,7 +53,7 @@ const loadGame = () => {
 
 const main = () => {
   loadGame();
-  document.getElementById('game-link').onclick = copyGameLink;
+  document.getElementById('copy-btn').onclick = copyGameLink;
 
 };
 

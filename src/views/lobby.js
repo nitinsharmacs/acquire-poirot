@@ -27,10 +27,12 @@ const lobbyPage = (game, gameLink) => `
       <div class="total-player option">Total Player: ${game.gameSize}</div>
 
       <div class="line"></div>
-
       <div class="link-box">
         <h2 class="share-header">Share with your friends</h2>
-        <h3 id="game-link">${gameLink}</h3>
+        <div class="game-link">
+          <input type="text" disabled value="${gameLink}" id="game-link">
+          <button class="fa-solid fa-clipboard" id="copy-btn"></button>
+        </div>
       </div>
 
     </section>
@@ -41,30 +43,6 @@ const lobbyPage = (game, gameLink) => `
       </div>
 
       <div class="players">
-        <!-- <div class="player">
-          <div class="player-avatar">
-            <img src="/images/usericon.png" alt="avatar">
-          </div>
-          <div class="player-name">Sam</div>
-        </div>
-        <div class="player">
-          <div class="player-avatar">
-            <img src="/images/usericon.png" alt="avatar">
-          </div>
-          <div class="player-name">Sam</div>
-        </div>
-        <div class="player">
-          <div class="player-avatar">
-            <img src="/images/usericon.png" alt="avatar">
-          </div>
-          <div class="player-name">Sam</div>
-        </div>
-        <div class="player">
-          <div class="player-avatar">
-            <img src="/images/usericon.png" alt="avatar">
-          </div>
-          <div class="player-name">Sam</div>
-        </div> -->
       </div>
     </div>
 
