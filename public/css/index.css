@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 
-body {
+body * {
   font-family: 'Recursive';
 }
 
@@ -107,13 +107,15 @@ body {
 
 .input-section {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+
 }
 
 .input-section select {
   padding: 0.4em 0.8em;
   outline: none;
+  width: 100%;
+  text-align: center;
+
 }
 
 .form-controls {
