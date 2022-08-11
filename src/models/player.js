@@ -1,5 +1,5 @@
 const randomInt = (limit) => {
-  return Math.round(Math.random() * limit);
+  return Math.floor(Math.random() * limit);
 };
 
 class Player {
