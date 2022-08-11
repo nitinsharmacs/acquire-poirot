@@ -166,6 +166,7 @@ const placeTile = () => {
         const { game, playerId } = res.body;
         renderScreen(game, playerId);
         removeOverlay();
+        step = 2;
       });
     });
 };
@@ -200,6 +201,14 @@ const main = () => {
         if (step === 1) {
           highlightTiles();
         }
+      } else {
+        setInterval(() => {
+          fetchReq('/api/loadgame', { method: 'GET' },
+            (res) => {
+              const { game, playerId } = res.body;
+              renderScreen(game, playerId);
+            });
+        });
       }
     });
 
