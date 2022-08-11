@@ -96,13 +96,36 @@ body {
   align-items: center;
 }
 
-.host-option {
-  width: 200px;
+.options * {
+  font-size: 1rem;
+}
+
+.form-inputs {
+  width: 250px;
   height: 40px;
-  border: 1px solid #ADB5BD;
+}
+
+.input-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.input-section select {
+  padding: 0.4em 0.8em;
+  outline: none;
+}
+
+.form-controls {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 1em;
+}
+
+.form-controls input {
+  padding: 0.5em 1em;
+  width: 100%;
 }
 
 .option>a {
@@ -122,7 +145,7 @@ body {
   text-align: center;
 }
 
-.host-option>input {
+.form-inputs>input {
   width: 100%;
   height: 100%;
   text-align: center;

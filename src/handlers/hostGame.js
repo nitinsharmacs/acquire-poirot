@@ -5,6 +5,9 @@ const generateId = () => {
   return new Date().getTime().toString(16);
 };
 
+const isPlayersCountValid = (noOfPlayers) =>
+  noOfPlayers >= 3 && noOfPlayers <= 6;
+
 const hostGame = (dataStore) => (req, res) => {
   if (!req.session.playerId) {
     res.redirect('/login?ref=host');
@@ -14,16 +17,24 @@ const hostGame = (dataStore) => (req, res) => {
   const { noOfPlayers } = req.body;
   const { playerName, playerId } = req.session;
 
-  if (!noOfPlayers || !isFinite(noOfPlayers)) {
+  if (!isPlayersCountValid(noOfPlayers)) {
     const hostPage = dataStore.load('HOST_TEMPLATE_PATH');
-    const errorHost = hostPage.replace('_MESSAGE_', 'Please enter valid number of players');
+    const errorHost = hostPage.replace(
+      '_MESSAGE_',
+      'Please enter valid number of players'
+    );
     res.type('text/html');
     res.end(errorHost);
     return;
   }
 
-  const game = newGame(generateId(), { name: playerName, id: playerId },
-    +noOfPlayers);
+  const game = newGame(generateId(),
+    {
+      name: playerName,
+      id: playerId
+    },
+    +noOfPlayers
+  );
   const gameHost = new Player(playerId, playerName, game);
   game.addPlayer(gameHost);
 

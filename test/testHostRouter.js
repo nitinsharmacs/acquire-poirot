@@ -98,7 +98,7 @@ describe('POST /host', () => {
         .expect(302, done);
     });
 
-  it('should show error in host page when host did not enter no of players and host a game', (done) => {
+  it('should show error for invalid number of players', (done) => {
     request(app)
       .post('/host')
       .send('host=localhost')
