@@ -56,6 +56,10 @@ class Game {
     this.players = this.players.slice(nearestTilePos).concat(this.players.slice(0, nearestTilePos));
     this.currentPlayer = this.players[0];
   }
+
+  isPlayerIdle(playerId) {
+    return this.currentPlayer.id !== playerId;
+  }
 }
 
 const createCorporations = () => {

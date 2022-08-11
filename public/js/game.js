@@ -1,5 +1,7 @@
 let step = 1;
 
+const store = {};
+
 const getplayer = (players, playerId) => {
   return players.find(player => player.id === playerId);
 };
@@ -89,6 +91,7 @@ const renderPlayerResources = (player) => {
     ]
   ];
 
+  playerResources.innerText = '';
   playerResources.append(...createElements(resourcesElements));
 };
 
@@ -131,6 +134,25 @@ const renderLogs = ({ logs }) => {
   logElement.replaceChildren(...createElements(logsHTML));
 };
 
+// TODO: Create game, player models
+const drawTile = () => {
+  fetch('/api/draw-tile', {
+    method: 'POST'
+  })
+    .then(res => {
+      if (res.status !== 200) {
+        throw new Error('Can\'t draw tile');
+      }
+      return res.json();
+    })
+    .then((res) => {
+      const player = getplayer(store.game.players, store.playerId);
+      player.tiles.push(res.data);
+
+      renderPlayerResources(player);
+    }).catch(err => console.log(err));
+};
+
 const highlightTiles = () => {
   const tilesElement = document.querySelector('.player-tiles');
   const backdropTemplate = ['div', { class: 'overlay' }, {}];
@@ -148,6 +170,9 @@ const main = () => {
   fetchReq('/api/loadgame', { method: 'GET' },
     (res) => {
       const { game, playerId } = res.body;
+      store.game = game;
+      store.playerId = playerId;
+      console.log(game);
       renderBoard(game.board.tiles);
       renderPlayers(game, playerId);
       renderPlayerResources(getplayer(game.players, playerId));
@@ -167,6 +192,11 @@ const main = () => {
   infoCardBtn.onclick = () => {
     infoCard.classList.toggle('hide');
   };
+
+  // has to remove this timeout when there is player turn flow
+  setTimeout(() => {
+    drawTile();
+  }, 5000);
 };
 
 window.onload = main;

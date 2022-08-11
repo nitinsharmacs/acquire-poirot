@@ -11,11 +11,12 @@ class Player {
     this.money = 0;
   }
 
-  getTile() {
+  drawTile() {
     const tilePos = randomInt(this.game.cluster.length);
     const tile = this.game.cluster[tilePos];
     this.game.cluster.splice(tilePos, 1);
     this.tiles.push(tile);
+    this.game.logs.push(`${this.name} drew a tile`);
 
     return tile;
   }

@@ -17,6 +17,7 @@ const DataStore = require('./dataStore.js');
 const { Game, newGame } = require('./models/game');
 const { Player } = require('./models/player');
 const { Games } = require('./models/games');
+const { injectGame } = require('./middlewares/game');
 
 const { LOGIN_TEMPLATE,
   SIGNUP_TEMPLATE,
@@ -61,7 +62,6 @@ const createApp = (config = appConfig, dataStore = new DataStore(resources)) => 
   // injecting games to app
   app.games = games;
 
-  // TODO : Inject game into the req
   const authRouter = createAuthRouter(dataStore);
   app.use(authRouter);
 
@@ -73,7 +73,7 @@ const createApp = (config = appConfig, dataStore = new DataStore(resources)) => 
 
   app.get('/game', restrict, serveGamePage(dataStore));
 
-  app.use('/api', restrict, apiRoutes);
+  app.use('/api', restrict, injectGame, apiRoutes);
   app.use(express.static(root));
   return app;
 };

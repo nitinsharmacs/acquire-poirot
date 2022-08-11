@@ -20,7 +20,7 @@ const loadGame = (req, res) => {
 
 const getInitialTiles = (player) => {
   for (let index = 0; index < 6; index++) {
-    player.getTile();
+    player.drawTile();
   }
 };
 
@@ -34,7 +34,7 @@ const startGame = (req, res) => {
 
   if (game.host.id === req.session.playerId) {
     game.players.forEach(player => {
-      player.getTile();
+      player.drawTile();
     });
 
     game.reorder();
@@ -46,6 +46,18 @@ const startGame = (req, res) => {
     });
   }
   res.json({ message: 'success' });
+};
+
+const drawTile = (req, res) => {
+  const { game } = req;
+  const { playerId } = req.session;
+
+  if (game.isPlayerIdle(playerId)) {
+    return res.status(400).json({ message: 'Can\'t draw a tile' });
+  }
+
+  const tile = game.currentPlayer.drawTile();
+  res.json({ data: tile, message: 'Drawn a tile' });
 };
 
 const placeTile = (req, res) => {
@@ -61,4 +73,4 @@ const placeTile = (req, res) => {
   res.json({ message: 'success' });
 };
 
-module.exports = { loadGame, startGame, placeTile };
+module.exports = { loadGame, startGame, drawTile, placeTile };

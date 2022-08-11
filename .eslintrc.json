@@ -61,7 +61,7 @@
     "no-eval": "error",
     "no-implicit-globals": "error",
     "prefer-const": "error",
-    "no-magic-numbers": "warn",
+    "no-magic-numbers": "off",
     "no-process-exit": "error",
     "no-process-env": "off",
     "no-return-assign": "error",
