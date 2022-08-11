@@ -9,6 +9,7 @@ class Player {
     this.game = game;
     this.tiles = [];
     this.money = 0;
+    this.stocks = [];
   }
 
   drawTile() {
@@ -32,6 +33,16 @@ class Player {
     this.game.board.placeTile(tile);
     this.game.logs.push(`${this.name} placed ${tile.id}`);
     this.tiles.splice(0, 1);
+  }
+
+  addStocks({ id, name }, noOfStocks = 0) {
+    const stocks = this.stocks.find(stock => stock.corporationId === id);
+
+    if (stocks) {
+      stocks.count += noOfStocks;
+      return;
+    }
+    this.stocks.push({ corporationId: id, corporationName: name, count: noOfStocks });
   }
 }
 

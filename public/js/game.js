@@ -36,14 +36,21 @@ const renderPlayers = (game, playerId) => {
   playersList.replaceChildren(...playersHtml);
 };
 
-const renderBoard = (tiles) => {
+const renderBoard = (tiles, corporations) => {
   const boardElement = document.querySelector('.board-tiles');
   const tilesTemplate = tiles.map(tile => {
     const colIndex = tile.label.slice(0, tile.label.length - 1);
     const rowIndex = tile.label.slice(-1);
     const placed = tile.placed ? 'placed' : '';
+    let built = '';
+    const corporation = corporations.find(corp => corp.tiles.includes(tile));
+
+    if (corporation) {
+      built = corporation.id;
+    }
+
     return ['div',
-      { class: `tile-item ${placed}`, id: `tile-${colIndex}` }, {},
+      { class: `tile-item ${placed} ${built}`, id: `tile-${colIndex}` }, {},
       `${colIndex}`,
       ['span', { class: 'letter' }, {}, `${rowIndex}`]
     ];
@@ -72,13 +79,22 @@ const playerTiles = ({ tiles }) => {
   });
 };
 
+const playerStocks = ({ stocks }) => {
+  return stocks.map(stock => ['div',
+    { class: 'stock', id: stock.corporationId }, {},
+    ['p', {}, {}, stock.corporationName],
+    ['p', {}, {}, `${stock.count}`]
+  ]
+  );
+};
+
 const renderPlayerResources = (player) => {
   const playerResources = document.querySelector('#player-resources');
 
   const resourcesElements = [
     ['section', { class: 'player-money' }, {},
       ['h3', { class: 'component-heading' }, {}, 'Money'],
-      ['p', {}, {}, `${player.money}`]
+      ['p', {}, {}, `${player.money} `]
     ],
     ['section', { class: 'player-tiles' }, {},
       ['h3', { class: 'component-heading' }, {}, 'Tiles'],
@@ -88,6 +104,7 @@ const renderPlayerResources = (player) => {
     ],
     ['section', { class: 'player-stocks' }, {},
       ['h3', { class: 'component-heading' }, {}, 'Stocks'],
+      ['div', {}, {}, ...playerStocks(player)]
     ]
   ];
 
@@ -99,7 +116,7 @@ const createCorporation = (corporation) => {
     ['div', { class: 'corporation-img', id: corporation.id }, {}],
     ['div', { class: 'corporation-info' }, {},
       ['p', {}, {}, corporation.name],
-      ['p', {}, {}, `${corporation.stocksLeft}`],
+      ['p', {}, {}, `${corporation.stocksLeft} `],
     ]
   ];
 };
@@ -185,7 +202,7 @@ const highlightTiles = () => {
 };
 
 const renderScreen = (game, playerId) => {
-  renderBoard(game.board.tiles);
+  renderBoard(game.board.tiles, game.corporations);
   renderPlayers(game, playerId);
   renderPlayerResources(getplayer(game.players, playerId));
   renderStockMarket(game);
