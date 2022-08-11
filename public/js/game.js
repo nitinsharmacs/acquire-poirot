@@ -154,8 +154,10 @@ const main = () => {
       renderStockMarket(game);
       renderLogs(game);
 
-      if (step === 1) {
-        highlightTiles();
+      if (playerId === game.currentPlayer.id) {
+        if (step === 1) {
+          highlightTiles();
+        }
       }
     });
 
