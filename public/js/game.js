@@ -33,7 +33,7 @@ const createPlayers = (game, playerId) => {
 const renderPlayers = (game, playerId) => {
   const playersList = document.querySelector('#players-list');
   const playersHtml = createPlayers(game, playerId);
-  playersList.append(...playersHtml);
+  playersList.replaceChildren(...playersHtml);
 };
 
 const renderBoard = (tiles) => {
@@ -91,8 +91,7 @@ const renderPlayerResources = (player) => {
     ]
   ];
 
-  playerResources.innerText = '';
-  playerResources.append(...createElements(resourcesElements));
+  playerResources.replaceChildren(...createElements(resourcesElements));
 };
 
 const createCorporation = (corporation) => {
@@ -134,7 +133,6 @@ const renderLogs = ({ logs }) => {
   logElement.replaceChildren(...createElements(logsHTML));
 };
 
-// TODO: Create game, player models
 const drawTile = () => {
   fetch('/api/draw-tile', {
     method: 'POST'
@@ -153,12 +151,31 @@ const drawTile = () => {
     }).catch(err => console.log(err));
 };
 
+const removeOverlay = () => {
+  const overlay = document.querySelector('.overlay');
+  overlay.remove();
+};
+
+const placeTile = () => {
+  const tilesElement = document.querySelector('.component-tiles');
+  const tileId = tilesElement.firstChild.id;
+  const body = toURLSearchParams({ tileId });
+  fetchReq('/api/place-tile', { method: 'POST', body },
+    (res) => {
+      fetchReq('/api/loadgame', { method: 'GET' }, (res) => {
+        const { game, playerId } = res.body;
+        renderScreen(game, playerId);
+        removeOverlay();
+      });
+    });
+};
+
 const highlightTiles = () => {
   const tilesElement = document.querySelector('.player-tiles');
   const backdropTemplate = ['div', { class: 'overlay' }, {}];
   const buttonTemplate = ['div', { class: 'place-button-holder' }, {},
     ['button', { class: 'place-tile-button' },
-      { innerText: 'Place' }]
+      { innerText: 'Place', onclick: placeTile }]
   ];
   tilesElement.style['z-index'] = 10;
   tilesElement.style.background = 'white';
@@ -166,19 +183,19 @@ const highlightTiles = () => {
   tilesElement.appendChild(createDOMTree(buttonTemplate));
 };
 
+const renderScreen = (game, playerId) => {
+  renderBoard(game.board.tiles);
+  renderPlayers(game, playerId);
+  renderPlayerResources(getplayer(game.players, playerId));
+  renderStockMarket(game);
+  renderLogs(game);
+};
+
 const main = () => {
   fetchReq('/api/loadgame', { method: 'GET' },
     (res) => {
       const { game, playerId } = res.body;
-      store.game = game;
-      store.playerId = playerId;
-      console.log(game);
-      renderBoard(game.board.tiles);
-      renderPlayers(game, playerId);
-      renderPlayerResources(getplayer(game.players, playerId));
-      renderStockMarket(game);
-      renderLogs(game);
-
+      renderScreen(game, playerId);
       if (playerId === game.currentPlayer.id) {
         if (step === 1) {
           highlightTiles();

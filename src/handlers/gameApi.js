@@ -40,7 +40,7 @@ const startGame = (req, res) => {
     game.reorder();
 
     game.players.forEach(player => {
-      player.placeTile();
+      player.placeFirstTile();
       player.money = 6000;
       getInitialTiles(player);
     });
@@ -66,10 +66,9 @@ const placeTile = (req, res) => {
   const game = req.app.games.find(gameId);
 
   const player = game.players.find(player => player.id === playerId);
-  const tilePos = player.tiles.findIndex((tile) => tile.id === tileId);
+  const tile = player.tiles.find((tile) => tile.id === tileId);
 
-  player.tiles.splice(tilePos, 1);
-  game.board.placeTile({ id: tileId });
+  player.placeTile(tile);
   res.json({ message: 'success' });
 };
 

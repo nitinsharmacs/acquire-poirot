@@ -21,8 +21,14 @@ class Player {
     return tile;
   }
 
-  placeTile() {
+  placeFirstTile() {
     const [tile] = this.tiles;
+    this.game.board.placeTile(tile);
+    this.game.logs.push(`${this.name} placed ${tile.id}`);
+    this.tiles.splice(0, 1);
+  }
+
+  placeTile(tile) {
     this.game.board.placeTile(tile);
     this.game.logs.push(`${this.name} placed ${tile.id}`);
     this.tiles.splice(0, 1);

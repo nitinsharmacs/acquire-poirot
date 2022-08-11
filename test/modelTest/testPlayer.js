@@ -29,7 +29,7 @@ describe('Player', () => {
       game.addPlayer(host);
       game.addPlayer(player);
       const tile = player.drawTile();
-      player.placeTile();
+      player.placeFirstTile();
 
       assert.ok(player.tiles.find(({ id }) => id === tile.id) === undefined);
       assert.ok(game.cluster.find(({ id }) => id === tile.id) === undefined);

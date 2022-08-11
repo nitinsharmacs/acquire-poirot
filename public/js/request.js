@@ -30,3 +30,12 @@ const fetchReq = (url, options, onDone) => {
 
   xhr.send(options.body);
 };
+
+const toURLSearchParams = (object) => {
+  const formData = new FormData();
+  for (const key in object) {
+    const value = object[key];
+    formData.append(key, value);
+  }
+  return new URLSearchParams(formData);
+};
