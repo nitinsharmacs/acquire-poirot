@@ -85,8 +85,9 @@ describe('POST /host', () => {
   };
 
   let app;
-  beforeEach(() => {
+  beforeEach((done) => {
     app = initApp(session);
+    done();
   });
 
   it('should show lobby when host enter no of players and host a game',
