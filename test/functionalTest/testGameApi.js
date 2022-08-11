@@ -58,3 +58,26 @@ describe('POST /api/start-game', () => {
       .expect(200, done);
   });
 });
+
+describe('POST /api/place-tile', () => {
+  const app = initApp(session);
+  before((done) => {
+    request(app)
+      .post('/api/start-game')
+      .expect('content-type', /json/)
+      .expect(200, done);
+  });
+
+  it('should remove tile from player\'s tiles and place it on board',
+    (done) => {
+      const game = app.games.find('123');
+      const player = game.players.find(player => player.id === 'user');
+      const tileId = player.tiles[0].id;
+
+      request(app)
+        .post('/api/place-tile')
+        .send(`tileId=${tileId}`)
+        .expect('content-type', /json/)
+        .expect(200, done);
+    });
+});

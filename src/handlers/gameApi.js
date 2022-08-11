@@ -48,4 +48,17 @@ const startGame = (req, res) => {
   res.json({ message: 'success' });
 };
 
-module.exports = { loadGame, startGame };
+const placeTile = (req, res) => {
+  const { tileId } = req.body;
+  const { gameId, playerId } = req.session;
+  const game = req.app.games.find(gameId);
+
+  const player = game.players.find(player => player.id === playerId);
+  const tilePos = player.tiles.findIndex((tile) => tile.id === tileId);
+
+  player.tiles.splice(tilePos, 1);
+  game.board.placeTile({ id: tileId });
+  res.json({ message: 'success' });
+};
+
+module.exports = { loadGame, startGame, placeTile };
