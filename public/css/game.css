@@ -138,6 +138,30 @@ body {
   height: 100%;
 }
 
+.overlay {
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.place-button-holder {
+  margin-top: 3em;
+  display: flex !important;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.place-tile-button {
+  height: 2em;
+  width: 4em;
+  font-size: 1em;
+  cursor: pointer;
+}
+
 .player-resources>section>h3 {
   margin-bottom: 1em;
 }

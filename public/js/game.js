@@ -1,3 +1,5 @@
+let step = 1;
+
 const getplayer = (players, playerId) => {
   return players.find(player => player.id === playerId);
 };
@@ -79,7 +81,7 @@ const renderPlayerResources = (player) => {
     ['section', { class: 'player-tiles' }, {},
       ['h3', { class: 'component-heading' }, {}, 'Tiles'],
       [
-        'div', {}, {}, ...playerTiles(player)
+        'div', { class: 'component-tiles' }, {}, ...playerTiles(player)
       ]
     ],
     ['section', { class: 'player-stocks' }, {},
@@ -129,6 +131,19 @@ const renderLogs = ({ logs }) => {
   logElement.replaceChildren(...createElements(logsHTML));
 };
 
+const highlightTiles = () => {
+  const tilesElement = document.querySelector('.player-tiles');
+  const backdropTemplate = ['div', { class: 'overlay' }, {}];
+  const buttonTemplate = ['div', { class: 'place-button-holder' }, {},
+    ['button', { class: 'place-tile-button' },
+      { innerText: 'Place' }]
+  ];
+  tilesElement.style['z-index'] = 10;
+  tilesElement.style.background = 'white';
+  document.body.appendChild(...createElements([backdropTemplate]));
+  tilesElement.appendChild(createDOMTree(buttonTemplate));
+};
+
 const main = () => {
   fetchReq('/api/loadgame', { method: 'GET' },
     (res) => {
@@ -138,6 +153,10 @@ const main = () => {
       renderPlayerResources(getplayer(game.players, playerId));
       renderStockMarket(game);
       renderLogs(game);
+
+      if (step === 1) {
+        highlightTiles();
+      }
     });
 
   const infoCard = document.getElementById('info-card');
