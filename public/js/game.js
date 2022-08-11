@@ -200,6 +200,7 @@ const main = () => {
       if (playerId === game.currentPlayer.id) {
         if (step === 1) {
           highlightTiles();
+          drawTile();
         }
       } else {
         setInterval(() => {
@@ -218,11 +219,6 @@ const main = () => {
   infoCardBtn.onclick = () => {
     infoCard.classList.toggle('hide');
   };
-
-  // has to remove this timeout when there is player turn flow
-  setTimeout(() => {
-    drawTile();
-  }, 5000);
 };
 
 window.onload = main;
