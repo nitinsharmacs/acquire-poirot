@@ -12,11 +12,22 @@ class Player {
     this.stocks = [];
   }
 
-  drawTile() {
+  #findTile(tileId) {
+    return this.tiles.find(tile => tile.id === tileId);
+  }
+
+  getTile() {
     const tilePos = randomInt(this.game.cluster.length);
     const tile = this.game.cluster[tilePos];
+
     this.game.cluster.splice(tilePos, 1);
     this.tiles.push(tile);
+
+    return tile;
+  }
+
+  drawTile() {
+    const tile = this.getTile();
     this.game.logs.push(`${this.name} drew a tile`);
 
     return tile;
@@ -29,10 +40,15 @@ class Player {
     this.tiles.splice(0, 1);
   }
 
-  placeTile(tile) {
+  placeTile({ id }) {
+    const tile = this.#findTile(id);
+
     this.game.board.placeTile(tile);
+
     this.game.logs.push(`${this.name} placed ${tile.id}`);
     this.tiles.splice(0, 1);
+
+    return tile;
   }
 
   addStocks({ id, name }, noOfStocks = 0) {

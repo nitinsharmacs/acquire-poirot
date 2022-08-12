@@ -1,4 +1,5 @@
 const { Player } = require('../models/player.js');
+const { getPlayer, createGameLink } = require('../utils/game.js');
 const { lobbyPage } = require('../views/lobby.js');
 
 const serveGamePage = (dataStore) => {
@@ -11,15 +12,18 @@ const serveGamePage = (dataStore) => {
 };
 
 const joinGame = (req, res) => {
-  const { id } = req.params;
-  const { playerName, playerId } = req.session;
+  const {
+    session: { playerId, playerName },
+    params: { id }
+  } = req;
 
   const game = req.app.games.find(id);
+
   if (!game) {
     return res.status(404).send('Game not found');
   }
 
-  const playerExists = game.players.find(player => player.id === playerId);
+  const playerExists = getPlayer(game.players, playerId);
 
   if (playerExists) {
     return res.redirect('/lobby/' + id);
@@ -32,10 +36,6 @@ const joinGame = (req, res) => {
   req.session.save(() => {
     res.redirect('/lobby/' + id);
   });
-};
-
-const createGameLink = (host, gameId) => {
-  return `http://${host}/join/${gameId}`;
 };
 
 const serveLobby = (req, res) => {

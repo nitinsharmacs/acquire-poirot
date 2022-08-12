@@ -1,50 +1,33 @@
-const loadGame = (req, res) => {
-  const { gameId } = req.session;
+const { createGameDAO } = require('../models/gameDAO.js');
+const { getPlayer, getInitialTiles } = require('../utils/game.js');
 
-  const game = req.app.games.find(gameId);
+const loadGame = (req, res) => {
+  const { game, session: { playerId } } = req;
+
   if (!game) {
     return res.status(404).send('Game not found');
   }
 
-  res.json({
-    game: {
-      ...game,
-      players: game.players.map(player => {
-        return { ...player, game: undefined };
-      }),
-      currentPlayer: { ...game.currentPlayer, game: undefined },
-    },
-    playerId: req.session.playerId
-  });
-};
-
-const getInitialTiles = (player) => {
-  for (let index = 0; index < 6; index++) {
-    player.drawTile();
-  }
+  res.json({ game: createGameDAO(game, playerId) });
 };
 
 const startGame = (req, res) => {
-  const { gameId } = req.session;
+  const { game } = req;
 
-  const game = req.app.games.find(gameId);
-  if (!game) {
-    return res.status(404).send('Game not found');
+  if (game.host.id !== req.session.playerId) {
+    return res.status(400).json({ message: 'Only host can start game' });
   }
 
-  if (game.host.id === req.session.playerId) {
-    game.players.forEach(player => {
-      player.drawTile();
-    });
+  game.players.forEach(player => player.drawTile());
 
-    game.reorder();
+  game.reorder();
 
-    game.players.forEach(player => {
-      player.placeFirstTile();
-      player.money = 6000;
-      getInitialTiles(player);
-    });
-  }
+  game.players.forEach(player => {
+    player.placeFirstTile();
+    player.money = 6000;
+    getInitialTiles(player);
+  });
+
   res.json({ message: 'success' });
 };
 
@@ -61,15 +44,16 @@ const drawTile = (req, res) => {
 };
 
 const placeTile = (req, res) => {
-  const { tileId } = req.body;
-  const { gameId, playerId } = req.session;
-  const game = req.app.games.find(gameId);
+  const {
+    game,
+    session: { playerId },
+    body: { tileId }
+  } = req;
 
-  const player = game.players.find(player => player.id === playerId);
-  const tile = player.tiles.find((tile) => tile.id === tileId);
+  const player = getPlayer(game.players, playerId);
 
-  player.placeTile(tile);
-  res.json({ message: 'success' });
+  const tile = player.placeTile({ id: tileId });
+  res.json({ data: tile, message: 'success' });
 };
 
 module.exports = { loadGame, startGame, drawTile, placeTile };

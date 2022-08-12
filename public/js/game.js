@@ -1,7 +1,3 @@
-let step = 1;
-
-const store = {};
-
 const getplayer = (players, playerId) => {
   return players.find(player => player.id === playerId);
 };
@@ -161,7 +157,8 @@ const drawTile = () => {
       return res.json();
     })
     .then((res) => {
-      const player = getplayer(store.game.players, store.playerId);
+
+      const player = getplayer(gameState.players, gameState.player.id);
       player.tiles.push(res.data);
 
       renderPlayerResources(player);
@@ -183,7 +180,7 @@ const placeTile = () => {
         const { game, playerId } = res.body;
         renderScreen(game, playerId);
         removeOverlay();
-        step = 2;
+        gameState.step = 2;
       });
     });
 };
@@ -209,13 +206,19 @@ const renderScreen = (game, playerId) => {
   renderLogs(game);
 };
 
+let gameState;
+
 const main = () => {
   fetchReq('/api/loadgame', { method: 'GET' },
     (res) => {
-      const { game, playerId } = res.body;
+      gameState = createState(res.body.game);
+
+      const game = gameState;
+      const playerId = gameState.player.id;
+
       renderScreen(game, playerId);
       if (playerId === game.currentPlayer.id) {
-        if (step === 1) {
+        if (gameState.step === 1) {
           highlightTiles();
           drawTile();
         }
@@ -223,7 +226,11 @@ const main = () => {
         setInterval(() => {
           fetchReq('/api/loadgame', { method: 'GET' },
             (res) => {
-              const { game, playerId } = res.body;
+              gameState = createState(res.body.game);
+
+              const game = gameState;
+              const playerId = gameState.player.id;
+
               renderScreen(game, playerId);
             });
         });

@@ -1,3 +1,17 @@
+const getPlayer = (players, playerId) => {
+  return players.find(player => player.id === playerId);
+};
+
+const getInitialTiles = (player) => {
+  for (let index = 0; index < 6; index++) {
+    player.getTile();
+  }
+};
+
+const createGameLink = (host, gameId) => {
+  return `http://${host}/join/${gameId}`;
+};
+
 const findAdjancetTiles = (tileId, tiles) => {
   const adjancentTiles = [];
   const tilePos = tiles.findIndex(tile => tile.id === tileId);
@@ -60,4 +74,4 @@ const buildCorporation = (player, corporations, placedTiles, tile) => {
   player.addStocks(corporation, 1);
 };
 
-module.exports = { nextMove, buildCorporation, findAdjancetTiles };
+module.exports = { getPlayer, getInitialTiles, createGameLink, nextMove, buildCorporation, findAdjancetTiles };
