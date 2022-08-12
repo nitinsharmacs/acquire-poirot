@@ -142,7 +142,7 @@ const renderStockMarket = ({ corporations }) => {
 };
 
 const renderLogs = ({ logs }) => {
-  const logElement = document.querySelector('.activity-logs');
+  const logElement = document.querySelector('.logs');
 
   const logsHTML = logs.map(log => ['div', {}, {}, log]);
 

@@ -334,10 +334,21 @@ body {
 
 .activity-logs {
   border: 2px solid black;
-  height: 100%;
   border-radius: var(--component-border-radius);
   padding: var(--component-padding);
-  overflow: scroll;
+  overflow: hidden;
+}
+
+.activity-logs .component-heading {
+  position: sticky;
+  top: 0;
+}
+
+.logs {
+  margin: 0.5em 0;
+  padding: 0.5em 0;
+  height: 90%;
+  overflow-y: scroll;
 }
 
 /* STOCK MARKET ------------------------- */
