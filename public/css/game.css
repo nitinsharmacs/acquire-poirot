@@ -340,11 +340,6 @@ body {
   height: 100%;
 }
 
-.activity-logs .component-heading {
-  position: sticky;
-  top: 0;
-}
-
 .logs {
   margin: 0.5em 0;
   padding: 0.5em 0;
