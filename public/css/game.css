@@ -195,7 +195,8 @@ body {
 }
 
 .highlight-tile {
-  background-color: red !important;
+  background-color: rgba(0, 0, 0, 0.799) !important;
+  color: white;
 }
 
 .player-tiles>div,

@@ -195,15 +195,17 @@ const placeTile = (event) => {
 };
 
 const selectTile = (event, tiles) => {
-  const inputEle = event.target;
-  const radio = inputEle.querySelector('input');
+  const inputElement = event.target;
+  const radio = inputElement.querySelector('input');
   radio.checked = true;
+  const buttonElement = document.querySelector('.place-tile-button');
+  buttonElement.hidden = false;
 
   tiles.forEach(tile => {
     const tileElement = document.getElementById(tile.id);
     tileElement.classList.remove('highlight-tile');
   });
-  inputEle.classList.add('highlight-tile');
+  inputElement.classList.add('highlight-tile');
 };
 
 const tileSelection = ({ tiles }) => {
@@ -221,9 +223,8 @@ const tileSelection = ({ tiles }) => {
 
 const createPlaceButton = () => {
   const buttonTemplate = ['div', { class: 'place-button-holder' }, {},
-    ['button', { class: 'place-tile-button' }, {},
+    ['button', { class: 'place-tile-button' }, { hidden: true },
       'Place'],
-
   ];
   return createDOMTree(buttonTemplate);
 };
@@ -273,7 +274,6 @@ const loadGame = () => {
   fetch('/api/loadgame', { method: 'GET' })
     .then(res => res.json())
     .then(res => {
-      console.log(res);
       gameState = createState(res.game);
       renderScreen(gameState);
 
