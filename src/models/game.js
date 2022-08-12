@@ -39,6 +39,11 @@ class Game {
     this.host = host;
     this.gameSize = gameSize;
     this.logs = [];
+    this.started = false;
+  }
+
+  start() {
+    this.started = true;
   }
 
   addPlayer(player) {
@@ -68,6 +73,10 @@ class Game {
 
   isPlayerIdle(playerId) {
     return this.currentPlayer.id !== playerId;
+  }
+
+  hasStarted() {
+    return this.started;
   }
 }
 

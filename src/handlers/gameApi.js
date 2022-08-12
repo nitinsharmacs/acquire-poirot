@@ -28,6 +28,8 @@ const startGame = (req, res) => {
     getInitialTiles(player);
   });
 
+  game.start();
+
   res.json({ message: 'success' });
 };
 

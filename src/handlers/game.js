@@ -23,6 +23,10 @@ const joinGame = (req, res) => {
     return res.status(404).send('Game not found');
   }
 
+  if (game.hasStarted()) {
+    return res.redirect('/');
+  }
+
   const playerExists = getPlayer(game.players, playerId);
 
   if (playerExists) {

@@ -25,7 +25,8 @@ const createGameDAO = (game, playerId) => {
     logs: game.logs,
     currentPlayer: game.currentPlayer ? otherPlayerDAO(game.currentPlayer) : {},
     corporations: game.corporations,
-    gameSize: game.gameSize
+    gameSize: game.gameSize,
+    started: game.started
   };
 
   return gameDAO;

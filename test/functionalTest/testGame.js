@@ -5,10 +5,10 @@ const { newGame } = require('../../src/models/game.js');
 const { Games } = require('../../src/models/games.js');
 const { Player } = require('../../src/models/player.js');
 
-const session = () => (req, res, next) => {
+const session = (gameId, playerId) => () => (req, res, next) => {
   req.session = {};
-  req.session.playerId = 'user';
-  req.session.gameId = '123';
+  req.session.playerId = playerId;
+  req.session.gameId = gameId;
   req.session.save = function (cb) {
     res.setHeader('set-cookie', 'connect.sid=23232');
     cb();
@@ -17,17 +17,7 @@ const session = () => (req, res, next) => {
   next();
 };
 
-const initApp = (session) => {
-  const games = new Games();
-  const host = { name: 'sam', id: 'user' };
-
-  const game = newGame('123', host, 4);
-  games.add(game);
-  game.addPlayer(new Player('user', 'sam', game));
-  game.addPlayer(new Player('user-2', 'harry', game));
-  game.addPlayer(new Player('user-3', 'nilam', game));
-  game.addPlayer(new Player('user-4', 'peter', game));
-
+const initApp = (session, games) => {
   const config = { session, root: './public', games };
   const dataStore = {
     load: Sinon.stub(),
@@ -39,8 +29,37 @@ const initApp = (session) => {
   return createApp(config, dataStore);
 };
 
+// const initApp = (session) => {
+//   const games = new Games();
+//   const host = { name: 'sam', id: 'user' };
+
+//   const game = newGame('123', host, 4);
+//   games.add(game);
+//   game.addPlayer(new Player('user', 'sam', game));
+//   game.addPlayer(new Player('user-2', 'harry', game));
+//   game.addPlayer(new Player('user-3', 'nilam', game));
+//   game.addPlayer(new Player('user-4', 'peter', game));
+
+//   const config = { session, root: './public', games };
+//   const dataStore = {
+//     load: Sinon.stub(),
+//     loadJSON: Sinon.stub()
+//   };
+//   dataStore.load.withArgs('LOGIN_TEMPLATE').returns('_MESSAGE_');
+//   dataStore.load.withArgs('SIGNUP_TEMPLATE').returns('_MESSAGE_');
+//   dataStore.load.withArgs('HOST_TEMPLATE_PATH').returns('_MESSAGE_');
+//   return createApp(config, dataStore);
+// };
+
 describe('GET /lobby', () => {
-  const app = initApp(session);
+  const games = new Games();
+  const host = { name: 'sam', id: 'user' };
+
+  const game = newGame('123', host, 4);
+  games.add(game);
+  game.addPlayer(new Player('user', 'sam', game));
+
+  const app = initApp(session('123', 'user'), games);
   it('should response with lobby page', (done) => {
     request(app)
       .get('/lobby/123')
@@ -50,7 +69,15 @@ describe('GET /lobby', () => {
 });
 
 describe('GET /join', () => {
-  const app = initApp(session);
+  const games = new Games();
+  const host = { name: 'sam', id: 'user' };
+
+  const game = newGame('123', host, 4);
+  games.add(game);
+  game.addPlayer(new Player('user', 'sam', game));
+
+  const app = initApp(session('123', 'user'), games);
+
   it('should redirect to lobby page if game found', (done) => {
     request(app)
       .get('/join/123')
@@ -81,5 +108,23 @@ describe('GET /join', () => {
       .get('/join/123')
       .expect(302)
       .expect('location', /login/, done);
+  });
+
+  it('should redirect to landing page if lobby is full', (done) => {
+    const games = new Games();
+    const host = { name: 'sam', id: 'user' };
+
+    const game = newGame('123', host, 4);
+    games.add(game);
+    game.addPlayer(new Player('user', 'sam', game));
+    game.addPlayer(new Player('user-2', 'harry', game));
+    game.start();
+
+    const app = initApp(session('123', 'user'), games);
+
+    request(app)
+      .get('/join/123')
+      .expect(302)
+      .expect('location', /\//, done);
   });
 });
