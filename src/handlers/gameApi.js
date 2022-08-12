@@ -1,5 +1,3 @@
-const { onPlaceTiles } = require('./onPlaceTiles.js');
-
 const loadGame = (req, res) => {
   const { gameId } = req.session;
 
@@ -71,12 +69,6 @@ const placeTile = (req, res) => {
   const tile = player.tiles.find((tile) => tile.id === tileId);
 
   player.placeTile(tile);
-
-  const tiles = game.board.tiles;
-  tiles[15].placed = true;
-  tiles[14].placed = true;
-
-  onPlaceTiles(game, player, '4b');
   res.json({ message: 'success' });
 };
 

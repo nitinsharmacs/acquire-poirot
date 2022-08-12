@@ -1,12 +1,30 @@
-// bug : 
 const findAdjancetTiles = (tileId, tiles) => {
+  const adjancentTiles = [];
   const tilePos = tiles.findIndex(tile => tile.id === tileId);
-  const leftTile = tiles[tilePos - 1];
-  const rightTile = tiles[tilePos + 1];
-  const topTile = tiles[tilePos - 12];
-  const bottomTile = tiles[tilePos + 12];
+  const rowSize = 12;
+  const colSize = 9;
 
-  return [leftTile, rightTile, topTile, bottomTile];
+  if (tilePos % rowSize !== 0) {
+    const leftTile = tiles[tilePos - 1];
+    adjancentTiles.push(leftTile);
+  }
+
+  if (tilePos % rowSize !== rowSize - 1) {
+    const rightTile = tiles[tilePos + 1];
+    adjancentTiles.push(rightTile);
+  }
+
+  if (tilePos - rowSize >= 0) {
+    const topTile = tiles[tilePos - rowSize];
+    adjancentTiles.push(topTile);
+  }
+
+  if (tilePos + rowSize < rowSize * colSize) {
+    const bottomTile = tiles[tilePos + rowSize];
+    adjancentTiles.push(bottomTile);
+  }
+
+  return adjancentTiles;
 };
 
 const findPlacedTiles = (tiles) => tiles.filter(tile => tile.placed);
@@ -42,4 +60,4 @@ const buildCorporation = (player, corporations, placedTiles, tile) => {
   player.addStocks(corporation, 1);
 };
 
-module.exports = { nextMove, buildCorporation };
+module.exports = { nextMove, buildCorporation, findAdjancetTiles };
