@@ -1,12 +1,16 @@
 const copyGameLink = () => {
   const textarea = document.createElement('textarea');
-  document.body.appendChild(textarea);
   textarea.style.display = 'hidden';
-  textarea.innerText = document.getElementById('game-link').value;
+  document.body.appendChild(textarea);
+
+  const gameLinkInput = document.getElementById('game-link');
+  textarea.innerText = gameLinkInput.value;
   textarea.focus();
   textarea.select();
   document.execCommand('copy');
+
   textarea.remove();
+
   alert('copied to clipboard');
 };
 
@@ -31,23 +35,27 @@ const renderPlayers = ({ players }) => {
 };
 
 const startGame = () => {
-  window.location.href = '/game';
+  fetch('/api/start-game', { method: 'POST' })
+    .then(res => res.json())
+    .then(res => {
+      window.location.href = '/game';
+    });
 };
+
+const hasGameStarted = (game) => game.gameSize === game.players.length;
 
 const loadGame = () => {
   const loadInterval = setInterval(() => {
-    fetchReq('/api/loadgame', {
-      method: 'get'
-    }, (res) => {
-      const { game } = res.body;
-      renderPlayers(game);
-      if (game.gameSize === game.players.length) {
-        clearInterval(loadInterval);
-        fetchReq('/api/start-game', { method: 'POST' },
-          (res) => { });
-        startGame();
-      }
-    });
+    fetch('/api/loadgame', { method: 'get' })
+      .then(res => res.json())
+      .then(({ game }) => {
+        renderPlayers(game);
+
+        if (hasGameStarted(game)) {
+          clearInterval(loadInterval);
+          startGame();
+        }
+      });
   }, 330);
 };
 
