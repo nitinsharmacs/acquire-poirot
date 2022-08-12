@@ -65,9 +65,7 @@ class Player {
   }
 
   placeTile(tileId, board) {
-    console.log(this.tiles);
     this.#removeTile({ id: tileId });
-    console.log(this.tiles);
     board.placeTile({ id: tileId });
   }
 
