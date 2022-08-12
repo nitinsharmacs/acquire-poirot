@@ -2,13 +2,19 @@ const { getPlayer } = require('../utils/game');
 
 const playerDAO = (player) => {
   return {
-    id: player.id,
-    name: player.name,
-    tiles: player.tiles
+    ...player,
+    game: undefined
   };
 };
 
-const createPlayersDAO = (players) => players.map(playerDAO);
+const otherPlayerDAO = (player) => {
+  return {
+    id: player.id,
+    name: player.name
+  };
+};
+
+const createPlayersDAO = (players) => players.map(otherPlayerDAO);
 
 const createGameDAO = (game, playerId) => {
   const gameDAO = {
@@ -17,7 +23,7 @@ const createGameDAO = (game, playerId) => {
     board: game.board,
     cluster: game.cluster,
     logs: game.logs,
-    currentPlayer: game.currentPlayer ? playerDAO(game.currentPlayer) : {},
+    currentPlayer: game.currentPlayer ? otherPlayerDAO(game.currentPlayer) : {},
     corporations: game.corporations,
     gameSize: game.gameSize
   };

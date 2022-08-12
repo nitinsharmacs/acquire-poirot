@@ -50,6 +50,8 @@ const createApp = (config = appConfig, dataStore = new DataStore(resources)) => 
   const app = express();
   app.use(morgan('tiny'));
   app.use(express.urlencoded({ extended: true }));
+  app.use(express.json());
+
   app.use(cookieParser());
   app.use(session(
     {

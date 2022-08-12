@@ -52,21 +52,25 @@ class Board {
 }
 
 class Player {
-  constructor({ id, name, tiles, money, shares }) {
+  constructor({ id, name, tiles, money, stocks }) {
     this.id = id;
     this.name = name;
     this.tiles = tiles || [];
     this.money = money || 6000;
-    this.shares = shares;
+    this.stocks = stocks;
   }
 
   #removeTile({ id }) {
     this.tiles = this.tiles.filter(tile => tile.id !== id);
   }
 
-  placeTile(tile, board) {
+  placeTile(board) {
+    const [tile] = this.tiles;
+
     this.#removeTile(tile);
     board.placeTile(tile);
+
+    return tile;
   }
 
   drawTile(tile) {
@@ -80,7 +84,7 @@ const createPlayer = ({ player }) => {
     name: player.name,
     tiles: player.tiles,
     money: player.money,
-    shares: player.shares,
+    stocks: player.stocks,
   });
 };
 

@@ -305,7 +305,6 @@ body {
   padding: var(--component-padding);
   padding-top: 0;
   padding-right: 0;
-  /* height: 15%; */
 }
 
 .player-activities header button {
@@ -319,7 +318,8 @@ body {
   border: 2px solid black;
   height: 100%;
   border-radius: var(--component-border-radius);
-  padding: var(--component-padding)
+  padding: var(--component-padding);
+  overflow: scroll;
 }
 
 /* STOCK MARKET ------------------------- */

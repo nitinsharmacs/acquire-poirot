@@ -1,14 +1,6 @@
-const getplayer = (players, playerId) => {
-  return players.find(player => player.id === playerId);
-};
-
-const isPlaying = (player, playerId) => {
-  return player.id === playerId;
-};
-
-const createPlayerItem = (game, player, playerId) => {
+const createPlayerItem = (player, game) => {
   const activeClass = player.id === game.currentPlayer.id ? 'active' : '';
-  const activeTag = isPlaying(player, playerId) ? '(You)' : '';
+  const activeTag = player.id === game.player.id ? '(You)' : '';
 
   return ['div',
     { class: `player-item ${activeClass}` },
@@ -18,40 +10,45 @@ const createPlayerItem = (game, player, playerId) => {
   ];
 };
 
-const createPlayers = (game, playerId) => {
+const createPlayers = (game) => {
   const playersList = game.players.map((player) => {
-    return createPlayerItem(game, player, playerId);
+    return createPlayerItem(player, game);
   });
 
   return createElements(playersList);
 };
 
-const renderPlayers = (game, playerId) => {
+const renderPlayers = (game) => {
   const playersList = document.querySelector('#players-list');
-  const playersHtml = createPlayers(game, playerId);
+
+  const playersHtml = createPlayers(game);
   playersList.replaceChildren(...playersHtml);
 };
 
-const renderBoard = (tiles, corporations) => {
-  const boardElement = document.querySelector('.board-tiles');
-  const tilesTemplate = tiles.map(tile => {
-    const colIndex = tile.label.slice(0, tile.label.length - 1);
-    const rowIndex = tile.label.slice(-1);
-    let placed = tile.placed ? 'placed' : '';
-    let built = '';
-    const corporation = corporations.find(corp => corp.tiles.includes(tile));
+const createTiles = (tiles) => {
+  return tiles.map(tile => {
+    const placed = tile.placed ? 'placed' : '';
+    const built = tile.corporation ? tile.corporation.id : '';
 
-    if (corporation) {
-      built = corporation.id;
-      placed = '';
-    }
-
-    return ['div',
-      { class: `tile-item ${placed} ${built}`, id: `tile-${colIndex}` }, {},
-      `${colIndex}`,
-      ['span', { class: 'letter' }, {}, `${rowIndex}`]
+    return [
+      'div',
+      {
+        class: `tile-item ${placed} ${built}`,
+        id: `tile-${tile.id}`
+      },
+      {},
+      ...tileLabel(tile)
     ];
   });
+};
+
+const renderBoard = ({ board }) => {
+  const { tiles } = board;
+
+  const boardElement = document.querySelector('.board-tiles');
+
+  const tilesTemplate = createTiles(tiles);
+
   const tilesHTML = createElements(tilesTemplate);
   boardElement.replaceChildren(...tilesHTML);
 };
@@ -85,7 +82,8 @@ const playerStocks = ({ stocks }) => {
   );
 };
 
-const renderPlayerResources = (player) => {
+const renderPlayerResources = ({ player }) => {
+  console.log(player);
   const playerResources = document.querySelector('#player-resources');
 
   const resourcesElements = [
@@ -133,6 +131,7 @@ const createCorporations = (corporations) => {
 
 const renderStockMarket = ({ corporations }) => {
   const stockMarket = document.querySelector('#stock-market');
+
   const elements = [
     ['h3', { class: 'component-heading' }, {}, 'Stock Market'],
     createCorporations(corporations)
@@ -143,27 +142,10 @@ const renderStockMarket = ({ corporations }) => {
 
 const renderLogs = ({ logs }) => {
   const logElement = document.querySelector('.activity-logs');
+
   const logsHTML = logs.map(log => ['div', {}, {}, log]);
+
   logElement.replaceChildren(...createElements(logsHTML));
-};
-
-const drawTile = () => {
-  fetch('/api/draw-tile', {
-    method: 'POST'
-  })
-    .then(res => {
-      if (res.status !== 200) {
-        throw new Error('Can\'t draw tile');
-      }
-      return res.json();
-    })
-    .then((res) => {
-
-      const player = getplayer(gameState.players, gameState.player.id);
-      player.tiles.push(res.data);
-
-      renderPlayerResources(player);
-    }).catch(err => console.log(err));
 };
 
 const removeOverlay = () => {
@@ -172,71 +154,83 @@ const removeOverlay = () => {
 };
 
 const placeTile = () => {
-  const tilesElement = document.querySelector('.component-tiles');
-  const tileId = tilesElement.firstChild.id;
-  const body = toURLSearchParams({ tileId });
-  fetchReq('/api/place-tile', { method: 'POST', body },
-    (res) => {
-      fetchReq('/api/loadgame', { method: 'GET' }, (res) => {
-        const { game, playerId } = res.body;
-        renderScreen(game, playerId);
-        removeOverlay();
-        gameState.step = 2;
-      });
+  const { id } = gameState.player.placeTile(gameState.board);
+  console.log(id);
+
+  fetch('/api/place-tile', { method: 'POST', body: JSON.stringify({ id }) })
+    .then(res => res.json())
+    .then(res => {
+      removeOverlay();
+
+      // further steps conditions would come here
+      drawTile();
+      startPolling();
+      gameState.step = 2;
     });
 };
 
 const highlightTiles = () => {
   const tilesElement = document.querySelector('.player-tiles');
+
   const backdropTemplate = ['div', { class: 'overlay' }, {}];
+
   const buttonTemplate = ['div', { class: 'place-button-holder' }, {},
     ['button', { class: 'place-tile-button' },
-      { innerText: 'Place', onclick: placeTile }]
+      { innerText: 'Place', onclick: placeTile }
+    ]
   ];
+
   tilesElement.style['z-index'] = 10;
   tilesElement.style.background = 'white';
+
   document.body.appendChild(...createElements([backdropTemplate]));
   tilesElement.appendChild(createDOMTree(buttonTemplate));
 };
 
-const renderScreen = (game, playerId) => {
-  renderBoard(game.board.tiles, game.corporations);
-  renderPlayers(game, playerId);
-  renderPlayerResources(getplayer(game.players, playerId));
+const renderScreen = (game) => {
+  renderBoard(game);
+  renderPlayers(game);
+  renderPlayerResources(game);
   renderStockMarket(game);
   renderLogs(game);
+};
+
+const startPolling = () => {
+  const pollingId = setInterval(() => {
+    fetch('/api/loadgame', { method: 'GET' })
+      .then(res => res.json())
+      .then(res => {
+        const { board, logs, stocks, currentPlayer } = res.game;
+        gameState.board = board;
+        gameState.logs = logs;
+        gameState.stocks = stocks;
+        gameState.currentPlayer = currentPlayer;
+        renderScreen(gameState);
+      });
+  });
+  gameState.pollingId = pollingId;
+};
+
+const loadGame = () => {
+  fetch('/api/loadgame', { method: 'GET' })
+    .then(res => res.json())
+    .then(res => {
+      console.log(res);
+      gameState = createState(res.game);
+      renderScreen(gameState);
+
+      if (gameState.isMyTurn()) {
+        return highlightTiles();
+      }
+
+      startPolling();
+    });
 };
 
 let gameState;
 
 const main = () => {
-  fetchReq('/api/loadgame', { method: 'GET' },
-    (res) => {
-      gameState = createState(res.body.game);
-
-      const game = gameState;
-      const playerId = gameState.player.id;
-
-      renderScreen(game, playerId);
-      if (playerId === game.currentPlayer.id) {
-        if (gameState.step === 1) {
-          highlightTiles();
-          drawTile();
-        }
-      } else {
-        setInterval(() => {
-          fetchReq('/api/loadgame', { method: 'GET' },
-            (res) => {
-              gameState = createState(res.body.game);
-
-              const game = gameState;
-              const playerId = gameState.player.id;
-
-              renderScreen(game, playerId);
-            });
-        });
-      }
-    });
+  loadGame();
 
   const infoCard = document.getElementById('info-card');
   const infoCardBtn = document.getElementById('info-card-btn');
