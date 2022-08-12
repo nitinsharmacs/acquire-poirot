@@ -1,6 +1,8 @@
 const assert = require('assert');
+const { newGame } = require('../../src/models/game.js');
+const { Player } = require('../../src/models/player.js');
 const { createTiles } = require('../../src/utils/createTiles.js');
-const { findAdjancetTiles } = require('../../src/utils/game.js');
+const { findAdjancetTiles, nextMove } = require('../../src/utils/game.js');
 
 describe('findAdjacentTiles', () => {
   const tiles = createTiles();
@@ -84,3 +86,17 @@ describe('findAdjacentTiles', () => {
   });
 });
 
+describe('nextMove', () => {
+  it('Should determine next move as no effect after placing a tile', () => {
+    const game = newGame('game1234', new Player('user123', 'sam'), 3);
+    assert.deepStrictEqual(nextMove(game, '2d'), { noEffect: true });
+  });
+
+  it('Should determine next move as build co. after placing a tile', () => {
+    const game = newGame('game1234', new Player('user123', 'sam'), 3);
+    game.board.tiles[2].placed = true;
+    game.board.tiles[3].placed = true;
+
+    assert.deepStrictEqual(nextMove(game, '4a'), { buildCorporation: true });
+  });
+});
