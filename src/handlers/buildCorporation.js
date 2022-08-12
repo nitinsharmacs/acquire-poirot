@@ -1,12 +1,12 @@
 const { findPlacedTiles } = require('../utils/game.js');
 
 const buildCorporation = (req, res, next) => {
-  const { tileId, corporationId } = req.body;
+  const { id, corporationId } = req.body;
   const { gameId, playerId } = req.session;
   const game = req.app.games.find(gameId);
 
   const player = game.players.find(player => player.id === playerId);
-  const tile = player.tiles.find((tile) => tile.id === tileId);
+  const tile = game.board.tiles.find((tile) => tile.id === id);
 
   const corporation = game.corporations.find(corporation =>
     corporation.id === corporationId);
@@ -19,10 +19,9 @@ const buildCorporation = (req, res, next) => {
     corporation.reduceStocks(stocksCount);
   }
 
-  const placedTiles = findPlacedTiles(tileId, game.board.tiles);
+  const placedTiles = findPlacedTiles(id, game.board.tiles);
   corporation.addTiles([tile, ...placedTiles]);
-
-  res.end(corporationId);
+  res.json(corporation);
 };
 
 module.exports = { buildCorporation };

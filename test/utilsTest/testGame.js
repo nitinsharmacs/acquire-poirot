@@ -89,7 +89,7 @@ describe('findAdjacentTiles', () => {
 describe('nextMove', () => {
   it('Should determine next move as no effect after placing a tile', () => {
     const game = newGame('game1234', new Player('user123', 'sam'), 3);
-    assert.deepStrictEqual(nextMove(game, '2d'), { noEffect: true });
+    assert.deepStrictEqual(nextMove(game, '2d'), { case: 'noEffect' });
   });
 
   it('Should determine next move as build co. after placing a tile', () => {
@@ -97,6 +97,6 @@ describe('nextMove', () => {
     game.board.tiles[2].placed = true;
     game.board.tiles[3].placed = true;
 
-    assert.deepStrictEqual(nextMove(game, '4a'), { buildCorporation: true });
+    assert.deepStrictEqual(nextMove(game, '4a'), { case: 'build' });
   });
 });

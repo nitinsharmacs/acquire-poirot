@@ -159,3 +159,34 @@ describe('POST /api/draw-tile', () => {
       .expect(400, done);
   });
 });
+
+describe('POST /api/build-corporation', () => {
+  const games = new Games();
+  const host = { name: 'sam', id: 'user' };
+
+  const game = newGame('123', host, 1);
+  games.add(game);
+  game.addPlayer(new Player('user', 'sam', game));
+  const app = initApp(session('123', 'user'), games);
+
+  before((done) => {
+    request(app)
+      .post('/api/start-game')
+      .expect('content-type', /json/)
+      .expect(200, done);
+  });
+
+  it('should build a corporation',
+    (done) => {
+      const player = game.players.find(player => player.id === 'user');
+      const tileId = player.tiles[0].id;
+      game.board.tiles[0].placed = true;
+      game.board.tiles[1].placed = true;
+
+      request(app)
+        .post('/api/build-corporation')
+        .send('id=1a&&corporationId=america')
+        .expect('content-type', /json/)
+        .expect(200, done);
+    });
+});

@@ -56,11 +56,11 @@ const nextMove = (game, tileId) => {
   const placedTiles = findPlacedTiles(tileId, tiles);
 
   if (placedTiles.length < 1) {
-    return { noEffect: true };
+    return { case: 'noEffect' };
   }
 
   if (!areTilesBelongto(placedTiles, corporations)) {
-    return { buildCorporation: true };
+    return { case: 'build' };
   }
 };
 

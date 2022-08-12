@@ -176,6 +176,19 @@ const changePlayerTurn = () => {
   });
 };
 
+const buildCorporation = (tileId) => {
+  fetch('/api/build-corporation', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ tileId, corporationId: 'america' })
+  })
+    .then(res => res.json())
+    .then(res => {
+      gameState.board.buildCorporation({ id: tileId }, res);
+      renderPlayerResources(gameState);
+    });
+};
+
 const placeTile = (event) => {
   event.preventDefault();
 
@@ -193,6 +206,9 @@ const placeTile = (event) => {
     .then(res => {
       removeOverlay();
 
+      if (res.case === 'build') {
+        buildCorporation(tileId);
+      }
       // further steps conditions would come here
       drawTile();
       changePlayerTurn();

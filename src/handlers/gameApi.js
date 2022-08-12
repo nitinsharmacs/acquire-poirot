@@ -1,5 +1,5 @@
 const { createGameDAO } = require('../models/gameDAO.js');
-const { getPlayer, getInitialTiles } = require('../utils/game.js');
+const { getPlayer, getInitialTiles, nextMove } = require('../utils/game.js');
 
 const loadGame = (req, res) => {
   const { game, session: { playerId } } = req;
@@ -54,8 +54,9 @@ const placeTile = (req, res) => {
 
   const player = getPlayer(game.players, playerId);
 
+  const nextStep = nextMove(game, id);
   const tile = player.placeTile({ id });
-  res.json({ data: tile, message: 'success' });
+  res.json({ data: tile, message: 'success', case: nextStep.case });
 };
 
 const changeTurn = (req, res) => {
