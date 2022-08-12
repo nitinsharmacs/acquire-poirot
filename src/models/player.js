@@ -58,6 +58,7 @@ class Player {
       stocks.count += noOfStocks;
       return;
     }
+
     this.stocks.push({ corporationId: id, corporationName: name, count: noOfStocks });
   }
 }

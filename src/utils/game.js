@@ -41,10 +41,10 @@ const findAdjancetTiles = (tileId, tiles) => {
   return adjancentTiles;
 };
 
-const findPlacedTiles = (tiles) => tiles.filter(tile => tile.placed);
-
-const findInactiveCorporations = (corporations) =>
-  corporations.filter(corporation => !corporation.active);
+const findPlacedTiles = (tileId, tiles) => {
+  const adjancetTiles = findAdjancetTiles(tileId, tiles);
+  return adjancetTiles.filter(tile => tile.placed);
+};
 
 const areTilesBelongto = (tiles, corporations) => tiles.some(tile =>
   corporations.find(corporation => corporation.tiles.includes(tile)));
@@ -53,8 +53,7 @@ const nextMove = (game, tileId) => {
   const tiles = game.board.tiles;
   const corporations = game.corporations;
 
-  const adjancetTiles = findAdjancetTiles(tileId, tiles);
-  const placedTiles = findPlacedTiles(adjancetTiles);
+  const placedTiles = findPlacedTiles(tileId, tiles);
 
   if (placedTiles.length < 1) {
     return { noEffect: true };
@@ -65,13 +64,4 @@ const nextMove = (game, tileId) => {
   }
 };
 
-const buildCorporation = (player, corporations, placedTiles, tile) => {
-  const inactiveCorporations = findInactiveCorporations(corporations);
-  const corporation = inactiveCorporations[0];
-  corporation.active = true;
-  corporation.tiles.push(tile, ...placedTiles);
-
-  player.addStocks(corporation, 1);
-};
-
-module.exports = { getPlayer, getInitialTiles, createGameLink, nextMove, buildCorporation, findAdjancetTiles };
+module.exports = { getPlayer, getInitialTiles, createGameLink, nextMove, findAdjancetTiles, findPlacedTiles };

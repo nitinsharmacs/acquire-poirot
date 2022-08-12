@@ -37,12 +37,13 @@ const renderBoard = (tiles, corporations) => {
   const tilesTemplate = tiles.map(tile => {
     const colIndex = tile.label.slice(0, tile.label.length - 1);
     const rowIndex = tile.label.slice(-1);
-    const placed = tile.placed ? 'placed' : '';
+    let placed = tile.placed ? 'placed' : '';
     let built = '';
     const corporation = corporations.find(corp => corp.tiles.includes(tile));
 
     if (corporation) {
       built = corporation.id;
+      placed = '';
     }
 
     return ['div',

@@ -118,4 +118,4 @@ const newGame = (id, host, gameSize) => {
   });
 };
 
-module.exports = { Game, newGame };
+module.exports = { Game, newGame, createCorporations };
