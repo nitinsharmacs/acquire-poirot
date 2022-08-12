@@ -337,6 +337,7 @@ body {
   border-radius: var(--component-border-radius);
   padding: var(--component-padding);
   overflow: hidden;
+  height: 100%;
 }
 
 .activity-logs .component-heading {
