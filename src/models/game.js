@@ -57,6 +57,15 @@ class Game {
     this.currentPlayer = this.players[0];
   }
 
+  changeTurn() {
+    const currentPlayerPosition = this.players.findIndex(player => {
+      return player.id === this.currentPlayer.id;
+    });
+    const totalPlayers = this.players.length;
+    const nextPlayerPosition = (currentPlayerPosition + 1) % totalPlayers;
+    this.currentPlayer = this.players[nextPlayerPosition];
+  }
+
   isPlayerIdle(playerId) {
     return this.currentPlayer.id !== playerId;
   }

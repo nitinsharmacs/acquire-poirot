@@ -170,6 +170,12 @@ const drawTile = () => {
     }).catch(err => console.log(err));
 };
 
+const changePlayerTurn = () => {
+  fetch('/api/change-turn', {
+    method: 'POST'
+  });
+};
+
 const placeTile = (event) => {
   event.preventDefault();
 
@@ -189,8 +195,8 @@ const placeTile = (event) => {
 
       // further steps conditions would come here
       drawTile();
+      changePlayerTurn();
       startPolling();
-      gameState.step = 2;
     });
 };
 

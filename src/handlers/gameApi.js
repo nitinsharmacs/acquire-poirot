@@ -56,4 +56,10 @@ const placeTile = (req, res) => {
   res.json({ data: tile, message: 'success' });
 };
 
-module.exports = { loadGame, startGame, drawTile, placeTile };
+const changeTurn = (req, res) => {
+  const { game } = req;
+  game.changeTurn();
+  res.json({ message: 'success' });
+};
+
+module.exports = { loadGame, startGame, drawTile, placeTile, changeTurn };
