@@ -75,7 +75,7 @@ describe('POST /api/start-game', () => {
 
       request(app)
         .post('/api/place-tile')
-        .send(`tileId=${tileId}`)
+        .send(`id=${tileId}`)
         .expect('content-type', /json/)
         .expect(200, done);
     });
@@ -107,7 +107,7 @@ describe('POST /api/place-tile', () => {
 
       request(app)
         .post('/api/place-tile')
-        .send(`tileId=${tileId}`)
+        .send(`id=${tileId}`)
         .expect('content-type', /json/)
         .expect(200, done);
     });

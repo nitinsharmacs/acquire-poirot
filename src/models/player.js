@@ -16,6 +16,10 @@ class Player {
     return this.tiles.find(tile => tile.id === tileId);
   }
 
+  #removeTile(tileId) {
+    this.tiles = this.tiles.filter(tile => tile.id !== tileId);
+  }
+
   getTile() {
     const tilePos = randomInt(this.game.cluster.length);
     const tile = this.game.cluster[tilePos];
@@ -44,10 +48,9 @@ class Player {
     const tile = this.#findTile(id);
 
     this.game.board.placeTile(tile);
-
     this.game.logs.push(`${this.name} placed ${tile.id}`);
-    this.tiles.splice(0, 1);
 
+    this.#removeTile(id);
     return tile;
   }
 

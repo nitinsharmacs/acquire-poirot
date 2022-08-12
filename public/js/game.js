@@ -83,7 +83,6 @@ const playerStocks = ({ stocks }) => {
 };
 
 const renderPlayerResources = ({ player }) => {
-  console.log(player);
   const playerResources = document.querySelector('#player-resources');
 
   const resourcesElements = [
@@ -93,8 +92,10 @@ const renderPlayerResources = ({ player }) => {
     ],
     ['section', { class: 'player-tiles' }, {},
       ['h3', { class: 'component-heading' }, {}, 'Tiles'],
-      [
-        'div', { class: 'component-tiles' }, {}, ...playerTiles(player)
+      ['form', {}, { onsubmit: (event) => placeTile(event) },
+        [
+          'div', { class: 'component-tiles' }, {}, ...playerTiles(player)
+        ]
       ]
     ],
     ['section', { class: 'player-stocks' }, {},
@@ -153,11 +154,35 @@ const removeOverlay = () => {
   overlay.remove();
 };
 
-const placeTile = () => {
-  const { id } = gameState.player.placeTile(gameState.board);
-  console.log(id);
+const drawTile = () => {
+  fetch('/api/draw-tile', {
+    method: 'POST'
+  })
+    .then(res => {
+      if (res.status !== 200) {
+        throw new Error('Can\'t draw tile');
+      }
+      return res.json();
+    })
+    .then((res) => {
+      gameState.player.drawTile(res.data);
+      renderPlayerResources(gameState);
+    }).catch(err => console.log(err));
+};
 
-  fetch('/api/place-tile', { method: 'POST', body: JSON.stringify({ id }) })
+const placeTile = (event) => {
+  event.preventDefault();
+
+  const formData = new FormData(event.target);
+  const tileId = formData.get('tile');
+
+  gameState.player.placeTile(tileId, gameState.board);
+
+  fetch('/api/place-tile', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ id: tileId })
+  })
     .then(res => res.json())
     .then(res => {
       removeOverlay();
@@ -169,22 +194,55 @@ const placeTile = () => {
     });
 };
 
+const selectTile = (event, tiles) => {
+  const inputEle = event.target;
+  const radio = inputEle.querySelector('input');
+  radio.checked = true;
+
+  tiles.forEach(tile => {
+    const tileElement = document.getElementById(tile.id);
+    tileElement.classList.remove('highlight-tile');
+  });
+  inputEle.classList.add('highlight-tile');
+};
+
+const tileSelection = ({ tiles }) => {
+  return tiles.map(tile => {
+
+    return ['div',
+      { class: 'tile-item', id: tile.id },
+      { onclick: (event) => selectTile(event, tiles) },
+      ['input',
+        { type: 'radio', id: tile.id, name: 'tile', value: tile.id }, {}],
+      ...tileLabel(tile)
+    ];
+  });
+};
+
+const createPlaceButton = () => {
+  const buttonTemplate = ['div', { class: 'place-button-holder' }, {},
+    ['button', { class: 'place-tile-button' }, {},
+      'Place'],
+
+  ];
+  return createDOMTree(buttonTemplate);
+};
+
 const highlightTiles = () => {
-  const tilesElement = document.querySelector('.player-tiles');
+  const { player } = gameState;
+  const tilesElement = createElements(tileSelection(player));
+  const tilesComponent = document.querySelector('.component-tiles');
+  tilesComponent.replaceChildren(...tilesElement);
+
+  const playerTilesElement = document.querySelector('.player-tiles');
+  const placeTileFormElement = playerTilesElement.querySelector('form');
 
   const backdropTemplate = ['div', { class: 'overlay' }, {}];
-
-  const buttonTemplate = ['div', { class: 'place-button-holder' }, {},
-    ['button', { class: 'place-tile-button' },
-      { innerText: 'Place', onclick: placeTile }
-    ]
-  ];
-
-  tilesElement.style['z-index'] = 10;
-  tilesElement.style.background = 'white';
+  playerTilesElement.style['z-index'] = 10;
+  playerTilesElement.style.background = 'white';
+  placeTileFormElement.appendChild(createPlaceButton());
 
   document.body.appendChild(...createElements([backdropTemplate]));
-  tilesElement.appendChild(createDOMTree(buttonTemplate));
 };
 
 const renderScreen = (game) => {

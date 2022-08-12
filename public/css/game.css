@@ -166,6 +166,10 @@ body {
   margin-bottom: 1em;
 }
 
+.tile-item input {
+  display: none;
+}
+
 .player-money {
   width: 15%;
   text-align: center;
@@ -182,12 +186,25 @@ body {
   padding: 0 2em;
 }
 
-.player-tiles>div {
+.component-tiles>* {
+  display: flex;
+  flex-direction: row;
+  row-gap: 5px;
+  gap: 0.2em;
+  align-items: center;
+}
+
+.highlight-tile {
+  background-color: red !important;
+}
+
+.player-tiles>div,
+.component-tiles {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 1fr);
   gap: 0.5em;
-  width: 220px;
+  width: 280px;
 }
 
 .player-tiles .tile-item {

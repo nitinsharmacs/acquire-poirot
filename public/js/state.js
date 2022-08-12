@@ -64,13 +64,11 @@ class Player {
     this.tiles = this.tiles.filter(tile => tile.id !== id);
   }
 
-  placeTile(board) {
-    const [tile] = this.tiles;
-
-    this.#removeTile(tile);
-    board.placeTile(tile);
-
-    return tile;
+  placeTile(tileId, board) {
+    console.log(this.tiles);
+    this.#removeTile({ id: tileId });
+    console.log(this.tiles);
+    board.placeTile({ id: tileId });
   }
 
   drawTile(tile) {

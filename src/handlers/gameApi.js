@@ -47,12 +47,12 @@ const placeTile = (req, res) => {
   const {
     game,
     session: { playerId },
-    body: { tileId }
+    body: { id }
   } = req;
 
   const player = getPlayer(game.players, playerId);
 
-  const tile = player.placeTile({ id: tileId });
+  const tile = player.placeTile({ id });
   res.json({ data: tile, message: 'success' });
 };
 
