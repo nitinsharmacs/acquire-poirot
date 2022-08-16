@@ -117,8 +117,9 @@ const renderPlayerResources = ({ player }) => {
 };
 
 const createCorporation = (corporation) => {
+  const disable = corporation.active ? 'disabled-corporation' : '';
   return ['div', { class: 'corporation' }, {},
-    ['div', { class: 'corporation-img', id: corporation.id }, {}],
+    ['div', { class: `corporation-img ${disable}`, id: corporation.id }, {}],
     ['div', { class: 'corporation-info' }, {},
       ['p', {}, {}, corporation.name],
       ['p', {}, {}, `${corporation.stocksLeft} `],

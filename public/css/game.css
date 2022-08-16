@@ -134,6 +134,10 @@ body {
   background-color: var(--fusion-bg);
 }
 
+.disabled-corporation {
+  background-color: white !important;
+}
+
 .branding {
   position: relative;
   width: 120px;
