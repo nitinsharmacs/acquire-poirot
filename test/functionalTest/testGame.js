@@ -29,28 +29,6 @@ const initApp = (session, games) => {
   return createApp(config, dataStore);
 };
 
-// const initApp = (session) => {
-//   const games = new Games();
-//   const host = { name: 'sam', id: 'user' };
-
-//   const game = newGame('123', host, 4);
-//   games.add(game);
-//   game.addPlayer(new Player('user', 'sam', game));
-//   game.addPlayer(new Player('user-2', 'harry', game));
-//   game.addPlayer(new Player('user-3', 'nilam', game));
-//   game.addPlayer(new Player('user-4', 'peter', game));
-
-//   const config = { session, root: './public', games };
-//   const dataStore = {
-//     load: Sinon.stub(),
-//     loadJSON: Sinon.stub()
-//   };
-//   dataStore.load.withArgs('LOGIN_TEMPLATE').returns('_MESSAGE_');
-//   dataStore.load.withArgs('SIGNUP_TEMPLATE').returns('_MESSAGE_');
-//   dataStore.load.withArgs('HOST_TEMPLATE_PATH').returns('_MESSAGE_');
-//   return createApp(config, dataStore);
-// };
-
 describe('GET /lobby', () => {
   const games = new Games();
   const host = { name: 'sam', id: 'user' };
