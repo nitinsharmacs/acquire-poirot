@@ -173,7 +173,7 @@ const drawTile = () => {
 const changePlayerTurn = () => {
   fetch('/api/change-turn', {
     method: 'POST'
-  });
+  }).then(res => startPolling());
 };
 
 const buildCorporation = (tileId) => {
@@ -212,7 +212,6 @@ const placeTile = (event) => {
       // further steps conditions would come here
       drawTile();
       changePlayerTurn();
-      startPolling();
     });
 };
 
@@ -281,36 +280,20 @@ const startPolling = () => {
     fetch('/api/loadgame', { method: 'GET' })
       .then(res => res.json())
       .then(res => {
-        const { board, logs, stocks, currentPlayer } = res.game;
-        gameState.board = board;
-        gameState.logs = logs;
-        gameState.stocks = stocks;
-        gameState.currentPlayer = currentPlayer;
+        gameState = createState(res.game);
         renderScreen(gameState);
+        if (gameState.isMyTurn()) {
+          clearInterval(pollingId);
+          return highlightTiles();
+        }
       });
-  });
-  gameState.pollingId = pollingId;
-};
-
-const loadGame = () => {
-  fetch('/api/loadgame', { method: 'GET' })
-    .then(res => res.json())
-    .then(res => {
-      gameState = createState(res.game);
-      renderScreen(gameState);
-
-      if (gameState.isMyTurn()) {
-        return highlightTiles();
-      }
-
-      startPolling();
-    });
+  }, 500);
 };
 
 let gameState;
 
 const main = () => {
-  loadGame();
+  startPolling();
 
   const infoCard = document.getElementById('info-card');
   const infoCardBtn = document.getElementById('info-card-btn');
