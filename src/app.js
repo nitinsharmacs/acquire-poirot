@@ -14,9 +14,7 @@ const { restrict } = require('./middlewares/auth.js');
 const { serveGamePage, joinGame, serveLobby } = require('./handlers/game.js');
 const session = require('express-session');
 const DataStore = require('./dataStore.js');
-const { Game, newGame } = require('./models/game');
-const { Player } = require('./models/player');
-const { Games } = require('./models/games');
+const { Games } = require('./models/games.js');
 const { injectGame } = require('./middlewares/game');
 
 const { LOGIN_TEMPLATE,
@@ -39,7 +37,7 @@ const appConfig = {
   root: './public',
   sessionKey: SESSION_KEY,
   session,
-  games: []
+  games: new Games()
 };
 
 const createApp = (config = appConfig, dataStore = new DataStore(resources)) => {
