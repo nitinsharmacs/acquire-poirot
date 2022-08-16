@@ -119,6 +119,11 @@ body {
   padding-top: 20px;
 }
 
+.highlight-joinee {
+  border: 3px solid #c6c7c8;
+  border-radius: 2em;
+}
+
 .players {
   display: flex;
   flex-flow: row wrap;

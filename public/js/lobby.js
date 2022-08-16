@@ -14,22 +14,29 @@ const copyGameLink = () => {
   alert('copied to clipboard');
 };
 
-const createPlayer = (player) => {
-  return ['div', { class: 'player' }, {},
+const createPlayer = (joinee, player) => {
+  console.log('pp', player);
+  let classname = '';
+
+  if (joinee.id === player.id) {
+    classname = 'highlight-joinee';
+  }
+
+  return ['div', { class: `player ${classname}` }, {},
     ['div', { class: 'player-avatar' }, {},
       ['img', { src: '/images/usericon.png', alt: 'avatar' }]
     ],
     ['div', { class: 'player-name' }, {},
-      player.name
+      joinee.name
     ],
   ];
 };
 
-const renderPlayers = ({ players }) => {
+const renderPlayers = ({ players: joinees, player }) => {
   const playersContainer = document.querySelector('.players');
   playersContainer.innerText = '';
 
-  const playersElements = players.map(createPlayer);
+  const playersElements = joinees.map((joinee) => createPlayer(joinee, player));
 
   playersContainer.append(...createElements(playersElements));
 };
@@ -49,6 +56,7 @@ const loadGame = () => {
     fetch('/api/loadgame', { method: 'get' })
       .then(res => res.json())
       .then(({ game }) => {
+        console.log(game);
         renderPlayers(game);
 
         if (hasGameStarted(game)) {
