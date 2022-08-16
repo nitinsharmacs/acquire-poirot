@@ -114,7 +114,24 @@ describe('GET /join', () => {
     const games = new Games();
     const host = { name: 'sam', id: 'user' };
 
-    const game = newGame('123', host, 4);
+    const game = newGame('123', host, 2);
+    games.add(game);
+    game.addPlayer(new Player('user', 'sam', game));
+    game.addPlayer(new Player('user-2', 'harry', game));
+    game.start();
+    const app = initApp(session('123', 'user-3'), games);
+
+    request(app)
+      .get('/join/123')
+      .expect(302)
+      .expect('location', /^\/$/, done);
+  });
+
+  it('should redirect to game if game started and player exists', (done) => {
+    const games = new Games();
+    const host = { name: 'sam', id: 'user' };
+
+    const game = newGame('123', host, 2);
     games.add(game);
     game.addPlayer(new Player('user', 'sam', game));
     game.addPlayer(new Player('user-2', 'harry', game));
@@ -125,6 +142,6 @@ describe('GET /join', () => {
     request(app)
       .get('/join/123')
       .expect(302)
-      .expect('location', /\//, done);
+      .expect('location', /^\/game$/, done);
   });
 });

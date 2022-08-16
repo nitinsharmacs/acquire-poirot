@@ -23,18 +23,24 @@ const joinGame = (req, res) => {
     return res.status(404).send('Game not found');
   }
 
-  if (game.hasStarted()) {
+  const playerExists = getPlayer(game.players, playerId);
+
+  if (playerExists && game.hasStarted()) {
+    req.session.gameId = id;
+    req.session.save(() => {
+      res.redirect('/game');
+    });
+    return;
+  }
+
+  if (!playerExists && game.hasStarted()) {
     return res.redirect('/');
   }
 
-  const playerExists = getPlayer(game.players, playerId);
-
-  if (playerExists) {
-    return res.redirect('/lobby/' + id);
+  if (!playerExists) {
+    const player = new Player(playerId, playerName, game);
+    game.addPlayer(player);
   }
-
-  const player = new Player(playerId, playerName, game);
-  game.addPlayer(player);
 
   req.session.gameId = id;
   req.session.save(() => {

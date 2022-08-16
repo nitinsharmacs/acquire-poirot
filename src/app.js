@@ -35,14 +35,11 @@ const resources = {
   GAME_TEMPLATE_PATH
 };
 
-const game = newGame('game123', new Player('user123', 'sam'), 2);
-const games = new Games([game]);
-
 const appConfig = {
   root: './public',
   sessionKey: SESSION_KEY,
   session,
-  games
+  games: []
 };
 
 const createApp = (config = appConfig, dataStore = new DataStore(resources)) => {
