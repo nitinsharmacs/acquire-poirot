@@ -13,6 +13,7 @@ const buildCorporation = (req, res, next) => {
 
   corporation.active = true;
   const stocksCount = 1;
+  game.logs.push(`${player.name} has built ${corporation.name}`);
 
   if (corporation.areStocksAvailable(stocksCount)) {
     player.addStocks(corporation, stocksCount);
