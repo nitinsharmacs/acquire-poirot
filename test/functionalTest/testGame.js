@@ -123,3 +123,20 @@ describe('GET /join', () => {
       .expect('location', /^\/game$/, done);
   });
 });
+
+describe('GET /badPath', () => {
+  const games = new Games();
+  const host = { name: 'sam', id: 'user' };
+
+  const game = newGame('123', host, 4);
+  games.add(game);
+  game.addPlayer(new Player('user', 'sam', game));
+
+  const app = initApp(session('123', 'user'), games);
+  it('Should show not found page', (done) => {
+    request(app)
+      .get('/something-bad')
+      .expect(404)
+      .expect('content-type', /html/, done);
+  });
+});
