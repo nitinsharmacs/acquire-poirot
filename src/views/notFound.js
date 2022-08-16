@@ -19,7 +19,7 @@ const notFoundPage = () => `<html>
   </div>
   <div class="container">
     <p>Page not Found</p>
-    <p>Go to <a href="/">HOME</a></p>
+    <p>Go to <a href="/">home</a></p>
     <div class="not-found">
       <img src="/images/not-found.gif" height="500">
     </div>
