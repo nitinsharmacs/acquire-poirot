@@ -92,6 +92,42 @@ body {
   margin-top: 0.3rem;
 }
 
+.hydra {
+  border: 2px solid var(--hydra-border);
+  background-color: var(--hydra-bg);
+}
+
+.sackson {
+  border: 2px solid var(--sackson-border);
+  background-color: var(--sackson-bg);
+}
+
+.quantum {
+  border: 2px solid var(--quantum-border);
+  background-color: var(--quantum-bg);
+}
+
+.america {
+  border: 2px solid var(--america-border);
+  background-color: var(--america-bg);
+  color: black;
+}
+
+.zeta {
+  border: 2px solid var(--zeta-border);
+  background-color: var(--zeta-bg);
+}
+
+.phoneix {
+  border: 2px solid var(--phoneix-border);
+  background-color: var(--phoneix-bg);
+}
+
+.fusion {
+  border: 2px solid var(--fusion-border);
+  background-color: var(--fusion-bg);
+}
+
 .branding {
   position: relative;
   width: 120px;

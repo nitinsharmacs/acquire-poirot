@@ -25,11 +25,20 @@ const renderPlayers = (game) => {
   playersList.replaceChildren(...playersHtml);
 };
 
+const belongsTo = (tile) => {
+  const corporation = gameState.corporations.find(corporation => {
+    return corporation.tiles[0]?.id === tile.id;
+  });
+  if (!corporation) {
+    return '';
+  }
+  return corporation.id;
+};
+
 const createTiles = (tiles) => {
   return tiles.map(tile => {
+    const built = belongsTo(tile);
     const placed = tile.placed ? 'placed' : '';
-    const built = tile.corporation ? tile.corporation.id : '';
-
     return [
       'div',
       {
@@ -138,7 +147,7 @@ const renderStockMarket = ({ corporations }) => {
     createCorporations(corporations)
   ];
 
-  stockMarket.append(...createElements(elements));
+  stockMarket.replaceChildren(...createElements(elements));
 };
 
 const renderLogs = ({ logs }) => {
@@ -177,15 +186,15 @@ const changePlayerTurn = () => {
 };
 
 const buildCorporation = (tileId) => {
+  const corporationId = 'america';
   fetch('/api/build-corporation', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ tileId, corporationId: 'america' })
+    body: JSON.stringify({ id: tileId, corporationId })
   })
     .then(res => res.json())
     .then(res => {
-      gameState.board.buildCorporation({ id: tileId }, res);
-      renderPlayerResources(gameState);
+      gameState.updateCorporation(corporationId, res.tiles);
     });
 };
 
@@ -209,6 +218,7 @@ const placeTile = (event) => {
       if (res.case === 'build') {
         buildCorporation(tileId);
       }
+
       // further steps conditions would come here
       drawTile();
       changePlayerTurn();
@@ -281,7 +291,7 @@ const startPolling = () => {
       .then(res => res.json())
       .then(res => {
         gameState = createState(res.game);
-        renderScreen(gameState);
+        renderScreen(res.game);
         if (gameState.isMyTurn()) {
           clearInterval(pollingId);
           return highlightTiles();

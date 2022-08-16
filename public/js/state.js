@@ -22,6 +22,13 @@ class GameState {
   isMyTurn() {
     return this.player.id === this.currentPlayer.id;
   }
+
+  updateCorporation(id, tiles) {
+    const corporation = this.corporations.find(corp => corp.id === id);
+    corporation.tiles = tiles;
+    corporation.active = true;
+    corporation.stocksLeft--;
+  }
 }
 
 class Board {
@@ -40,9 +47,6 @@ class Board {
 
   buildCorporation({ id }, corporation) {
     const tile = this.#findTile(id);
-    if (!tile.placed) {
-      return;
-    }
 
     tile.corporation = {
       name: corporation.name,

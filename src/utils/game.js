@@ -62,6 +62,7 @@ const nextMove = (game, tileId) => {
   if (!areTilesBelongto(placedTiles, corporations)) {
     return { case: 'build' };
   }
+  return { case: '' };
 };
 
 module.exports = { getPlayer, getInitialTiles, createGameLink, nextMove, findAdjancetTiles, findPlacedTiles };
