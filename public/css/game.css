@@ -95,15 +95,18 @@ body {
 .hydra {
   border: 2px solid var(--hydra-border);
   background-color: var(--hydra-bg);
+  color: black;
 }
 
 .sackson {
   border: 2px solid var(--sackson-border);
   background-color: var(--sackson-bg);
+  color: black;
 }
 
 .quantum {
   border: 2px solid var(--quantum-border);
+  color: black;
   background-color: var(--quantum-bg);
 }
 
@@ -115,16 +118,19 @@ body {
 
 .zeta {
   border: 2px solid var(--zeta-border);
+  color: black;
   background-color: var(--zeta-bg);
 }
 
 .phoneix {
   border: 2px solid var(--phoneix-border);
+  color: black;
   background-color: var(--phoneix-bg);
 }
 
 .fusion {
   border: 2px solid var(--fusion-border);
+  color: black;
   background-color: var(--fusion-bg);
 }
 

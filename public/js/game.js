@@ -185,8 +185,12 @@ const changePlayerTurn = () => {
   }).then(res => startPolling());
 };
 
+const getInactiveCorporation = () => {
+  return gameState.corporations.find(corporation => !corporation.active).id;
+};
+
 const buildCorporation = (tileId) => {
-  const corporationId = 'america';
+  const corporationId = getInactiveCorporation();
   fetch('/api/build-corporation', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
