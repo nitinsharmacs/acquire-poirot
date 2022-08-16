@@ -1,0 +1,31 @@
+const notFoundPage = () => `<html>
+
+<head>
+  <title>Not Found</title>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Recursive:regular,bold,bolditalic">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"
+    integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="/css/notFound.css">
+</head>
+
+<body>
+  <div class="header">
+    <div class="heading">
+      Acquire
+    </div>
+  </div>
+  <div class="container">
+    <p>Page not Found</p>
+    <p>Go to <a href="/">HOME</a></p>
+    <div class="not-found">
+      <img src="/images/not-found.gif" height="500">
+    </div>
+  </div>
+</body>
+
+</html>`;
+
+module.exports = { notFoundPage };

@@ -1,0 +1,36 @@
+body * {
+  font-family: 'Recursive';
+}
+
+.header {
+  padding: 0px 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 100px;
+  background-color: #343A40;
+  color: #F8F9FA;
+}
+
+.header>a {
+  text-decoration: none;
+  font-size: 20px;
+  color: #F8F9FA;
+}
+
+.heading {
+  font-size: 4rem;
+  font-weight: 400;
+}
+
+.container p {
+  margin-top: 1em;
+  font-size: 5em;
+  text-align: center;
+}
+
+.not-found {
+  display: flex;
+  justify-content: center;
+}

@@ -16,6 +16,7 @@ const session = require('express-session');
 const DataStore = require('./dataStore.js');
 const { Games } = require('./models/games.js');
 const { injectGame } = require('./middlewares/game');
+const { notFound } = require('./handlers/notFound.js');
 
 const { LOGIN_TEMPLATE,
   SIGNUP_TEMPLATE,
@@ -72,6 +73,7 @@ const createApp = (config = appConfig, dataStore = new DataStore(resources)) => 
 
   app.use('/api', restrict, injectGame, apiRoutes);
   app.use(express.static(root));
+  app.use(notFound);
   return app;
 };
 
