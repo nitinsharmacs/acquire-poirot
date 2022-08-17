@@ -5,7 +5,6 @@ const Sinon = require('sinon');
 const { newGame } = require('../../src/models/game.js');
 const { Games } = require('../../src/models/games.js');
 const { Player } = require('../../src/models/player.js');
-const { json } = require('express');
 
 const session = (gameId, playerId) => () => (req, res, next) => {
   req.session = {};
@@ -191,7 +190,7 @@ describe('POST /api/build-corporation', () => {
     });
 });
 
-describe('POST /api/buy-stocks', () => {
+describe.only('POST /api/buy-stocks', () => {
   const games = new Games();
   const host = { name: 'sam', id: 'user' };
 
