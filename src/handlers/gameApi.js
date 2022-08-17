@@ -65,4 +65,39 @@ const changeTurn = (req, res) => {
   res.json({ message: 'success' });
 };
 
-module.exports = { loadGame, startGame, drawTile, placeTile, changeTurn };
+const totalNumOfStocks = (stocks) => {
+  return stocks.reduce((totalNumOfStocks, { numOfStocks }) => {
+    return totalNumOfStocks + numOfStocks;
+  }, 0);
+};
+
+const areStocksAvailable = (game, stocks) => {
+  return stocks.every(({ corporationId, numOfStocks }) => {
+    const corporation = game.findCorporation(corporationId);
+    return corporation.areStocksAvailable(numOfStocks) && corporation.active;
+  });
+};
+
+const buyStocks = (req, res) => {
+  const {
+    game,
+    session: { playerId },
+  } = req;
+  const stocks = JSON.parse(req.body.stocks);
+  const numOfStocks = totalNumOfStocks(stocks);
+  const stocksAvailable = areStocksAvailable(game, stocks);
+
+  if (numOfStocks > 3) {
+    res.status(422).json({ message: 'Can buy maximum 3 stocks' });
+    return;
+  }
+
+  if (!stocksAvailable) {
+    res.status(422).json({ message: 'Inactive corporation or Insufficient stocks' });
+    return;
+  }
+
+  res.end('hello');
+};
+
+module.exports = { loadGame, startGame, drawTile, placeTile, changeTurn, buyStocks, totalNumOfStocks, areStocksAvailable };
