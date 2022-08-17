@@ -1,5 +1,5 @@
 const { createGameDAO } = require('../models/gameDAO.js');
-const { getPlayer, getInitialTiles, nextMove } = require('../utils/game.js');
+const { getPlayer, getInitialTiles, nextStep } = require('../utils/game.js');
 
 const loadGame = (req, res) => {
   const { game, session: { playerId } } = req;
@@ -54,9 +54,14 @@ const placeTile = (req, res) => {
 
   const player = getPlayer(game.players, playerId);
 
-  const nextStep = nextMove(game, id);
   const tile = player.placeTile({ id });
-  res.json({ data: tile, message: 'success', case: nextStep.case });
+  const { step, tiles, corporation } = nextStep(game, id);
+
+  if (step === 'grow') {
+    corporation.grow(tiles);
+  }
+
+  res.json({ data: { tile, case: step }, message: 'placed tile' });
 };
 
 const changeTurn = (req, res) => {
@@ -103,4 +108,26 @@ const buyStocks = (req, res) => {
   res.end('hello');
 };
 
-module.exports = { loadGame, startGame, drawTile, placeTile, changeTurn, buyStocks, totalNumOfStocks, areStocksAvailable };
+const buildCorporation = (req, res) => {
+  const {
+    game,
+    session: { playerId },
+    body: { id, corporationId }
+  } = req;
+
+  const corporation = game.buildCorporation(corporationId, id, playerId);
+
+  res.json({ message: 'built corporation', data: corporation });
+};
+
+module.exports = {
+  loadGame,
+  startGame,
+  drawTile,
+  placeTile,
+  changeTurn,
+  buildCorporation,
+  buyStocks,
+  totalNumOfStocks,
+  areStocksAvailable
+};

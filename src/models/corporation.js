@@ -22,6 +22,18 @@ class Corporation {
   addTiles(tiles) {
     this.tiles.push(...tiles);
   }
+
+  hasTile(tileId) {
+    return this.tiles.findIndex(tile => tile.id === tileId) >= 0;
+  }
+
+  activate() {
+    this.active = true;
+  }
+
+  grow(tiles) {
+    this.tiles = tiles;
+  }
 }
 
 module.exports = { Corporation };

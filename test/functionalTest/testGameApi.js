@@ -5,6 +5,7 @@ const Sinon = require('sinon');
 const { newGame } = require('../../src/models/game.js');
 const { Games } = require('../../src/models/games.js');
 const { Player } = require('../../src/models/player.js');
+const { findTilesChain } = require('../../src/utils/game.js');
 
 const session = (gameId, playerId) => () => (req, res, next) => {
   req.session = {};
@@ -110,6 +111,25 @@ describe('POST /api/place-tile', () => {
         .expect('content-type', /json/)
         .expect(200, done);
     });
+
+  it('should grow corporation',
+    (done) => {
+      const player = game.getPlayer('user');
+      const tile = game.board.tiles.find(tile => tile.id === '3a');
+      player.tiles.push(tile);
+
+      const corporation = game.getCorporation('america');
+      game.board.placeTile({ id: '1a' });
+      game.board.placeTile({ id: '2a' });
+      game.buildCorporation(corporation.id, '1a', 'user');
+
+      const tileId = '3a';
+      request(app)
+        .post('/api/place-tile')
+        .send(`id=${tileId}`)
+        .expect('content-type', /json/)
+        .expect(200, done);
+    });
 });
 
 describe('POST /api/draw-tile', () => {
@@ -177,7 +197,7 @@ describe('POST /api/build-corporation', () => {
 
   it('should build a corporation',
     (done) => {
-      const player = game.players.find(player => player.id === 'user');
+      const player = game.getPlayer('user');
       const tileId = player.tiles[0].id;
       game.board.tiles[0].placed = true;
       game.board.tiles[1].placed = true;

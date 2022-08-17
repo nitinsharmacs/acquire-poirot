@@ -2,6 +2,7 @@ const lodash = require('lodash');
 const { Corporation } = require('./corporation.js');
 const { createBoard } = require('./board.js');
 const { createTiles } = require('../utils/createTiles.js');
+const { findTilesChain } = require('../utils/game.js');
 
 const getSameRowTiles = (letter, tiles) => {
   return tiles.filter(tile => tile.id.includes(letter));
@@ -99,6 +100,32 @@ class Game {
       stockLogs.push(`${numOfStocks} stocks of ${corporation.name}`);
     });
     this.logs.push(`${player.name} bought ` + stockLogs.join(', '));
+  }
+
+  getPlayer(playerId) {
+    return this.players.find(player => player.id === playerId);
+  }
+
+  getCorporation(corporationId) {
+    return this.corporations.find(corporation =>
+      corporation.id === corporationId);
+  }
+
+  buildCorporation(corporationId, tileId, playerId) {
+    const corporation = this.getCorporation(corporationId);
+    const player = this.getPlayer(playerId);
+
+    const tiles = findTilesChain(tileId, this.board.tiles);
+    corporation.addTiles(tiles);
+    corporation.activate();
+
+    const stocksCount = 1;
+    if (corporation.areStocksAvailable(stocksCount)) {
+      player.addStocks(corporation, stocksCount);
+      corporation.reduceStocks(stocksCount);
+    }
+
+    return corporation;
   }
 }
 
