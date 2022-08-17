@@ -210,7 +210,7 @@ describe('POST /api/build-corporation', () => {
     });
 });
 
-describe.only('POST /api/buy-stocks', () => {
+describe('POST /api/buy-stocks', () => {
   const games = new Games();
   const host = { name: 'sam', id: 'user' };
 
