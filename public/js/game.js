@@ -161,6 +161,7 @@ const renderLogs = ({ logs }) => {
 };
 
 const removeOverlay = () => {
+  console.log('hello');
   const overlay = document.querySelector('.overlay');
   overlay.remove();
 };
@@ -204,6 +205,39 @@ const buildCorporation = (tileId) => {
     });
 };
 
+const createBuildControls = (tileId) => {
+  console.log('in build', tileId);
+  return ['div', { class: 'build-controls-holder' }, {},
+    ['button', { class: 'build-button' },
+      { onclick: () => buildCorporation(tileId) },
+      'Build'],
+    ['button', { class: 'skip-button' }, { onclick: event => skipBuild(event) },
+      'Skip']
+  ];
+};
+
+const highlightStockMarket = (tileId) => {
+  const { corporations } = gameState;
+
+  const corporationsEle = createDOMTree(createCorporations(corporations));
+  const corporationsCompo = document.querySelector('.corporations');
+  corporationsCompo.replaceWith(corporationsEle);
+
+  const buildControls = createDOMTree(createBuildControls(tileId));
+  const stockMarketEle = document.querySelector('#stock-market');
+  stockMarketEle.appendChild(buildControls);
+
+  const backdropTemplate = ['div', { class: 'overlay' }, {}];
+  stockMarketEle.style['z-index'] = 10;
+  stockMarketEle.style.background = 'white';
+  document.body.appendChild(...createElements([backdropTemplate]));
+};
+
+const removeHighlight = (ele) => {
+  const element = document.querySelector(ele);
+  element.style['z-index'] = 0;
+};
+
 const placeTile = (event) => {
   event.preventDefault();
 
@@ -220,9 +254,12 @@ const placeTile = (event) => {
     .then(res => res.json())
     .then(res => {
       removeOverlay();
+      removeHighlight('.player-tiles');
 
       if (res.data.case === 'build') {
-        buildCorporation(tileId);
+        //highlight stock market
+        highlightStockMarket(tileId);
+        return;
       }
 
       // further steps conditions would come here
@@ -233,6 +270,7 @@ const placeTile = (event) => {
 
 const selectTile = (event, tiles) => {
   const inputElement = event.target;
+
   const radio = inputElement.querySelector('input');
   radio.checked = true;
   const buttonElement = document.querySelector('.place-tile-button');
@@ -303,7 +341,7 @@ const startPolling = () => {
           return highlightTiles();
         }
       });
-  }, 500);
+  }, 2000);
 };
 
 let gameState;

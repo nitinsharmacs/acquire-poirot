@@ -478,3 +478,16 @@ body {
 .info-card.hide {
   transform: translateX(1000px);
 }
+
+.build-controls-holder {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.build-controls-holder>button {
+  font-size: large;
+  padding: 1em;
+}
