@@ -200,7 +200,7 @@ const buildCorporation = (tileId) => {
   })
     .then(res => res.json())
     .then(res => {
-      gameState.updateCorporation(corporationId, res.tiles);
+      gameState.updateCorporation(corporationId, res.data.tiles);
     });
 };
 
@@ -221,7 +221,7 @@ const placeTile = (event) => {
     .then(res => {
       removeOverlay();
 
-      if (res.case === 'build') {
+      if (res.data.case === 'build') {
         buildCorporation(tileId);
       }
 

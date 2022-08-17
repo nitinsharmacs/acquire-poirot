@@ -1,10 +1,10 @@
-const { buildCorporation } = require('../handlers/buildCorporation.js');
 const {
   loadGame,
   startGame,
   drawTile,
   placeTile,
   changeTurn,
+  buildCorporation,
   buyStocks
 } = require('../handlers/gameApi.js');
 
