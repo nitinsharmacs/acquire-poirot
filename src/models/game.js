@@ -58,6 +58,10 @@ class Game {
     return this.corporations.find(({ id }) => id === corporationId);
   }
 
+  findPlayer(playerId) {
+    return this.players.find(({ id }) => id === playerId);
+  }
+
   reorder() {
     const playersTiles = this.players.map(player => player.tiles[0]);
     const nearestTile = findNearestTile(playersTiles);
@@ -81,6 +85,20 @@ class Game {
 
   hasStarted() {
     return this.started;
+  }
+
+  sellStocks(stocks, playerId) {
+    const player = this.findPlayer(playerId);
+    const stockLogs = [];
+
+    stocks.forEach(({ corporationId, numOfStocks }) => {
+      const corporation = this.findCorporation(corporationId);
+      corporation.reduceStocks(numOfStocks);
+      player.addStocks(corporation, numOfStocks);
+      player.deductMoney(400);
+      stockLogs.push(`${numOfStocks} stocks of ${corporation.name}`);
+    });
+    this.logs.push(`${player.name} bought ` + stockLogs.join(', '));
   }
 }
 

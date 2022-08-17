@@ -64,6 +64,10 @@ class Player {
 
     this.stocks.push({ corporationId: id, corporationName: name, count: noOfStocks });
   }
+
+  deductMoney(toBeDeducted) {
+    this.money -= toBeDeducted;
+  }
 }
 
 module.exports = { Player };

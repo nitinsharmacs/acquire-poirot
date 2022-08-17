@@ -78,25 +78,28 @@ const areStocksAvailable = (game, stocks) => {
   });
 };
 
+const isValidStockCount = (stocks) => {
+  return totalNumOfStocks(stocks) < 4;
+};
+
 const buyStocks = (req, res) => {
   const {
     game,
     session: { playerId },
   } = req;
   const stocks = JSON.parse(req.body.stocks);
-  const numOfStocks = totalNumOfStocks(stocks);
-  const stocksAvailable = areStocksAvailable(game, stocks);
 
-  if (numOfStocks > 3) {
+  if (!isValidStockCount(stocks)) {
     res.status(422).json({ message: 'Can buy maximum 3 stocks' });
     return;
   }
 
-  if (!stocksAvailable) {
+  if (!areStocksAvailable(game, stocks)) {
     res.status(422).json({ message: 'Inactive corporation or Insufficient stocks' });
     return;
   }
 
+  game.sellStocks(stocks, playerId);
   res.end('hello');
 };
 
