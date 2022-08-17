@@ -1,3 +1,23 @@
+const replaceTick = () => {
+  const copyButton = ['button',
+    { class: 'fa-solid fa-clipboard', id: 'copy-btn' },
+    { onclick: copyGameLink }
+  ];
+  const tickElement = document.querySelector('#tick');
+  tickElement.replaceWith(createDOMTree(copyButton));
+};
+
+const replaceCopyButton = () => {
+  const copyButton = document.querySelector('#copy-btn');
+
+  const tick = ['div',
+    { class: 'fa-solid fa-clipboard-check', id: 'tick' }
+  ];
+  copyButton.replaceWith(createDOMTree(tick));
+
+  setTimeout(replaceTick, 2000);
+};
+
 const copyGameLink = () => {
   const textarea = document.createElement('textarea');
   textarea.style.display = 'hidden';
@@ -11,11 +31,10 @@ const copyGameLink = () => {
 
   textarea.remove();
 
-  alert('copied to clipboard');
+  replaceCopyButton();
 };
 
 const createPlayer = (joinee, player) => {
-  console.log('pp', player);
   let classname = '';
 
   if (joinee.id === player.id) {
@@ -56,7 +75,6 @@ const loadGame = () => {
     fetch('/api/loadgame', { method: 'get' })
       .then(res => res.json())
       .then(({ game }) => {
-        console.log(game);
         renderPlayers(game);
 
         if (hasGameStarted(game)) {
@@ -64,13 +82,12 @@ const loadGame = () => {
           startGame();
         }
       });
-  }, 330);
+  }, 2000);
 };
 
 const main = () => {
   loadGame();
   document.getElementById('copy-btn').onclick = copyGameLink;
-
 };
 
 window.onload = main;
