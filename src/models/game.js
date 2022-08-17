@@ -54,6 +54,10 @@ class Game {
     return this.players;
   }
 
+  findCorporation(corporationId) {
+    return this.corporations.find(({ id }) => id === corporationId);
+  }
+
   reorder() {
     const playersTiles = this.players.map(player => player.tiles[0]);
     const nearestTile = findNearestTile(playersTiles);

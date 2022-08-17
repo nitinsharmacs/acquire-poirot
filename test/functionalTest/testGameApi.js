@@ -5,6 +5,7 @@ const Sinon = require('sinon');
 const { newGame } = require('../../src/models/game.js');
 const { Games } = require('../../src/models/games.js');
 const { Player } = require('../../src/models/player.js');
+const { json } = require('express');
 
 const session = (gameId, playerId) => () => (req, res, next) => {
   req.session = {};
@@ -187,5 +188,71 @@ describe('POST /api/build-corporation', () => {
         .send('id=1a&&corporationId=america')
         .expect('content-type', /json/)
         .expect(200, done);
+    });
+});
+
+describe('POST /api/buy-stocks', () => {
+  const games = new Games();
+  const host = { name: 'sam', id: 'user' };
+
+  const game = newGame('123', host, 1);
+  games.add(game);
+  game.addPlayer(new Player('user', 'sam', game));
+  const app = initApp(session('123', 'user'), games);
+
+  before((done) => {
+    request(app)
+      .post('/api/start-game')
+      .expect('content-type', /json/)
+      .expect(200, done);
+  });
+
+  it('should buy stocks',
+    (done) => {
+      const corporation = game.findCorporation('america');
+      corporation.active = true;
+      request(app)
+        .post('/api/buy-stocks')
+        .send('stocks=[{"corporationId":"america","numOfStocks":2}]')
+        .expect(200, 'hello', done);
+    });
+
+  it('should not buy stocks when limit exceeds',
+    (done) => {
+      request(app)
+        .post('/api/buy-stocks')
+        .send('stocks=[{"corporationId":"america","numOfStocks":4}]')
+        .expect(422,
+          JSON.stringify({ message: 'Can buy maximum 3 stocks' }),
+          done);
+    });
+
+  it('should not buy stocks in case of insufficient stocks',
+    (done) => {
+      const corporation = game.findCorporation('america');
+      corporation.active = true;
+      corporation.stocksLeft = 2;
+      request(app)
+        .post('/api/buy-stocks')
+        .send('stocks=[{"corporationId":"america","numOfStocks":3}]')
+        .expect(422,
+          JSON.stringify({
+            message: 'Inactive corporation or Insufficient stocks'
+          }),
+          done);
+    });
+
+  it('should not buy stocks when coroporation is inactive',
+    (done) => {
+      const corporation = game.findCorporation('america');
+      corporation.stocksLeft = 2;
+      request(app)
+        .post('/api/buy-stocks')
+        .send('stocks=[{"corporationId":"america","numOfStocks":3}]')
+        .expect(422,
+          JSON.stringify({
+            message: 'Inactive corporation or Insufficient stocks'
+          }),
+          done);
     });
 });
