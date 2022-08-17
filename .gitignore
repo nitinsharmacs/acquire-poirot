@@ -3,3 +3,5 @@ data/
 .env
 ref/
 game_temp.js
+.nyc_output
+coverage
