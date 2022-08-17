@@ -23,7 +23,6 @@ const initApp = () => {
   };
   dataStore.load.withArgs('LOGIN_TEMPLATE').returns('_MESSAGE_');
   dataStore.load.withArgs('SIGNUP_TEMPLATE').returns('_MESSAGE_');
-  dataStore.load.withArgs('HOST_TEMPLATE_PATH').returns('_MESSAGE_');
   dataStore.loadJSON.withArgs('USERS_DB_PATH').returns(mockUsers);
   return createApp(config, dataStore);
 };

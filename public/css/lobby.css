@@ -37,7 +37,12 @@ body {
   color: #F8F9FA;
 }
 
-.host-header>a {
+.navigation {
+  display: flex;
+  gap: 1.2em;
+}
+
+.host-header a {
   text-decoration: none;
   font-size: 20px;
   color: #F8F9FA;

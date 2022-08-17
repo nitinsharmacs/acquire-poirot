@@ -2,10 +2,10 @@ const express = require('express');
 const { createGame } = require('../handlers/createGame');
 const { hostGame } = require('../handlers/hostGame');
 
-const createHostRouter = (dataStore) => {
+const createHostRouter = () => {
   const router = express.Router();
-  router.get('/host', createGame(dataStore));
-  router.post('/host', hostGame(dataStore));
+  router.get('/host', createGame);
+  router.post('/host', hostGame);
   return router;
 };
 

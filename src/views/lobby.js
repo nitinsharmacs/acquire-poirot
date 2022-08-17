@@ -1,4 +1,4 @@
-const lobbyPage = (game, gameLink) => `
+const lobbyPage = (game, gameLink, playerName) => `
 <html>
 
 <head>
@@ -16,7 +16,10 @@ const lobbyPage = (game, gameLink) => `
     <h1 class="heading">
       Acquire
     </h1>
+    <div class="navigation">
+    <p>${playerName}</p>
     <a href="/" class="fa-solid fa-arrow-right-from-bracket"></a>
+    </div>
   </header>
 
   <main class="main">

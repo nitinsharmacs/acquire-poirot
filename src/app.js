@@ -20,7 +20,6 @@ const { notFound } = require('./handlers/notFound.js');
 
 const { LOGIN_TEMPLATE,
   SIGNUP_TEMPLATE,
-  HOST_TEMPLATE_PATH,
   USERS_DB_PATH,
   GAME_TEMPLATE_PATH,
   SESSION_KEY
@@ -29,7 +28,6 @@ const { LOGIN_TEMPLATE,
 const resources = {
   LOGIN_TEMPLATE,
   SIGNUP_TEMPLATE,
-  HOST_TEMPLATE_PATH,
   USERS_DB_PATH,
   GAME_TEMPLATE_PATH
 };
@@ -63,7 +61,7 @@ const createApp = (config = appConfig, dataStore = new DataStore(resources)) => 
   const authRouter = createAuthRouter(dataStore);
   app.use(authRouter);
 
-  const hostRouter = createHostRouter(dataStore);
+  const hostRouter = createHostRouter();
   app.use(hostRouter);
 
   app.get('/join/:id', restrict, joinGame);

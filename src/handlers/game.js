@@ -49,7 +49,10 @@ const joinGame = (req, res) => {
 };
 
 const serveLobby = (req, res) => {
-  const { id } = req.params;
+  const {
+    session: { playerName },
+    params: { id }
+  } = req;
 
   const game = req.app.games.find(id);
   if (!game) {
@@ -60,7 +63,7 @@ const serveLobby = (req, res) => {
   const gameLink = createGameLink(host, game.id);
 
   res.type('text/html');
-  res.send(lobbyPage(game, gameLink));
+  res.send(lobbyPage(game, gameLink, playerName));
 };
 
 module.exports = { serveGamePage, joinGame, serveLobby };
