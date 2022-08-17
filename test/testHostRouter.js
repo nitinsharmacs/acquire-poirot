@@ -30,7 +30,6 @@ const initApp = (session) => {
   };
   dataStore.load.withArgs('LOGIN_TEMPLATE').returns('_MESSAGE_');
   dataStore.load.withArgs('SIGNUP_TEMPLATE').returns('_MESSAGE_');
-  dataStore.load.withArgs('HOST_TEMPLATE_PATH').returns('_MESSAGE_');
   return createApp(config, dataStore);
 };
 

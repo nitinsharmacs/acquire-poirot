@@ -1,5 +1,6 @@
 const { newGame } = require('../models/game.js');
 const { Player } = require('../models/player.js');
+const { hostPage } = require('../views/hostPage.js');
 
 const generateId = () => {
   return new Date().getTime().toString(16);
@@ -8,7 +9,7 @@ const generateId = () => {
 const isPlayersCountValid = (noOfPlayers) =>
   noOfPlayers >= 3 && noOfPlayers <= 6;
 
-const hostGame = (dataStore) => (req, res) => {
+const hostGame = (req, res) => {
   if (!req.session.playerId) {
     res.redirect('/login?ref=host');
     return;
@@ -18,13 +19,10 @@ const hostGame = (dataStore) => (req, res) => {
   const { playerName, playerId } = req.session;
 
   if (!isPlayersCountValid(noOfPlayers)) {
-    const hostPage = dataStore.load('HOST_TEMPLATE_PATH');
-    const errorHost = hostPage.replace(
-      '_MESSAGE_',
-      'Please enter valid number of players'
-    );
+    const message = 'Please enter valid number of players';
+    const hostPageTemplate = hostPage(playerName, message);
     res.type('text/html');
-    res.end(errorHost);
+    res.end(hostPageTemplate);
     return;
   }
 

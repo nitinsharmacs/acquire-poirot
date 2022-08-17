@@ -1,17 +1,16 @@
-const serveHostPage = (req, res, hostPage) => {
-  const pageContent = hostPage.replace('_MESSAGE_', '');
-  res.type('text/html');
-  res.end(pageContent);
-  return true;
-};
+const { hostPage } = require('../views/hostPage.js');
 
-const createGame = (dataStore) => (req, res) => {
-  if (!req.session.playerId) {
+const createGame = (req, res) => {
+  const { playerId, playerName } = req.session;
+  if (!playerId) {
     res.redirect('/login?ref=host');
     return;
   }
-  const hostPage = dataStore.load('HOST_TEMPLATE_PATH');
-  serveHostPage(req, res, hostPage);
+  const message = '';
+  const hostPageTemplate = hostPage(playerName, message);
+
+  res.type('text/html');
+  res.send(hostPageTemplate);
 };
 
 module.exports = { createGame };
