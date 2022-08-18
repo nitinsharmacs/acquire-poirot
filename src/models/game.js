@@ -4,6 +4,7 @@ const { createBoard } = require('./board.js');
 const { createTiles } = require('../utils/createTiles.js');
 const { findTilesChain } = require('../utils/game.js');
 const { informationCard } = require('./informationCard.js');
+const { Turn } = require('./turn.js');
 
 const getSameRowTiles = (letter, tiles) => {
   return tiles.filter(tile => tile.id.includes(letter));
@@ -50,6 +51,8 @@ class Game {
 
   start() {
     this.started = true;
+    this.currentPlayer = this.players[0];
+    this.turn = new Turn(this.currentPlayer);
   }
 
   addPlayer(player) {
@@ -73,7 +76,6 @@ class Game {
     const nearestTile = findNearestTile(playersTiles);
     const nearestTilePos = playersTiles.findIndex((tile) => tile.id === nearestTile.id);
     this.players = this.players.slice(nearestTilePos).concat(this.players.slice(0, nearestTilePos));
-    this.currentPlayer = this.players[0];
   }
 
   changeTurn() {
@@ -83,6 +85,8 @@ class Game {
     const totalPlayers = this.players.length;
     const nextPlayerPosition = (currentPlayerPosition + 1) % totalPlayers;
     this.currentPlayer = this.players[nextPlayerPosition];
+
+    this.turn = new Turn(this.currentPlayer);
   }
 
   isPlayerIdle(playerId) {
@@ -144,6 +148,18 @@ class Game {
     this.logs.push(`${player.name} built ${corporation.name} on ${tileId}`);
 
     return corporation;
+  }
+
+  buildState() {
+    this.turn.buildState();
+  }
+
+  buyStocksState() {
+    this.turn.buyStocksState();
+  }
+
+  drawTileState() {
+    this.turn.drawTileState();
   }
 }
 

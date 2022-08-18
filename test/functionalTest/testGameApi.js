@@ -45,6 +45,14 @@ describe('GET /api/loadgame', () => {
       .expect(200)
       .expect('content-type', /^application\/json/, done);
   });
+
+  it('should response with game data when game started', (done) => {
+    game.start();
+    request(app)
+      .get('/api/loadgame')
+      .expect(200)
+      .expect('content-type', /^application\/json/, done);
+  });
 });
 
 // TODO : verify the game is started
@@ -145,6 +153,7 @@ describe('POST /api/draw-tile', () => {
     game.addPlayer(new Player('user-3', 'nilam', game));
     game.players.forEach(player => player.drawTile());
     game.reorder();
+    game.start();
 
     currentPlayer = game.currentPlayer;
     done();

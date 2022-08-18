@@ -26,17 +26,27 @@ const renderPlayers = (game) => {
   playersList.replaceChildren(...playersHtml);
 };
 
-const getCorporationClass = (tileId) => {
-  const corporation = gameState.findCorporationByTile(tileId);
+const isTilePresentIn = (tileId, corporation) => {
+  return corporation.tiles.findIndex(tile => tile.id === tileId) !== -1;
+};
+
+const findCorporationByTile = (tileId, corporations) => {
+  return corporations.find(corporation => {
+    return isTilePresentIn(tileId, corporation);
+  });
+};
+
+const getCorporationClass = (tileId, corporations) => {
+  const corporation = findCorporationByTile(tileId, corporations);
   if (corporation) {
     return corporation.id;
   }
   return '';
 };
 
-const createTiles = (tiles) => {
+const createTiles = (tiles, corporations) => {
   return tiles.map(tile => {
-    const corporationClass = getCorporationClass(tile.id);
+    const corporationClass = getCorporationClass(tile.id, corporations);
     const placed = tile.placed ? 'placed' : '';
     return [
       'div',
@@ -50,12 +60,13 @@ const createTiles = (tiles) => {
   });
 };
 
-const renderBoard = ({ board }) => {
+const renderBoard = (game) => {
+  const { board, corporations } = game;
   const { tiles } = board;
 
   const boardElement = document.querySelector('.board-tiles');
 
-  const tilesTemplate = createTiles(tiles);
+  const tilesTemplate = createTiles(tiles, corporations);
 
   const tilesHTML = createElements(tilesTemplate);
   boardElement.replaceChildren(...tilesHTML);
@@ -90,6 +101,15 @@ const playerStocks = ({ stocks }) => {
   );
 };
 
+const placeTileOnBoard = (event) => {
+  event.preventDefault();
+
+  const formData = new FormData(event.target);
+  const tileId = formData.get('tile');
+
+  placeTile(tileId);
+};
+
 const renderPlayerResources = ({ player }) => {
   const playerResources = document.querySelector('#player-resources');
 
@@ -100,7 +120,7 @@ const renderPlayerResources = ({ player }) => {
     ],
     ['section', { class: 'player-tiles' }, {},
       ['h3', { class: 'component-heading' }, {}, 'Tiles'],
-      ['form', {}, { onsubmit: (event) => placeTile(event) },
+      ['form', {}, { onsubmit: (event) => placeTileOnBoard(event) },
         [
           'div', { class: 'component-tiles' }, {}, ...playerTiles(player)
         ]
@@ -204,8 +224,7 @@ const createPlaceButton = () => {
 };
 
 // view
-const highlightTiles = () => {
-  const { player } = gameState;
+const highlightTiles = ({ player }) => {
   const tilesElement = createElements(tileSelection(player));
   const tilesComponent = document.querySelector('.component-tiles');
   tilesComponent.replaceChildren(...tilesElement);

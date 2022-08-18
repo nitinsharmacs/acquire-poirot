@@ -7,7 +7,7 @@ const playerDAO = (player) => {
   };
 };
 
-const otherPlayerDAO = (player) => {
+const otherPlayerDAO = (player = {}) => {
   return {
     id: player.id,
     name: player.name
@@ -16,6 +16,13 @@ const otherPlayerDAO = (player) => {
 
 const createPlayersDAO = (players) => players.map(otherPlayerDAO);
 
+const createTurnDAO = (turn = {}) => {
+  return {
+    ...turn,
+    player: otherPlayerDAO(turn.player)
+  };
+};
+
 const createGameDAO = (game, playerId) => {
   const gameDAO = {
     player: playerDAO(getPlayer(game.players, playerId)),
@@ -23,11 +30,12 @@ const createGameDAO = (game, playerId) => {
     board: game.board,
     cluster: game.cluster,
     logs: game.logs,
-    currentPlayer: game.currentPlayer ? otherPlayerDAO(game.currentPlayer) : {},
+    currentPlayer: otherPlayerDAO(game.currentPlayer),
     corporations: game.corporations,
     gameSize: game.gameSize,
     started: game.started,
-    informationCard: game.informationCard
+    informationCard: game.informationCard,
+    turn: createTurnDAO(game.turn)
   };
 
   return gameDAO;
