@@ -3,10 +3,13 @@ const { Corporation } = require('./corporation.js');
 const { createBoard } = require('./board.js');
 const { createTiles } = require('../utils/createTiles.js');
 const { findTilesChain } = require('../utils/game.js');
+const { informationCard } = require('./informationCard.js');
 
 const getSameRowTiles = (letter, tiles) => {
   return tiles.filter(tile => tile.id.includes(letter));
 };
+
+const isBetween = (number, { min, max }) => number >= min && number <= max;
 
 const findNearestTile = (tiles) => {
   const sortedTilesByLetter = lodash.sortBy(tiles, ({ id }) => {
@@ -30,7 +33,8 @@ class Game {
     cluster,
     corporations,
     host,
-    gameSize
+    gameSize,
+    informationCard
   }) {
     this.id = id;
     this.players = players;
@@ -41,6 +45,7 @@ class Game {
     this.gameSize = gameSize;
     this.logs = [];
     this.started = false;
+    this.informationCard = informationCard;
   }
 
   start() {
@@ -88,6 +93,18 @@ class Game {
     return this.started;
   }
 
+  calculateStockPrice(corporation) {
+    const corporationSize = corporation.getSize();
+
+    const corporationColumn = this.informationCard.find(column =>
+      column.corporations.includes(corporation.id));
+
+    const priceBySize = corporationColumn.pricesBySize.find(({ range }) => {
+      return isBetween(corporationSize, range);
+    });
+    return priceBySize.stockPrice;
+  }
+
   sellStocks(stocks, playerId) {
     const player = this.findPlayer(playerId);
     const stockLogs = [];
@@ -96,7 +113,7 @@ class Game {
       const corporation = this.findCorporation(corporationId);
       corporation.reduceStocks(numOfStocks);
       player.addStocks(corporation, numOfStocks);
-      player.deductMoney(400);
+      player.deductMoney(this.calculateStockPrice(corporation) * numOfStocks);
       stockLogs.push(`${numOfStocks} stocks of ${corporation.name}`);
     });
     this.logs.push(`${player.name} bought ` + stockLogs.join(', '));
@@ -172,7 +189,6 @@ const createCorporations = () => {
 const newGame = (id, host, gameSize) => {
   const board = createBoard();
   const cluster = createTiles();
-
   const corporations = createCorporations();
 
   return new Game({
@@ -182,7 +198,8 @@ const newGame = (id, host, gameSize) => {
     board,
     cluster,
     corporations,
-    gameSize
+    gameSize,
+    informationCard
   });
 };
 

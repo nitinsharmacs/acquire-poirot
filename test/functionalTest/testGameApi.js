@@ -219,7 +219,7 @@ describe('POST /api/buy-stocks', () => {
   game.addPlayer(new Player('user', 'sam', game));
   const app = initApp(session('123', 'user'), games);
 
-  before((done) => {
+  beforeEach((done) => {
     request(app)
       .post('/api/start-game')
       .expect('content-type', /json/)
@@ -230,6 +230,7 @@ describe('POST /api/buy-stocks', () => {
     (done) => {
       const corporation = game.findCorporation('america');
       corporation.active = true;
+      corporation.tiles.push('1a', '1b');
       request(app)
         .post('/api/buy-stocks')
         .set('content-type', 'application/json')
@@ -237,6 +238,30 @@ describe('POST /api/buy-stocks', () => {
           stocks: [{
             corporationId: 'america',
             numOfStocks: 2
+          }]
+        }))
+        .expect(200, done);
+    });
+
+  it('should buy stocks for multiple corporations',
+    (done) => {
+      let corporation = game.findCorporation('america');
+      corporation.active = true;
+      corporation.tiles.push('1a', '1b');
+      corporation = game.findCorporation('zeta');
+      corporation.active = true;
+      corporation.tiles.push('1d', '1f');
+      request(app)
+        .post('/api/buy-stocks')
+        .set('content-type', 'application/json')
+        .send(JSON.stringify({
+          stocks: [{
+            corporationId: 'america',
+            numOfStocks: 2
+          },
+          {
+            corporationId: 'zeta',
+            numOfStocks: 1
           }]
         }))
         .expect(200, done);

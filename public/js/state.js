@@ -6,7 +6,8 @@ class GameState {
     logs,
     currentPlayer,
     corporations,
-    gameSize
+    gameSize,
+    informationCard
   }) {
     this.player = player;
     this.players = players;
@@ -17,6 +18,7 @@ class GameState {
     this.corporations = corporations;
     this.step = 1;
     this.gameSize = gameSize;
+    this.informationCard = informationCard;
   }
 
   isMyTurn() {
@@ -34,12 +36,25 @@ class GameState {
     return this.corporations.find(({ id }) => id === corporationId);
   }
 
+  calculateStockPrice(corporation) {
+    const corporationSize = corporation.getSize();
+
+    const corporationColumn = this.informationCard.find(column =>
+      column.corporations.includes(corporation.id));
+
+    const priceBySize = corporationColumn.pricesBySize.find(({ range }) => {
+      return isBetween(corporationSize, range);
+    });
+    return priceBySize.stockPrice;
+  }
+
   sellStocks(stocks) {
     stocks.forEach(({ corporationId, numOfStocks }) => {
       const corporation = this.findCorporation(corporationId);
       corporation.reduceStocks(numOfStocks);
       this.player.addStocks(corporation, numOfStocks);
-      this.player.deductMoney(400);
+      const stockPrice = this.calculateStockPrice(corporation);
+      this.player.deductMoney(stockPrice * numOfStocks);
     });
   }
 }
@@ -129,7 +144,11 @@ class Corporation {
   reduceStocks(count) {
     this.stocksLeft -= count;
   }
-};
+
+  getSize() {
+    return this.tiles.length;
+  }
+}
 
 const createCorporations = (corporations) => {
   return corporations.map(corporation => new Corporation(corporation));
@@ -144,7 +163,8 @@ const createState = (game) => {
     logs: game.logs,
     currentPlayer: game.currentPlayer,
     corporations: createCorporations(game.corporations),
-    gameSize: game.gameSize
+    gameSize: game.gameSize,
+    informationCard: game.informationCard
   });
 };
 
