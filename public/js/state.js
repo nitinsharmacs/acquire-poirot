@@ -25,11 +25,30 @@ class GameState {
     return this.player.id === this.currentPlayer.id;
   }
 
-  updateCorporation(id, tiles) {
-    const corporation = this.corporations.find(corp => corp.id === id);
+  #findCorpration(corporationId) {
+    return this.corporations.find(corpration =>
+      corpration.id === corporationId);
+  }
+
+  getInactiveCorporation() {
+    return this.corporations.find(corporation => !corporation.active);
+  }
+
+  buildCorporation(corporationId, tiles) {
+    const corporation = this.#findCorpration(corporationId);
+
     corporation.tiles = tiles;
     corporation.active = true;
     corporation.stocksLeft--;
+  }
+
+  drawTile(tileId) {
+    const tile = this.cluster.find(tile => tile.id === tileId);
+    this.player.drawTile(tile);
+  }
+
+  placeTile(tileId) {
+    this.player.placeTile(tileId, this.board);
   }
 
   findCorporation(corporationId) {
@@ -71,15 +90,6 @@ class Board {
   placeTile({ id }) {
     const tile = this.#findTile(id);
     tile.placed = true;
-  }
-
-  buildCorporation({ id }, corporation) {
-    const tile = this.#findTile(id);
-
-    tile.corporation = {
-      name: corporation.name,
-      id: corporation.id
-    };
   }
 }
 
