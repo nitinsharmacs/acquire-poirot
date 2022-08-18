@@ -1,3 +1,7 @@
+const isTilePresentIn = (tileId, corporation) => {
+  return corporation.tiles.findIndex(tile => tile.id === tileId) !== -1;
+};
+
 class GameState {
   constructor({ player,
     players,
@@ -30,6 +34,11 @@ class GameState {
       corpration.id === corporationId);
   }
 
+  findCorporationByTile(tileId) {
+    return this.corporations.find(corporation => {
+      return isTilePresentIn(tileId, corporation);
+    });
+  }
   getInactiveCorporation() {
     return this.corporations.find(corporation => !corporation.active);
   }
