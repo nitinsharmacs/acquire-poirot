@@ -91,9 +91,8 @@ const buyStocks = (req, res) => {
   const {
     game,
     session: { playerId },
+    body: { stocks }
   } = req;
-  const stocks = JSON.parse(req.body.stocks);
-
   if (!isValidStockCount(stocks)) {
     res.status(422).json({ message: 'Can buy maximum 3 stocks' });
     return;
@@ -105,7 +104,7 @@ const buyStocks = (req, res) => {
   }
 
   game.sellStocks(stocks, playerId);
-  res.end('hello');
+  res.json({ success: true });
 };
 
 const buildCorporation = (req, res) => {

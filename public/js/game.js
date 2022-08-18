@@ -117,7 +117,7 @@ const renderPlayerResources = ({ player }) => {
   playerResources.replaceChildren(...createElements(resourcesElements));
 };
 
-const createCorporation = (corporation) => {
+const createCorporationHTML = (corporation) => {
   const disable = corporation.active ? 'disabled-corporation' : '';
   return ['div', { class: 'corporation' }, {},
     ['div', { class: `corporation-img ${disable}`, id: corporation.id }, {}],
@@ -130,11 +130,11 @@ const createCorporation = (corporation) => {
 
 const createColumn = (corporations) => {
   return ['div', { class: 'corporation-col' }, {},
-    ...corporations.map(createCorporation)
+    ...corporations.map(createCorporationHTML)
   ];
 };
 
-const createCorporations = (corporations) => {
+const createCorporationsHTML = (corporations) => {
   return ['div', { class: 'corporations' }, {},
     createColumn(corporations.slice(0, 4)),
     createColumn(corporations.slice(4))
@@ -146,7 +146,7 @@ const renderStockMarket = ({ corporations }) => {
 
   const elements = [
     ['h3', { class: 'component-heading' }, {}, 'Stock Market'],
-    createCorporations(corporations)
+    createCorporationsHTML(corporations)
   ];
 
   stockMarket.replaceChildren(...createElements(elements));
@@ -207,8 +207,9 @@ const buildCorporation = (tileId) => {
 };
 
 const latestStage = () => {
+  buyStocks();
   drawTile();
-  return changePlayerTurn();
+  changePlayerTurn();
 };
 
 const removeHighlight = () => {
@@ -240,8 +241,7 @@ const createBuildControls = (tileId) => {
 
 const highlightStockMarket = (tileId) => {
   const { corporations } = gameState;
-
-  const corporationsEle = createDOMTree(createCorporations(corporations));
+  const corporationsEle = createDOMTree(createCorporationsHTML(corporations));
   const corporationsCompo = document.querySelector('.corporations');
   corporationsCompo.replaceWith(corporationsEle);
 
@@ -259,6 +259,22 @@ const highlightStockMarket = (tileId) => {
 const removeBackdrop = (ele) => {
   const element = document.querySelector(ele);
   element.style['z-index'] = 0;
+};
+
+const buyStocks = () => {
+  const stocks = [
+    { corporationId: 'america', numOfStocks: 3 }];
+  fetch('/api/buy-stocks', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ stocks })
+  })
+    .then(res => res.json())
+    .then(res => {
+      if (res.success) {
+        gameState.sellStocks(stocks);
+      }
+    });
 };
 
 const placeTile = (event) => {
@@ -280,11 +296,11 @@ const placeTile = (event) => {
       removeBackdrop('.player-tiles');
 
       if (res.data.case === 'build') {
-        highlightStockMarket(tileId);
-        return;
+        return highlightStockMarket(tileId);
       }
 
       // further steps conditions would come here
+      buyStocks();
       drawTile();
       changePlayerTurn();
     });
