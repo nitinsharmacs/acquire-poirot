@@ -29,6 +29,19 @@ class GameState {
     corporation.active = true;
     corporation.stocksLeft--;
   }
+
+  findCorporation(corporationId) {
+    return this.corporations.find(({ id }) => id === corporationId);
+  }
+
+  sellStocks(stocks) {
+    stocks.forEach(({ corporationId, numOfStocks }) => {
+      const corporation = this.findCorporation(corporationId);
+      corporation.reduceStocks(numOfStocks);
+      this.player.addStocks(corporation, numOfStocks);
+      this.player.deductMoney(400);
+    });
+  }
 }
 
 class Board {
@@ -76,6 +89,22 @@ class Player {
   drawTile(tile) {
     this.tiles.push(tile);
   }
+
+  addStocks({ id, name }, noOfStocks = 0) {
+    const stocks = this.stocks.find(stock => stock.corporationId === id);
+
+    if (stocks) {
+      stocks.count += noOfStocks;
+      return;
+    }
+
+    this.stocks.push(
+      { corporationId: id, corporationName: name, count: noOfStocks });
+  }
+
+  deductMoney(toBeDeducted) {
+    this.money -= toBeDeducted;
+  }
 }
 
 const createPlayer = ({ player }) => {
@@ -88,6 +117,24 @@ const createPlayer = ({ player }) => {
   });
 };
 
+class Corporation {
+  constructor({ id, name, stocksLeft, active, tiles }) {
+    this.id = id;
+    this.name = name;
+    this.active = active;
+    this.stocksLeft = stocksLeft;
+    this.tiles = tiles;
+  }
+
+  reduceStocks(count) {
+    this.stocksLeft -= count;
+  }
+};
+
+const createCorporations = (corporations) => {
+  return corporations.map(corporation => new Corporation(corporation));
+};
+
 const createState = (game) => {
   return new GameState({
     player: createPlayer(game),
@@ -96,7 +143,7 @@ const createState = (game) => {
     cluster: game.cluster,
     logs: game.logs,
     currentPlayer: game.currentPlayer,
-    corporations: game.corporations,
+    corporations: createCorporations(game.corporations),
     gameSize: game.gameSize
   });
 };

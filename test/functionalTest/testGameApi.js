@@ -232,15 +232,27 @@ describe('POST /api/buy-stocks', () => {
       corporation.active = true;
       request(app)
         .post('/api/buy-stocks')
-        .send('stocks=[{"corporationId":"america","numOfStocks":2}]')
-        .expect(200, 'hello', done);
+        .set('content-type', 'application/json')
+        .send(JSON.stringify({
+          stocks: [{
+            corporationId: 'america',
+            numOfStocks: 2
+          }]
+        }))
+        .expect(200, done);
     });
 
   it('should not buy stocks when limit exceeds',
     (done) => {
       request(app)
         .post('/api/buy-stocks')
-        .send('stocks=[{"corporationId":"america","numOfStocks":4}]')
+        .set('content-type', 'application/json')
+        .send(JSON.stringify({
+          stocks: [{
+            corporationId: 'america',
+            numOfStocks: 4
+          }]
+        }))
         .expect(422,
           JSON.stringify({ message: 'Can buy maximum 3 stocks' }),
           done);
@@ -253,7 +265,13 @@ describe('POST /api/buy-stocks', () => {
       corporation.stocksLeft = 2;
       request(app)
         .post('/api/buy-stocks')
-        .send('stocks=[{"corporationId":"america","numOfStocks":3}]')
+        .set('content-type', 'application/json')
+        .send(JSON.stringify({
+          stocks: [{
+            corporationId: 'america',
+            numOfStocks: 3
+          }]
+        }))
         .expect(422,
           JSON.stringify({
             message: 'Inactive corporation or Insufficient stocks'
@@ -267,7 +285,13 @@ describe('POST /api/buy-stocks', () => {
       corporation.stocksLeft = 2;
       request(app)
         .post('/api/buy-stocks')
-        .send('stocks=[{"corporationId":"america","numOfStocks":3}]')
+        .set('content-type', 'application/json')
+        .send(JSON.stringify({
+          stocks: [{
+            corporationId: 'america',
+            numOfStocks: 3
+          }]
+        }))
         .expect(422,
           JSON.stringify({
             message: 'Inactive corporation or Insufficient stocks'
