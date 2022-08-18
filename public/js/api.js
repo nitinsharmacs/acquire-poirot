@@ -51,5 +51,10 @@ const API = {
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ stocks })
   })
-    .then(res => res.json())
+    .then(res => {
+      if (res.status !== 200) {
+        throw new Error('Can\'t purchase stocks');
+      }
+      return res.json();
+    })
 };

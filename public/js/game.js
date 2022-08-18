@@ -1,358 +1,111 @@
-const createPlayerItem = (player, game) => {
-  const activeClass = player.id === game.currentPlayer.id ? 'active' : '';
-  const activeTag = player.id === game.player.id ? '(You)' : '';
-
-  return ['div',
-    { class: `player-item ${activeClass}` },
-    {},
-    ['div', { class: 'highlight' }, {}],
-    ['p', {}, {}, `${player.name}`],
-    ['span', {}, {}, ` ${activeTag}`]
-  ];
-};
-
-const createPlayers = (game) => {
-  const playersList = game.players.map((player) => {
-    return createPlayerItem(player, game);
-  });
-
-  return createElements(playersList);
-};
-
-const renderPlayers = (game) => {
-  const playersList = document.querySelector('#players-list');
-
-  const playersHtml = createPlayers(game);
-  playersList.replaceChildren(...playersHtml);
-};
-
-const belongsTo = (tile) => {
-  const corporation = gameState.corporations.find(corporation => {
-    return corporation.tiles[0]?.id === tile.id;
-  });
-  if (!corporation) {
-    return '';
-  }
-  return corporation.id;
-};
-
-const createTiles = (tiles) => {
-  return tiles.map(tile => {
-    const built = belongsTo(tile);
-    const placed = tile.placed ? 'placed' : '';
-    return [
-      'div',
-      {
-        class: `tile-item ${placed} ${built}`,
-        id: `tile-${tile.id}`
-      },
-      {},
-      ...tileLabel(tile)
-    ];
-  });
-};
-
-const renderBoard = ({ board }) => {
-  const { tiles } = board;
-
-  const boardElement = document.querySelector('.board-tiles');
-
-  const tilesTemplate = createTiles(tiles);
-
-  const tilesHTML = createElements(tilesTemplate);
-  boardElement.replaceChildren(...tilesHTML);
-};
-
-const tileLabel = ({ label }) => {
-  const number = label.slice(0, -1);
-  const letter = label.slice(-1);
-
-  return [number,
-    ['span', { class: 'letter' }, {}, letter]
-  ];
-};
-
-const playerTiles = ({ tiles }) => {
-  return tiles.map(tile => {
-
-    return ['div',
-      { class: 'tile-item', id: tile.id },
-      {},
-      ...tileLabel(tile)
-    ];
-  });
-};
-
-const playerStocks = ({ stocks }) => {
-  return stocks.map(stock => ['div',
-    { class: 'stock', id: stock.corporationId }, {},
-    ['p', {}, {}, stock.corporationName],
-    ['p', {}, {}, `${stock.count}`]
-  ]
-  );
-};
-
-const renderPlayerResources = ({ player }) => {
-  const playerResources = document.querySelector('#player-resources');
-
-  const resourcesElements = [
-    ['section', { class: 'player-money' }, {},
-      ['h3', { class: 'component-heading' }, {}, 'Money'],
-      ['p', {}, {}, `${player.money} `]
-    ],
-    ['section', { class: 'player-tiles' }, {},
-      ['h3', { class: 'component-heading' }, {}, 'Tiles'],
-      ['form', {}, { onsubmit: (event) => placeTile(event) },
-        [
-          'div', { class: 'component-tiles' }, {}, ...playerTiles(player)
-        ]
-      ]
-    ],
-    ['section', { class: 'player-stocks' }, {},
-      ['h3', { class: 'component-heading' }, {}, 'Stocks'],
-      ['div', {}, {}, ...playerStocks(player)]
-    ]
-  ];
-
-  playerResources.replaceChildren(...createElements(resourcesElements));
-};
-
-const createCorporationHTML = (corporation) => {
-  const disable = corporation.active ? 'disabled-corporation' : '';
-  return ['div', { class: 'corporation' }, {},
-    ['div', { class: `corporation-img ${disable}`, id: corporation.id }, {}],
-    ['div', { class: 'corporation-info' }, {},
-      ['p', {}, {}, corporation.name],
-      ['p', {}, {}, `${corporation.stocksLeft} `],
-    ]
-  ];
-};
-
-const createColumn = (corporations) => {
-  return ['div', { class: 'corporation-col' }, {},
-    ...corporations.map(createCorporationHTML)
-  ];
-};
-
-const createCorporationsHTML = (corporations) => {
-  return ['div', { class: 'corporations' }, {},
-    createColumn(corporations.slice(0, 4)),
-    createColumn(corporations.slice(4))
-  ];
-};
-
-const renderStockMarket = ({ corporations }) => {
-  const stockMarket = document.querySelector('#stock-market');
-
-  const elements = [
-    ['h3', { class: 'component-heading' }, {}, 'Stock Market'],
-    createCorporationsHTML(corporations)
-  ];
-
-  stockMarket.replaceChildren(...createElements(elements));
-};
-
-const renderLogs = ({ logs }) => {
-  const logElement = document.querySelector('.logs');
-
-  const logsHTML = logs.map(log => ['div', {}, {}, log]);
-
-  logElement.replaceChildren(...createElements(logsHTML));
-};
-
-const removeOverlay = () => {
-  const overlay = document.querySelector('.overlay');
-  overlay.remove();
-};
-
 const drawTile = () => {
   API.drawTile()
     .then((res) => {
-      gameState.player.drawTile(res.data);
-      renderPlayerResources(gameState);
-    }).catch(err => console.log(err));
+      const { id: tileId } = res.data;
+      gameState.drawTile(tileId);
+    })
+    .catch(err => console.log(err));
 };
 
 const changePlayerTurn = () => {
-  API.changeTurn().then(() => startPolling());
-};
-
-const getInactiveCorporation = () => {
-  return gameState.corporations.find(corporation => !corporation.active).id;
-};
-
-const buildCorporation = (tileId) => {
-  const corporationId = getInactiveCorporation();
-  API.buildCorporation(tileId, corporationId)
-    .then(res => {
-      gameState.buildCorporation(corporationId, res.data.tiles);
-      removeHighlight();
-      latestStage();
-    });
-};
-
-const latestStage = () => {
-  buyStocks();
-  drawTile();
-  changePlayerTurn();
-};
-
-const removeHighlight = () => {
-  removeOverlay();
-  return removeBackdrop('.stock-market');
+  API.changeTurn()
+    .then(() => startPolling());
 };
 
 const skipBuild = () => {
   API.skipBuild()
-    .then(() => {
-      removeHighlight();
-      latestStage();
+    .then((res) => {
+      gameState.updateState(res.data.case);
+      handleView(gameState);
     });
 };
 
-const createBuildControls = (tileId) => {
-  return ['div', { class: 'build-controls-holder' }, {},
-    ['button', { class: 'build-button' },
-      { onclick: () => buildCorporation(tileId) },
-      'Build'],
-    ['button', { class: 'skip-button' }, { onclick: skipBuild },
-      'Skip']
-  ];
-};
+const buildCorporation = (tileId) => {
+  const corporation = gameState.getInactiveCorporation();
+  if (!corporation) {
+    return;
+  }
 
-const highlightStockMarket = (tileId) => {
-  const { corporations } = gameState;
-  const corporationsEle = createDOMTree(createCorporationsHTML(corporations));
-  const corporationsCompo = document.querySelector('.corporations');
-  corporationsCompo.replaceWith(corporationsEle);
-
-  const buildControls = createDOMTree(createBuildControls(tileId));
-  const stockMarketEle = document.querySelector('#stock-market');
-
-  const backdropTemplate = ['div', { class: 'overlay' }, {}];
-  stockMarketEle.style['z-index'] = 10;
-  stockMarketEle.style.background = 'white';
-  stockMarketEle.appendChild(buildControls);
-  document.body.appendChild(...createElements([backdropTemplate]));
-  return true;
-};
-
-const removeBackdrop = (ele) => {
-  const element = document.querySelector(ele);
-  element.style['z-index'] = 0;
+  API.buildCorporation(tileId, corporation.id)
+    .then(res => {
+      const { corporation: { tiles }, case: step } = res.data;
+      gameState.buildCorporation(corporation.id, tiles);
+      gameState.updateState(step);
+      handleView(gameState);
+    });
 };
 
 const buyStocks = () => {
-  const stocks = [
-    { corporationId: 'america', numOfStocks: 3 }];
+  const stocks = [{
+    corporationId: 'america',
+    numOfStocks: 3
+  }];
+
   API.buyStocks(stocks)
     .then(res => {
-      if (res.success) {
-        gameState.sellStocks(stocks);
-      }
+      gameState.sellStocks(stocks);
+
+      gameState.updateState(res.data.case);
+    })
+    .catch(() => {
+      // has to remove : it is just for until interactive for buy stocks comes
+      gameState.updateState('draw-tile');
+    })
+    .finally(() => {
+      handleView(gameState);
     });
 };
 
-const placeTile = (event) => {
-  event.preventDefault();
-
-  const formData = new FormData(event.target);
-  const tileId = formData.get('tile');
-
-  gameState.player.placeTile(tileId, gameState.board);
-
+const placeTile = (tileId) => {
   API.placeTile(tileId)
     .then(res => {
-      removeOverlay();
-      removeBackdrop('.player-tiles');
+      gameState.placeTile(tileId);
+      storeItem('tileId', tileId);
 
-      if (res.data.case === 'build') {
-        return highlightStockMarket(tileId);
-      }
-
-      // further steps conditions would come here
-      buyStocks();
-      drawTile();
-      changePlayerTurn();
+      gameState.updateState(res.data.case);
+      return handleView(gameState);
     });
 };
 
-const selectTile = (event, tiles) => {
-  let inputElement = event.target;
+const handleView = (game) => {
+  removeOverlay();
 
-  const targetClass = event.path[0].className;
-  if (targetClass === 'letter') {
-    inputElement = event.path[1];
+  if (game.isInPlaceTileState()) {
+    highlightTiles(game);
   }
 
-  const radio = inputElement.querySelector('input');
-  radio.checked = true;
-  const buttonElement = document.querySelector('.place-tile-button');
-  buttonElement.hidden = false;
+  if (game.isInBuildState()) {
+    renderBoard(game);
+    renderPlayerResources(game);
+    highlightStockMarket(getItem('tileId'));
+  }
 
-  tiles.forEach(tile => {
-    const tileElement = document.getElementById(tile.id);
-    tileElement.classList.remove('highlight-tile');
-  });
-  inputElement.classList.add('highlight-tile');
+  if (game.isInBuyState()) {
+    renderBoard(game);
+    renderPlayerResources(game);
+    buyStocks();
+  }
+
+  if (game.isInDrawTileState()) {
+    renderPlayerResources(game);
+    drawTile();
+    changePlayerTurn();
+  }
 };
 
-const tileSelection = ({ tiles }) => {
-  return tiles.map(tile => {
-
-    return ['div',
-      { class: 'tile-item', id: tile.id },
-      { onmouseup: (event) => selectTile(event, tiles) },
-      ['input',
-        { type: 'radio', id: tile.id, name: 'tile', value: tile.id }, {}],
-      ...tileLabel(tile)
-    ];
-  });
-};
-
-const createPlaceButton = () => {
-  const buttonTemplate = ['div', { class: 'place-button-holder' }, {},
-    ['button', { class: 'place-tile-button' }, { hidden: true },
-      'Place'],
-  ];
-  return createDOMTree(buttonTemplate);
-};
-
-const highlightTiles = () => {
-  const { player } = gameState;
-  const tilesElement = createElements(tileSelection(player));
-  const tilesComponent = document.querySelector('.component-tiles');
-  tilesComponent.replaceChildren(...tilesElement);
-
-  const playerTilesElement = document.querySelector('.player-tiles');
-  const placeTileFormElement = playerTilesElement.querySelector('form');
-
-  const backdropTemplate = ['div', { class: 'overlay' }, {}];
-  playerTilesElement.style['z-index'] = 10;
-  playerTilesElement.style.background = 'white';
-  placeTileFormElement.appendChild(createPlaceButton());
-
-  document.body.appendChild(...createElements([backdropTemplate]));
-};
-
-const renderScreen = (game) => {
-  renderBoard(game);
-  renderPlayers(game);
-  renderPlayerResources(game);
-  renderStockMarket(game);
-  renderLogs(game);
-};
-
+// TODO : Consider renaming startPolling function name
 const startPolling = () => {
   const pollingId = setInterval(() => {
     API.loadGame()
-      .then(res => {
-        gameState = createState(res.game);
-        renderScreen(res.game);
-        if (gameState.isMyTurn()) {
+      .then(res => createState(res.game))
+      .then(game => {
+        gameState = game;
+        renderScreen(game);
+        if (game.isMyTurn()) {
           clearInterval(pollingId);
-          return highlightTiles();
         }
+
+        handleView(game);
       });
   }, 500);
 };
