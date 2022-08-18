@@ -82,7 +82,7 @@ const loadGame = () => {
           startGame();
         }
       });
-  }, 2000);
+  }, 300);
 };
 
 const main = () => {
