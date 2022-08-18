@@ -210,6 +210,37 @@ describe('POST /api/build-corporation', () => {
     });
 });
 
+describe('POST /api/skip-build', () => {
+  const games = new Games();
+  const host = { name: 'sam', id: 'user' };
+
+  const game = newGame('123', host, 1);
+  games.add(game);
+  game.addPlayer(new Player('user', 'sam', game));
+  const app = initApp(session('123', 'user'), games);
+
+  before((done) => {
+    request(app)
+      .post('/api/start-game')
+      .expect('content-type', /json/)
+      .expect(200, done);
+  });
+
+  it('should skip building a corporation',
+    (done) => {
+      const player = game.getPlayer('user');
+      const tileId = player.tiles[0].id;
+      game.board.tiles[0].placed = true;
+      game.board.tiles[1].placed = true;
+
+      request(app)
+        .post('/api/skip-build')
+        .expect('content-type', /json/)
+        .expect(200,
+          JSON.stringify({ message: 'skip built corporation' }), done);
+    });
+});
+
 describe('POST /api/buy-stocks', () => {
   const games = new Games();
   const host = { name: 'sam', id: 'user' };
