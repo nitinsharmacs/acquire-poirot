@@ -166,15 +166,7 @@ const removeOverlay = () => {
 };
 
 const drawTile = () => {
-  fetch('/api/draw-tile', {
-    method: 'POST'
-  })
-    .then(res => {
-      if (res.status !== 200) {
-        throw new Error('Can\'t draw tile');
-      }
-      return res.json();
-    })
+  API.drawTile()
     .then((res) => {
       gameState.player.drawTile(res.data);
       renderPlayerResources(gameState);
@@ -182,9 +174,7 @@ const drawTile = () => {
 };
 
 const changePlayerTurn = () => {
-  fetch('/api/change-turn', {
-    method: 'POST'
-  }).then(res => startPolling());
+  API.changeTurn().then(() => startPolling());
 };
 
 const getInactiveCorporation = () => {
@@ -193,14 +183,9 @@ const getInactiveCorporation = () => {
 
 const buildCorporation = (tileId) => {
   const corporationId = getInactiveCorporation();
-  fetch('/api/build-corporation', {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ id: tileId, corporationId })
-  })
-    .then(res => res.json())
+  API.buildCorporation(tileId, corporationId)
     .then(res => {
-      gameState.updateCorporation(corporationId, res.data.tiles);
+      gameState.buildCorporation(corporationId, res.data.tiles);
       removeHighlight();
       latestStage();
     });
@@ -218,12 +203,8 @@ const removeHighlight = () => {
 };
 
 const skipBuild = () => {
-  fetch('/api/skip-build', {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-  })
-    .then(res => res.json())
-    .then(res => {
+  API.skipBuild()
+    .then(() => {
       removeHighlight();
       latestStage();
     });
@@ -264,12 +245,7 @@ const removeBackdrop = (ele) => {
 const buyStocks = () => {
   const stocks = [
     { corporationId: 'america', numOfStocks: 3 }];
-  fetch('/api/buy-stocks', {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ stocks })
-  })
-    .then(res => res.json())
+  API.buyStocks(stocks)
     .then(res => {
       if (res.success) {
         gameState.sellStocks(stocks);
@@ -285,12 +261,7 @@ const placeTile = (event) => {
 
   gameState.player.placeTile(tileId, gameState.board);
 
-  fetch('/api/place-tile', {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ id: tileId })
-  })
-    .then(res => res.json())
+  API.placeTile(tileId)
     .then(res => {
       removeOverlay();
       removeBackdrop('.player-tiles');
@@ -374,8 +345,7 @@ const renderScreen = (game) => {
 
 const startPolling = () => {
   const pollingId = setInterval(() => {
-    fetch('/api/loadgame', { method: 'GET' })
-      .then(res => res.json())
+    API.loadGame()
       .then(res => {
         gameState = createState(res.game);
         renderScreen(res.game);
