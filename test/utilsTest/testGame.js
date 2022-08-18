@@ -92,6 +92,8 @@ describe('findAdjacentTiles', () => {
 describe('nextStep', () => {
   it('Should determine next move as no effect after placing a tile', () => {
     const game = newGame('game1234', new Player('user123', 'sam'), 3);
+    game.start();
+
     assert.deepStrictEqual(nextStep(game, '2d'), { step: 'noEffect' });
   });
 
@@ -100,6 +102,7 @@ describe('nextStep', () => {
     game.board.tiles[2].placed = true;
     game.board.tiles[3].placed = true;
 
+    game.start();
     assert.deepStrictEqual(nextStep(game, '4a'), { step: 'build' });
   });
 
@@ -129,7 +132,7 @@ describe('nextStep', () => {
         'placed': true
       }
     ];
-
+    game.start();
     assert.deepStrictEqual(nextStep(game, '5a'), {
       step: 'grow',
       corporation, tiles

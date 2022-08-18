@@ -105,17 +105,20 @@ const nextStep = (game, tileId) => {
   const placedTiles = findTilesChain(tileId, tiles);
 
   if (placedTiles.length === 1) {
+    game.buyStocksState();
     return { step: 'noEffect' };
   }
 
   const activeCorporations = getCorporations(placedTiles, corporations);
 
   if (activeCorporations.length === 0) {
+    game.buildState();
     return { step: 'build' };
   }
 
   if (activeCorporations.length === 1) {
     const [corporation] = activeCorporations;
+    game.buyStocksState();
     return { step: 'grow', corporation, tiles: placedTiles };
   }
 

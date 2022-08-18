@@ -1,7 +1,3 @@
-const isTilePresentIn = (tileId, corporation) => {
-  return corporation.tiles.findIndex(tile => tile.id === tileId) !== -1;
-};
-
 class GameState {
   constructor({ player,
     players,
@@ -11,6 +7,7 @@ class GameState {
     currentPlayer,
     corporations,
     gameSize,
+    turn,
     informationCard
   }) {
     this.player = player;
@@ -23,6 +20,7 @@ class GameState {
     this.step = 1;
     this.gameSize = gameSize;
     this.informationCard = informationCard;
+    this.turn = turn;
   }
 
   isMyTurn() {
@@ -34,11 +32,6 @@ class GameState {
       corpration.id === corporationId);
   }
 
-  findCorporationByTile(tileId) {
-    return this.corporations.find(corporation => {
-      return isTilePresentIn(tileId, corporation);
-    });
-  }
   getInactiveCorporation() {
     return this.corporations.find(corporation => !corporation.active);
   }
@@ -84,6 +77,14 @@ class GameState {
       const stockPrice = this.calculateStockPrice(corporation);
       this.player.deductMoney(stockPrice * numOfStocks);
     });
+  }
+
+  isPlaceTileTurn() {
+    return this.isMyTurn() && this.turn.state === 'place-tile';
+  }
+
+  buildState() {
+    this.turn.state = 'build';
   }
 }
 
@@ -183,7 +184,8 @@ const createState = (game) => {
     currentPlayer: game.currentPlayer,
     corporations: createCorporations(game.corporations),
     gameSize: game.gameSize,
-    informationCard: game.informationCard
+    informationCard: game.informationCard,
+    turn: game.turn
   });
 };
 
