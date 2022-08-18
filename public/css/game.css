@@ -138,6 +138,7 @@ body {
 
 .disabled-corporation {
   background-color: white !important;
+  pointer-events: none;
 }
 
 .branding {
@@ -503,4 +504,8 @@ body {
 .build-controls-holder>button {
   font-size: large;
   padding: 0.6em;
+}
+
+.highlight-corp {
+  border: 2px solid black !important;
 }
