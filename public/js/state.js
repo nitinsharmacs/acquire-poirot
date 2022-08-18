@@ -1,3 +1,5 @@
+const isBetween = (number, { min, max }) => number >= min && number <= max;
+
 class GameState {
   constructor({ player,
     players,
@@ -79,12 +81,24 @@ class GameState {
     });
   }
 
-  isPlaceTileTurn() {
+  updateState(newState) {
+    this.turn.state = newState;
+  }
+
+  isInPlaceTileState() {
     return this.isMyTurn() && this.turn.state === 'place-tile';
   }
 
-  buildState() {
-    this.turn.state = 'build';
+  isInBuildState() {
+    return this.isMyTurn() && this.turn.state === 'build';
+  }
+
+  isInBuyState() {
+    return this.isMyTurn() && this.turn.state === 'buy-stocks';
+  }
+
+  isInDrawTileState() {
+    return this.isMyTurn() && this.turn.state === 'draw-tile';
   }
 }
 

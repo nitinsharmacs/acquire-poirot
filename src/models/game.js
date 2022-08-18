@@ -161,6 +161,12 @@ class Game {
   drawTileState() {
     this.turn.drawTileState();
   }
+
+  // getters ---------------
+
+  get state() {
+    return this.turn.state;
+  }
 }
 
 const createCorporations = () => {

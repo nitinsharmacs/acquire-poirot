@@ -241,12 +241,16 @@ describe('POST /api/skip-build', () => {
       const tileId = player.tiles[0].id;
       game.board.tiles[0].placed = true;
       game.board.tiles[1].placed = true;
+      game.buyStocksState();
 
       request(app)
         .post('/api/skip-build')
         .expect('content-type', /json/)
         .expect(200,
-          JSON.stringify({ message: 'skip built corporation' }), done);
+          JSON.stringify({
+            message: 'skip built corporation',
+            data: { case: 'buy-stocks' }
+          }), done);
     });
 });
 
@@ -260,6 +264,7 @@ describe('POST /api/buy-stocks', () => {
   const app = initApp(session('123', 'user'), games);
 
   beforeEach((done) => {
+
     request(app)
       .post('/api/start-game')
       .expect('content-type', /json/)
@@ -309,6 +314,7 @@ describe('POST /api/buy-stocks', () => {
 
   it('should not buy stocks when limit exceeds',
     (done) => {
+      game.buyStocksState();
       request(app)
         .post('/api/buy-stocks')
         .set('content-type', 'application/json')
@@ -319,7 +325,10 @@ describe('POST /api/buy-stocks', () => {
           }]
         }))
         .expect(422,
-          JSON.stringify({ message: 'Can buy maximum 3 stocks' }),
+          JSON.stringify({
+            message: 'Can buy maximum 3 stocks',
+            data: { case: 'buy-stocks' }
+          }),
           done);
     });
 
@@ -328,6 +337,8 @@ describe('POST /api/buy-stocks', () => {
       const corporation = game.findCorporation('america');
       corporation.active = true;
       corporation.stocksLeft = 2;
+      game.buyStocksState();
+
       request(app)
         .post('/api/buy-stocks')
         .set('content-type', 'application/json')
@@ -339,7 +350,8 @@ describe('POST /api/buy-stocks', () => {
         }))
         .expect(422,
           JSON.stringify({
-            message: 'Inactive corporation or Insufficient stocks'
+            message: 'Inactive corporation or Insufficient stocks',
+            data: { case: 'buy-stocks' }
           }),
           done);
     });
@@ -348,6 +360,8 @@ describe('POST /api/buy-stocks', () => {
     (done) => {
       const corporation = game.findCorporation('america');
       corporation.stocksLeft = 2;
+      game.buyStocksState();
+
       request(app)
         .post('/api/buy-stocks')
         .set('content-type', 'application/json')
@@ -359,7 +373,8 @@ describe('POST /api/buy-stocks', () => {
         }))
         .expect(422,
           JSON.stringify({
-            message: 'Inactive corporation or Insufficient stocks'
+            message: 'Inactive corporation or Insufficient stocks',
+            data: { case: 'buy-stocks' }
           }),
           done);
     });

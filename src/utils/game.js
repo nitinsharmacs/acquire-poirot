@@ -125,6 +125,10 @@ const nextStep = (game, tileId) => {
   return { step: '' };
 };
 
+const getCase = (step) => {
+
+};
+
 module.exports = {
   getPlayer,
   getInitialTiles,

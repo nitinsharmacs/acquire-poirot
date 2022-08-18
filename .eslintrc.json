@@ -99,7 +99,8 @@
     {
       "files": [
         "test*.js",
-        "public/js/*.js"
+        "public/js/*.js",
+        "public/js/*/*.js"
       ],
       "rules": {
         "max-len": "warn",
