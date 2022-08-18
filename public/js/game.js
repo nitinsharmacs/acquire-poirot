@@ -161,7 +161,6 @@ const renderLogs = ({ logs }) => {
 };
 
 const removeOverlay = () => {
-  console.log('hello');
   const overlay = document.querySelector('.overlay');
   overlay.remove();
 };
@@ -202,16 +201,39 @@ const buildCorporation = (tileId) => {
     .then(res => res.json())
     .then(res => {
       gameState.updateCorporation(corporationId, res.data.tiles);
+      removeHighlight();
+      latestStage();
+    });
+};
+
+const latestStage = () => {
+  drawTile();
+  return changePlayerTurn();
+};
+
+const removeHighlight = () => {
+  removeOverlay();
+  return removeBackdrop('.stock-market');
+};
+
+const skipBuild = () => {
+  fetch('/api/skip-build', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+  })
+    .then(res => res.json())
+    .then(res => {
+      removeHighlight();
+      latestStage();
     });
 };
 
 const createBuildControls = (tileId) => {
-  console.log('in build', tileId);
   return ['div', { class: 'build-controls-holder' }, {},
     ['button', { class: 'build-button' },
       { onclick: () => buildCorporation(tileId) },
       'Build'],
-    ['button', { class: 'skip-button' }, { onclick: event => skipBuild(event) },
+    ['button', { class: 'skip-button' }, { onclick: skipBuild },
       'Skip']
   ];
 };
@@ -225,15 +247,16 @@ const highlightStockMarket = (tileId) => {
 
   const buildControls = createDOMTree(createBuildControls(tileId));
   const stockMarketEle = document.querySelector('#stock-market');
-  stockMarketEle.appendChild(buildControls);
 
   const backdropTemplate = ['div', { class: 'overlay' }, {}];
   stockMarketEle.style['z-index'] = 10;
   stockMarketEle.style.background = 'white';
+  stockMarketEle.appendChild(buildControls);
   document.body.appendChild(...createElements([backdropTemplate]));
+  return true;
 };
 
-const removeHighlight = (ele) => {
+const removeBackdrop = (ele) => {
   const element = document.querySelector(ele);
   element.style['z-index'] = 0;
 };
@@ -254,10 +277,9 @@ const placeTile = (event) => {
     .then(res => res.json())
     .then(res => {
       removeOverlay();
-      removeHighlight('.player-tiles');
+      removeBackdrop('.player-tiles');
 
       if (res.data.case === 'build') {
-        //highlight stock market
         highlightStockMarket(tileId);
         return;
       }
@@ -341,7 +363,7 @@ const startPolling = () => {
           return highlightTiles();
         }
       });
-  }, 2000);
+  }, 500);
 };
 
 let gameState;

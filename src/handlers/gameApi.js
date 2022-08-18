@@ -120,6 +120,13 @@ const buildCorporation = (req, res) => {
   res.json({ message: 'built corporation', data: corporation });
 };
 
+const skipBuildCorp = (req, res) => {
+  const { game } = req;
+
+  game.currentPlayer.skipBuild();
+  res.json({ message: 'skip built corporation' });
+};
+
 module.exports = {
   loadGame,
   startGame,
@@ -129,5 +136,6 @@ module.exports = {
   buildCorporation,
   buyStocks,
   totalNumOfStocks,
-  areStocksAvailable
+  areStocksAvailable,
+  skipBuildCorp
 };
