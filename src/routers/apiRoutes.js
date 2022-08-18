@@ -5,7 +5,8 @@ const {
   placeTile,
   changeTurn,
   buildCorporation,
-  buyStocks
+  buyStocks,
+  skipBuildCorp,
 } = require('../handlers/gameApi.js');
 
 const router = require('express').Router();
@@ -16,6 +17,7 @@ router.post('/place-tile', placeTile);
 router.post('/draw-tile', drawTile);
 router.post('/change-turn', changeTurn);
 router.post('/build-corporation', buildCorporation);
+router.post('/skip-build', skipBuildCorp);
 router.post('/buy-stocks', buyStocks);
 
 module.exports = router;

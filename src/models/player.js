@@ -54,6 +54,10 @@ class Player {
     return tile;
   }
 
+  skipBuild() {
+    this.game.logs.push(`${this.name} skipped building corporation`);
+  }
+
   addStocks({ id, name }, noOfStocks = 0) {
     const stocks = this.stocks.find(stock => stock.corporationId === id);
 

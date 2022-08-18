@@ -124,6 +124,7 @@ class Game {
       player.addStocks(corporation, stocksCount);
       corporation.reduceStocks(stocksCount);
     }
+    this.logs.push(`${player.name} built ${corporation.name} on ${tileId}`);
 
     return corporation;
   }
