@@ -307,7 +307,12 @@ const placeTile = (event) => {
 };
 
 const selectTile = (event, tiles) => {
-  const inputElement = event.target;
+  let inputElement = event.target;
+
+  const targetClass = event.path[0].className;
+  if (targetClass === 'letter') {
+    inputElement = event.path[1];
+  }
 
   const radio = inputElement.querySelector('input');
   radio.checked = true;
@@ -326,7 +331,7 @@ const tileSelection = ({ tiles }) => {
 
     return ['div',
       { class: 'tile-item', id: tile.id },
-      { onclick: (event) => selectTile(event, tiles) },
+      { onmouseup: (event) => selectTile(event, tiles) },
       ['input',
         { type: 'radio', id: tile.id, name: 'tile', value: tile.id }, {}],
       ...tileLabel(tile)
