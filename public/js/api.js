@@ -40,4 +40,16 @@ const API = {
       }
       return res.json();
     }),
+
+  skipBuild: () => fetch('/api/skip-build', {
+    method: 'POST',
+  })
+    .then(res => res.json()),
+
+  buyStocks: (stocks) => fetch('/api/buy-stocks', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ stocks })
+  })
+    .then(res => res.json())
 };
