@@ -34,6 +34,10 @@ class Corporation {
   grow(tiles) {
     this.tiles = tiles;
   }
+
+  getSize() {
+    return this.tiles.length;
+  }
 }
 
 module.exports = { Corporation };
