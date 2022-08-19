@@ -85,11 +85,19 @@ const corpColumn = (corporations, allcorps) => {
   ];
 };
 
+const buildCorpOnBoard = (event, tileId) => {
+  event.preventDefault();
+  const formData = new FormData(event.target);
+  const corporationId = formData.get('corporation');
+
+  buildCorporation(tileId, corporationId);
+};
+
 const createCorpsWhileBuild = (corporations, tileId) => {
   return ['form',
     { class: 'stocks-holder' },
     {
-      onsubmit: (event) => buildCorporation(event, tileId)
+      onsubmit: (event) => buildCorpOnBoard(event, tileId)
     }, ['div', { class: 'corporations' }, {},
       corpColumn(corporations.slice(0, 4), corporations),
       corpColumn(corporations.slice(4), corporations)

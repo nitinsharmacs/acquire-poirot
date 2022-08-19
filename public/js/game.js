@@ -20,20 +20,13 @@ const skipBuild = () => {
     });
 };
 
-const buildCorporation = (event, tileId) => {
-  event.preventDefault();
-  const formData = new FormData(event.target);
-  const corporationId = formData.get('corporation');
-
-  if (!corporationId) {
-    return;
-  }
-
+const buildCorporation = (tileId, corporationId) => {
   API.buildCorporation(tileId, corporationId)
     .then(res => {
       const { corporation: { tiles }, case: step } = res.data;
       gameState.buildCorporation(corporationId, tiles);
       gameState.updateState(step);
+      storeItem('corporationId', corporationId);
       handleView(gameState);
     });
 };
@@ -66,7 +59,6 @@ const skipBuy = () => {
       handleView(gameState);
     });
 };
-
 
 const placeTile = (tileId) => {
   API.placeTile(tileId)
