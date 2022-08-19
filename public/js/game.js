@@ -31,11 +31,15 @@ const buildCorporation = (tileId, corporationId) => {
     });
 };
 
+const stocksToBuy = () => {
+  const activeCorporations = gameState.getActiveCorporations();
+  const { id, stocksLeft } = activeCorporations.find(corporation =>
+    corporation.stocksLeft > 0);
+  return [{ corporationId: id, numOfStocks: Math.min(3, stocksLeft) }];
+};
+
 const buyStocks = () => {
-  const stocks = [{
-    corporationId: 'america',
-    numOfStocks: 3
-  }];
+  const stocks = stocksToBuy();
 
   API.buyStocks(stocks)
     .then(res => {
