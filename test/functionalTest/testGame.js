@@ -27,6 +27,59 @@ const initApp = (session, games) => {
   return createApp(config, dataStore);
 };
 
+describe('GET /game', () => {
+  it('should serve game page if game started for logined player', (done) => {
+    const games = new Games();
+    const host = { name: 'sam', id: 'user' };
+
+    const game = newGame('123', host, 4);
+    games.add(game);
+    game.addPlayer(new Player('user', 'sam', game));
+
+    const app = initApp(session('123', 'user'), games);
+    game.start();
+
+    request(app)
+      .get('/game')
+      .expect('content-type', /html/)
+      .expect(200, done);
+  });
+
+  it('should redirect to login if player not logined', (done) => {
+    const games = new Games();
+    const host = { name: 'sam', id: 'user' };
+
+    const game = newGame('123', host, 4);
+    games.add(game);
+    game.addPlayer(new Player('user', 'sam', game));
+
+    const app = initApp(session('123'), games);
+    game.start();
+
+    request(app)
+      .get('/game')
+      .expect('location', /^\/login/)
+      .expect(302, done);
+  });
+
+  it('should respond with game not found for invalid game', (done) => {
+    const games = new Games();
+    const host = { name: 'sam', id: 'user' };
+
+    const game = newGame('123', host, 4);
+    games.add(game);
+    game.addPlayer(new Player('user', 'sam', game));
+
+    const app = initApp(session('1233', 'user'), games);
+    game.start();
+
+    request(app)
+      .get('/game')
+      .expect('Game not found')
+      .expect(404, done);
+  });
+});
+
 describe('GET /lobby', () => {
   const games = new Games();
   const host = { name: 'sam', id: 'user' };

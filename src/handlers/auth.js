@@ -66,13 +66,6 @@ const login = users => (req, res) => {
   });
 };
 
-const redirectIfLoggedIn = (req, res, next) => {
-  if (req.session.playerId) {
-    return res.redirect('/');
-  }
-  next();
-};
-
 const register = (users, dataStore) => (req, res) => {
   const { username, password } = req.body;
   const { ref } = req.query;
@@ -108,7 +101,6 @@ const register = (users, dataStore) => (req, res) => {
 };
 
 module.exports = {
-  redirectIfLoggedIn,
   serveLoginPage,
   validateUser: login,
   serveSignupPage,
