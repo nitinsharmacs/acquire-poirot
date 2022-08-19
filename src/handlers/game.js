@@ -1,6 +1,14 @@
 const { Player } = require('../models/player.js');
 const { getPlayer, createGameLink } = require('../utils/game.js');
 const { lobbyPage } = require('../views/lobby.js');
+const { landingPage } = require('../views/index.js');
+
+const serveLandingPage = (req, res) => {
+  const { playerName } = req.session;
+
+  res.type('html');
+  res.send(landingPage(playerName));
+};
 
 const serveGamePage = (dataStore) => {
   const gamePage = dataStore.load('GAME_TEMPLATE_PATH');
@@ -66,4 +74,9 @@ const serveLobby = (req, res) => {
   res.send(lobbyPage(game, gameLink, playerName));
 };
 
-module.exports = { serveGamePage, joinGame, serveLobby };
+module.exports = {
+  serveLandingPage,
+  serveGamePage,
+  joinGame,
+  serveLobby
+};
