@@ -121,7 +121,7 @@ const createBuyControls = () => {
 };
 
 const highlightStockMarketToBuy = () => {
-  const stockMarketElement = document.querySelector('#stock-market');
+  const stockMarketElement = select('#stock-market');
   highlight(stockMarketElement);
 
   const buyControls = createDOMTree(createBuyControls());
@@ -141,10 +141,7 @@ const highlightStockMarket = ({ corporations }, tileId) => {
 
 // main
 const renderStockMarket = ({ corporations }) => {
-  const stockMarket = document.querySelector('#stock-market');
-  // styles has to get reset to remove highlight
-  // todo : after making general highlight, remove this style resetting
-  stockMarket.style = '';
+  const stockMarket = select('#stock-market');
 
   const elements = [
     ['h3', { class: 'component-heading' }, {}, 'Stock Market'],
