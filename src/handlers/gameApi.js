@@ -51,7 +51,6 @@ const placeTile = (req, res) => {
     session: { playerId },
     body: { id }
   } = req;
-
   const player = getPlayer(game.players, playerId);
 
   const tile = player.placeTile({ id });
@@ -124,7 +123,11 @@ const buildCorporation = (req, res) => {
   } = req;
 
   const corporation = game.buildCorporation(corporationId, id, playerId);
-  game.buyStocksState();
+  if (game.isAnyCorporationActive()) {
+    game.buyStocksState();
+  } else {
+    game.drawTileState();
+  }
 
   res.json({
     message: 'built corporation',
@@ -136,7 +139,11 @@ const skipBuildCorp = (req, res) => {
   const { game } = req;
 
   game.currentPlayer.skipBuild();
-  game.buyStocksState();
+  if (game.isAnyCorporationActive()) {
+    game.buyStocksState();
+  } else {
+    game.drawTileState();
+  }
 
   res.json({
     message: 'skip built corporation',

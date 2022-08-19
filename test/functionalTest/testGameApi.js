@@ -249,7 +249,7 @@ describe('POST /api/skip-build', () => {
         .expect(200,
           JSON.stringify({
             message: 'skip built corporation',
-            data: { case: 'buy-stocks' }
+            data: { case: 'draw-tile' }
           }), done);
     });
 });

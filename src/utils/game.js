@@ -105,7 +105,11 @@ const nextStep = (game, tileId) => {
   const placedTiles = findTilesChain(tileId, tiles);
 
   if (placedTiles.length === 1) {
-    game.buyStocksState();
+    if (game.isAnyCorporationActive()) {
+      game.buyStocksState();
+      return { step: 'noEffect' };
+    }
+    game.drawTileState();
     return { step: 'noEffect' };
   }
 
