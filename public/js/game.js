@@ -3,6 +3,7 @@ const drawTile = () => {
     .then((res) => {
       const { id: tileId } = res.data;
       gameState.drawTile(tileId);
+      changePlayerTurn();
     })
     .catch(err => console.log(err));
 };
@@ -99,7 +100,6 @@ const handleView = (game) => {
   if (game.isInDrawTileState()) {
     renderPlayerResources(game);
     drawTile();
-    changePlayerTurn();
   }
 };
 
