@@ -42,7 +42,7 @@ const lobbyPage = (game, gameLink, playerName) => `
 
     <div class="players-lobby">
       <div class="processing-header">
-        <h3>Waiting for players......</h3>
+        <h3>Waiting for other players...</h3>
       </div>
 
       <div class="players">
