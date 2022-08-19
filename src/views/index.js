@@ -1,4 +1,4 @@
-<html>
+const landingPage = (username) => `<html>
 
 <head>
   <title>Acquire</title>
@@ -16,7 +16,7 @@
       </div>
       <div class="adv">plan, build and own the next super city</div>
       <div class="username">
-        Hi Guest
+        Welcome, ${username} !
       </div>
 
     </div>
@@ -54,4 +54,8 @@
 
 </body>
 
-</html>
+</html>`;
+
+module.exports = {
+  landingPage
+};

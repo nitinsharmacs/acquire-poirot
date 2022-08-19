@@ -1,22 +1,29 @@
 const express = require('express');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
-const { createAuthRouter } = require('./routers/authRouter');
-const { createHostRouter } = require('./routers/hostRouter');
+const session = require('express-session');
 
 // routes
 const apiRoutes = require('./routers/apiRoutes.js');
 
 // middlewares
 const { restrict } = require('./middlewares/auth.js');
+const { injectGame } = require('./middlewares/game');
 
 // handlers
-const { serveGamePage, joinGame, serveLobby } = require('./handlers/game.js');
-const session = require('express-session');
+const { notFound } = require('./handlers/notFound.js');
+const { serveGamePage,
+  joinGame,
+  serveLobby,
+  serveLandingPage
+} = require('./handlers/game.js');
+
+const { createAuthRouter } = require('./routers/authRouter');
+const { createHostRouter } = require('./routers/hostRouter');
+
+// models
 const DataStore = require('./dataStore.js');
 const { Games } = require('./models/games.js');
-const { injectGame } = require('./middlewares/game');
-const { notFound } = require('./handlers/notFound.js');
 
 const { LOGIN_TEMPLATE,
   SIGNUP_TEMPLATE,
@@ -68,9 +75,12 @@ const createApp = (config = appConfig, dataStore = new DataStore(resources)) => 
   app.get('/lobby/:id', restrict, serveLobby);
 
   app.get('/game', restrict, serveGamePage(dataStore));
-
   app.use('/api', restrict, injectGame, apiRoutes);
+
+  app.get('/', restrict, serveLandingPage);
+
   app.use(express.static(root));
+
   app.use(notFound);
   return app;
 };
