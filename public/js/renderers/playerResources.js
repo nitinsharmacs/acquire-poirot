@@ -71,13 +71,9 @@ const highlightTiles = ({ player }) => {
 
   const playerTilesElement = document.querySelector('.player-tiles');
   const placeTileFormElement = playerTilesElement.querySelector('form');
+  highlight(playerTilesElement);
 
-  const backdropTemplate = ['div', { class: 'overlay' }, {}];
-  playerTilesElement.style['z-index'] = 10;
-  playerTilesElement.style.background = 'white';
   placeTileFormElement.appendChild(createPlaceButton());
-
-  document.body.appendChild(...createElements([backdropTemplate]));
 };
 
 const removeOverlay = () => {
