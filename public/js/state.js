@@ -44,6 +44,7 @@ class GameState {
     corporation.tiles = tiles;
     corporation.active = true;
     corporation.stocksLeft--;
+    this.player.addStocks(corporation, 1);
   }
 
   drawTile(tileId) {

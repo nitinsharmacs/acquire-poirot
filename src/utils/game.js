@@ -116,7 +116,11 @@ const nextStep = (game, tileId) => {
   const activeCorporations = getCorporations(placedTiles, corporations);
 
   if (activeCorporations.length === 0) {
-    game.buildState();
+    if (game.isAnyCorporationInactive) {
+      game.buildState();
+      return { step: 'build' };
+    }
+    game.buyStocksState();
     return { step: 'build' };
   }
 
