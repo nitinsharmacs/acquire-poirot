@@ -166,6 +166,10 @@ class Game {
     return this.corporations.some(corporation => corporation.active);
   }
 
+  isAnyCorporationInactive() {
+    return this.corporations.some(corporation => !corporation.active);
+  }
+
   // getters ---------------
 
   get state() {

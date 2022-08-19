@@ -92,6 +92,7 @@ const handleView = (game) => {
 
   if (game.isInBuyState()) {
     renderBoard(game);
+    console.log(game);
     renderPlayerResources(game);
     renderStockMarket(game);
     highlightStockMarketToBuy();
