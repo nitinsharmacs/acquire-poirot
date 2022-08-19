@@ -2,6 +2,7 @@ const { Player } = require('../models/player.js');
 const { getPlayer, createGameLink } = require('../utils/game.js');
 const { lobbyPage } = require('../views/lobby.js');
 const { landingPage } = require('../views/index.js');
+const { gamePage } = require('../views/game.js');
 
 const serveLandingPage = (req, res) => {
   const { playerName } = req.session;
@@ -10,13 +11,9 @@ const serveLandingPage = (req, res) => {
   res.send(landingPage(playerName));
 };
 
-const serveGamePage = (dataStore) => {
-  const gamePage = dataStore.load('GAME_TEMPLATE_PATH');
-
-  return (req, res, next) => {
-    res.type('text/html');
-    res.end(gamePage);
-  };
+const serveGamePage = (req, res) => {
+  res.type('text/html');
+  res.end(gamePage());
 };
 
 const joinGame = (req, res) => {

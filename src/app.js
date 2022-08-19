@@ -69,7 +69,7 @@ const createApp = (config = appConfig, dataStore = new DataStore(resources)) => 
   app.get('/join/:id', restrict, joinGame);
   app.get('/lobby/:id', restrict, serveLobby);
 
-  app.get('/game', restrict, serveGamePage(dataStore));
+  app.get('/game', restrict, injectGame, serveGamePage);
   app.use('/api', restrict, injectGame, apiRoutes);
 
   app.get('/', restrict, serveLandingPage);

@@ -5,4 +5,11 @@ const restrict = (req, res, next) => {
   res.redirect('/login?ref=' + req.url);
 };
 
-module.exports = { restrict };
+const redirectIfLoggedIn = (req, res, next) => {
+  if (req.session.playerId) {
+    return res.redirect('/');
+  }
+  next();
+};
+
+module.exports = { restrict, redirectIfLoggedIn };

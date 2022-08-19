@@ -1,10 +1,12 @@
 const express = require('express');
 
-const { redirectIfLoggedIn,
+const {
   serveLoginPage,
   validateUser,
   serveSignupPage,
-  register } = require('../handlers/auth.js');
+  register,
+} = require('../handlers/auth.js');
+const { redirectIfLoggedIn } = require('../middlewares/auth.js');
 
 const createAuthRouter = (dataStore) => {
   const users = dataStore.loadJSON('USERS_DB_PATH');
