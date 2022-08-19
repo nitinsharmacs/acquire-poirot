@@ -28,8 +28,6 @@ const initApp = (session) => {
     load: Sinon.stub(),
     loadJSON: Sinon.stub()
   };
-  dataStore.load.withArgs('LOGIN_TEMPLATE').returns('_MESSAGE_');
-  dataStore.load.withArgs('SIGNUP_TEMPLATE').returns('_MESSAGE_');
   return createApp(config, dataStore);
 };
 

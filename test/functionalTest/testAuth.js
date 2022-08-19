@@ -1,5 +1,5 @@
 const request = require('supertest');
-const { createApp } = require('../src/app.js');
+const { createApp } = require('../../src/app.js');
 const Sinon = require('sinon');
 const session = () => (req, res, next) => {
   req.session = {};
@@ -21,8 +21,7 @@ const initApp = () => {
   const mockUsers = {
     raju: { username: 'raju', password: 'abc', id: '127824693' }
   };
-  dataStore.load.withArgs('LOGIN_TEMPLATE').returns('_MESSAGE_');
-  dataStore.load.withArgs('SIGNUP_TEMPLATE').returns('_MESSAGE_');
+
   dataStore.loadJSON.withArgs('USERS_DB_PATH').returns(mockUsers);
   return createApp(config, dataStore);
 };
@@ -39,25 +38,6 @@ describe('GET /login', () => {
       .expect('content-type', /html/)
       .expect(200, done);
   });
-
-  it('should serve login page with apt error message 404(invalid credentials)',
-    (done) => {
-      const req = request(app);
-      req.get('/login')
-        .set('Cookie', 'errCode=404')
-        .expect('content-type', /html/)
-        .expect(200, /Invalid username or password/, done);
-    });
-
-  it('should serve login page with apt error msg 401(fields cannot be empty)',
-    (done) => {
-
-      const req = request(app);
-      req.get('/login')
-        .set('Cookie', 'errCode=401')
-        .expect('content-type', /html/)
-        .expect(200, /Fields cannot be empty/, done);
-    });
 });
 
 describe('POST /login', () => {
@@ -65,6 +45,26 @@ describe('POST /login', () => {
   beforeEach(() => {
     app = initApp();
   });
+
+  it('should serve login page with error 401(invalid credentials)',
+    (done) => {
+      const req = request(app);
+      req.post('/login')
+        .send('username=raju&password=abcc')
+        .expect('content-type', /html/)
+        .expect(401, /Invalid username or password/, done);
+    });
+
+  it('should serve login page with error 400(fields cannot be empty)',
+    (done) => {
+
+      const req = request(app);
+      req.post('/login')
+        .send('username=&password=')
+        .expect('content-type', /html/)
+        .expect(400, /Fields cannot be empty/, done);
+    });
+
   it('should log the user in and set cookie', (done) => {
     const req = request(app);
     req.post('/login')
@@ -101,24 +101,6 @@ describe('GET /sign-up', () => {
       .expect('content-type', /html/)
       .expect(200, done);
   });
-
-  it('should serve login page with apt error message 409(user already exists)',
-    (done) => {
-      const req = request(app);
-      req.get('/sign-up')
-        .set('Cookie', 'errCode=409')
-        .expect('content-type', /html/)
-        .expect(200, /User already exists/, done);
-    });
-
-  it('should serve login page with apt error msg 401(fields cannot be empty)',
-    (done) => {
-      const req = request(app);
-      req.get('/sign-up')
-        .set('Cookie', 'errCode=401')
-        .expect('content-type', /html/)
-        .expect(200, /Fields cannot be empty/, done);
-    });
 });
 
 describe('POST /sign-up', () => {
@@ -150,4 +132,22 @@ describe('POST /sign-up', () => {
       .expect('location', '/join/1')
       .expect(302, done);
   });
+
+  it('should serve sigup page with error 400(user already exists)',
+    (done) => {
+      const req = request(app);
+      req.post('/sign-up')
+        .send('username=raju&password=abc')
+        .expect('content-type', /html/)
+        .expect(400, /User already exists/, done);
+    });
+
+  it('should serve signup page with error 400(fields cannot be empty)',
+    (done) => {
+      const req = request(app);
+      req.post('/sign-up')
+        .send('username=&password=')
+        .expect('content-type', /html/)
+        .expect(400, /Fields cannot be empty/, done);
+    });
 });

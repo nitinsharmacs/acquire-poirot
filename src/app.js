@@ -1,6 +1,5 @@
 const express = require('express');
 const morgan = require('morgan');
-const cookieParser = require('cookie-parser');
 const session = require('express-session');
 
 // routes
@@ -18,23 +17,20 @@ const { serveGamePage,
   serveLandingPage
 } = require('./handlers/game.js');
 
-const { createAuthRouter } = require('./routers/authRouter');
+const { createAuthRouter } = require('./routers/authRoutes.js');
 const { createHostRouter } = require('./routers/hostRouter');
 
 // models
 const DataStore = require('./dataStore.js');
 const { Games } = require('./models/games.js');
 
-const { LOGIN_TEMPLATE,
-  SIGNUP_TEMPLATE,
+const {
   USERS_DB_PATH,
   GAME_TEMPLATE_PATH,
   SESSION_KEY
 } = process.env;
 
 const resources = {
-  LOGIN_TEMPLATE,
-  SIGNUP_TEMPLATE,
   USERS_DB_PATH,
   GAME_TEMPLATE_PATH
 };
@@ -53,7 +49,6 @@ const createApp = (config = appConfig, dataStore = new DataStore(resources)) => 
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
 
-  app.use(cookieParser());
   app.use(session(
     {
       saveUninitialized: false,
