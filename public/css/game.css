@@ -507,5 +507,5 @@ body {
 }
 
 .highlight-corp {
-  border: 2px solid black !important;
+  box-shadow: 1px 1px 5px 1px dimgrey;
 }

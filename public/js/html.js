@@ -64,3 +64,18 @@ const createDOMTree = (rootElement) => {
   const [tag, attrs, events, ...children] = rootElement;
   return createElement(tag, attrs, events, createElements(children));
 };
+
+const replace = (ele1, ele2) => ele1.replaceWith(ele2);
+
+const select = (selectBy, name) =>
+  document.querySelector(`${selectBy}${name}`);
+
+const show = (element) => {
+  element.style.visibility = 'visible';
+};
+
+const hide = (element) => {
+  element.style.visibility = 'hidden';
+};
+
+const createStyle = (property, value) => `${property}:${value}`;
