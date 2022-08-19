@@ -219,6 +219,19 @@ body {
   margin-bottom: 1em;
 }
 
+.player-resources .tile-item {
+  position: relative;
+}
+
+.player-resources .tile-item::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .tile-item input {
   display: none;
 }
