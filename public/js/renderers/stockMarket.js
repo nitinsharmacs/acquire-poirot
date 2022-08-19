@@ -43,18 +43,27 @@ const createBuildControls = () => {
 const selectCorp = (event, corporations) => {
   const inputElement = event.target;
   const targetEle = inputElement;
+  const targetEleInfo = inputElement.parentElement;
+  const corpInfoEle = targetEleInfo.querySelector('.corporation-info');
 
   const radio = inputElement.querySelector('input');
   radio.checked = true;
 
-  const buildButton = select('.', 'build-button');
+  const buildButton = select('.build-button');
   show(buildButton);
 
   corporations.forEach(corp => {
     const corpElement = document.getElementById(corp.id);
-    corpElement.classList.remove('highlight-corp');
+    const corpInfo = corpElement.parentElement.querySelector(
+      '.corporation-info');
+
+    if (corpInfo) {
+      corpElement.classList.remove('highlight-corp');
+      corpInfo.classList.remove('highlight-info');
+    }
   });
   targetEle.classList.add('highlight-corp');
+  corpInfoEle.classList.add('highlight-info');
 };
 
 const corpWhileBuild = (corporations) => (corporation) => {
@@ -119,15 +128,14 @@ const highlightStockMarketToBuy = () => {
   stockMarketElement.appendChild(buyControls);
 };
 
-const highlightStockMarket = (tileId) => {
-  const { corporations } = gameState;
+const highlightStockMarket = ({ corporations }, tileId) => {
   const corporationsEle = createDOMTree(
     createCorpsWhileBuild(corporations, tileId));
 
-  const corporationsCompo = select('.', 'corporations');
+  const corporationsCompo = select('.corporations');
   replace(corporationsCompo, corporationsEle);
 
-  const stockMarketEle = select('#', 'stock-market');
+  const stockMarketEle = select('#stock-market');
   highlight(stockMarketEle);
 };
 

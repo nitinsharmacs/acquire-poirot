@@ -67,8 +67,7 @@ const createDOMTree = (rootElement) => {
 
 const replace = (ele1, ele2) => ele1.replaceWith(ele2);
 
-const select = (selectBy, name) =>
-  document.querySelector(`${selectBy}${name}`);
+const select = (selectBy) => document.querySelector(selectBy);
 
 const show = (element) => {
   element.style.visibility = 'visible';

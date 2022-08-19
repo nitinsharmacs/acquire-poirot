@@ -87,7 +87,7 @@ const handleView = (game) => {
   if (game.isInBuildState()) {
     renderBoard(game);
     renderPlayerResources(game);
-    highlightStockMarket(getItem('tileId'));
+    highlightStockMarket(game, getItem('tileId'));
   }
 
   if (game.isInBuyState()) {
