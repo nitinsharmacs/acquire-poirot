@@ -144,6 +144,18 @@ const skipBuildCorp = (req, res) => {
   });
 };
 
+const skipBuyStocks = (req, res) => {
+  const { game } = req;
+
+  game.currentPlayer.skipBuy();
+  game.drawTileState();
+
+  res.json({
+    message: 'skip buying stocks',
+    data: { case: game.state }
+  });
+};
+
 module.exports = {
   loadGame,
   startGame,
@@ -154,5 +166,6 @@ module.exports = {
   buyStocks,
   totalNumOfStocks,
   areStocksAvailable,
-  skipBuildCorp
+  skipBuildCorp,
+  skipBuyStocks
 };

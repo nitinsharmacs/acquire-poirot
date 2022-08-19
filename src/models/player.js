@@ -58,6 +58,10 @@ class Player {
     this.game.logs.push(`${this.name} skipped building corporation`);
   }
 
+  skipBuy() {
+    this.game.logs.push(`${this.name} skipped buying stocks`);
+  }
+
   addStocks({ id, name }, noOfStocks = 0) {
     const stocks = this.stocks.find(stock => stock.corporationId === id);
 
