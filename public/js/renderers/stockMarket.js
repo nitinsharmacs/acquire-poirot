@@ -45,19 +45,12 @@ const highlightStockMarket = (tileId) => {
   stockMarketEle.appendChild(buildControls);
 };
 
-const removeHighlight = () => {
-  removeOverlay();
-  return removeBackdrop('.stock-market');
-};
-
-const removeBackdrop = (ele) => {
-  const element = document.querySelector(ele);
-  element.style['z-index'] = 0;
-};
-
 // main
 const renderStockMarket = ({ corporations }) => {
   const stockMarket = document.querySelector('#stock-market');
+  // styles has to get reset to remove highlight
+  // todo : after making general highlight, remove this style resetting
+  stockMarket.style = '';
 
   const elements = [
     ['h3', { class: 'component-heading' }, {}, 'Stock Market'],
