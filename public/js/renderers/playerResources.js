@@ -43,6 +43,7 @@ const selectTile = (event, tiles) => {
   inputElement.classList.add('highlight-tile');
 };
 
+// TODO: consider renaming this function
 const tileSelection = ({ tiles }) => {
   return tiles.map(tile => {
 
