@@ -162,6 +162,10 @@ class Game {
     this.turn.drawTileState();
   }
 
+  isAnyCorporationActive() {
+    return this.corporations.some(corporation => corporation.active);
+  }
+
   // getters ---------------
 
   get state() {
