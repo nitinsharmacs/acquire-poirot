@@ -21,7 +21,7 @@ const createPlayers = (game) => {
 
 // main
 const renderPlayers = (game) => {
-  const playersList = document.querySelector('#players-list');
+  const playersList = select('#players-list');
 
   const playersHtml = createPlayers(game);
   playersList.replaceChildren(...playersHtml);

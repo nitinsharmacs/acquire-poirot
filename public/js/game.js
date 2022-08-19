@@ -77,7 +77,7 @@ const placeTile = (tileId) => {
 };
 
 const handleView = (game) => {
-  removeOverlay();
+  removeHighLight();
 
   if (game.isInPlaceTileState()) {
     renderPlayerResources(game);
@@ -125,8 +125,8 @@ let gameState;
 const main = () => {
   startPolling();
 
-  const infoCard = document.getElementById('info-card');
-  const infoCardBtn = document.getElementById('info-card-btn');
+  const infoCard = select('#info-card');
+  const infoCardBtn = select('#info-card-btn');
 
   infoCardBtn.onclick = () => {
     infoCard.classList.toggle('hide');

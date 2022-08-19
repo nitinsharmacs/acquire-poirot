@@ -33,7 +33,7 @@ const selectTile = (event, tiles) => {
   const inputElement = event.target;
   const radio = inputElement.querySelector('input');
   radio.checked = true;
-  const buttonElement = document.querySelector('.place-tile-button');
+  const buttonElement = select('.place-tile-button');
   buttonElement.hidden = false;
 
   tiles.forEach(tile => {
@@ -67,24 +67,19 @@ const createPlaceButton = () => {
 
 const highlightTiles = ({ player }) => {
   const tilesElement = createElements(tileSelection(player));
-  const tilesComponent = document.querySelector('.component-tiles');
+  const tilesComponent = select('.component-tiles');
   tilesComponent.replaceChildren(...tilesElement);
 
-  const playerTilesElement = document.querySelector('.player-tiles');
+  const playerTilesElement = select('.player-tiles');
   const placeTileFormElement = playerTilesElement.querySelector('form');
   highlight(playerTilesElement);
 
   placeTileFormElement.appendChild(createPlaceButton());
 };
 
-const removeOverlay = () => {
-  const overlay = document.querySelector('.overlay');
-  overlay && overlay.remove();
-};
-
 // main
 const renderPlayerResources = ({ player }) => {
-  const playerResources = document.querySelector('#player-resources');
+  const playerResources = select('#player-resources');
 
   const resourcesElements = [
     ['section', { class: 'player-money' }, {},

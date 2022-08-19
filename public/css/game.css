@@ -422,6 +422,11 @@ body {
   overflow-y: scroll;
 }
 
+.highlight-element {
+  background-color: white;
+  z-index: 10;
+}
+
 /* STOCK MARKET ------------------------- */
 .stock-market {
   border: 2px solid black;

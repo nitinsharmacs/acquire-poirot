@@ -3,12 +3,12 @@ const replaceTick = () => {
     { class: 'fa-solid fa-clipboard', id: 'copy-btn' },
     { onclick: copyGameLink }
   ];
-  const tickElement = document.querySelector('#tick');
+  const tickElement = select('#tick');
   tickElement.replaceWith(createDOMTree(copyButton));
 };
 
 const replaceCopyButton = () => {
-  const copyButton = document.querySelector('#copy-btn');
+  const copyButton = select('#copy-btn');
 
   const tick = ['div',
     { class: 'fa-solid fa-clipboard-check', id: 'tick' }
@@ -23,7 +23,7 @@ const copyGameLink = () => {
   textarea.style.display = 'hidden';
   document.body.appendChild(textarea);
 
-  const gameLinkInput = document.getElementById('game-link');
+  const gameLinkInput = select('#game-link');
   textarea.innerText = gameLinkInput.value;
   textarea.focus();
   textarea.select();
@@ -52,7 +52,7 @@ const createPlayer = (joinee, player) => {
 };
 
 const renderPlayers = ({ players: joinees, player }) => {
-  const playersContainer = document.querySelector('.players');
+  const playersContainer = select('.players');
   playersContainer.innerText = '';
 
   const playersElements = joinees.map((joinee) => createPlayer(joinee, player));
@@ -87,7 +87,7 @@ const loadGame = () => {
 
 const main = () => {
   loadGame();
-  document.getElementById('copy-btn').onclick = copyGameLink;
+  select('#copy-btn').onclick = copyGameLink;
 };
 
 window.onload = main;

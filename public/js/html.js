@@ -77,4 +77,8 @@ const hide = (element) => {
   element.style.visibility = 'hidden';
 };
 
+const removeClass = (element, className) => {
+  element.classList.remove(className);
+};
+
 const createStyle = (property, value) => `${property}:${value}`;
