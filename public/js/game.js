@@ -56,6 +56,15 @@ const buyStocks = () => {
     });
 };
 
+const skipBuy = () => {
+  API.skipBuy()
+    .then((res) => {
+      gameState.updateState(res.data.case);
+      handleView(gameState);
+    });
+};
+
+
 const placeTile = (tileId) => {
   API.placeTile(tileId)
     .then(res => {
@@ -71,6 +80,7 @@ const handleView = (game) => {
   removeOverlay();
 
   if (game.isInPlaceTileState()) {
+    renderPlayerResources(game);
     highlightTiles(game);
   }
 
@@ -83,7 +93,8 @@ const handleView = (game) => {
   if (game.isInBuyState()) {
     renderBoard(game);
     renderPlayerResources(game);
-    buyStocks();
+    renderStockMarket(game);
+    highlightStockMarketToBuy();
   }
 
   if (game.isInDrawTileState()) {

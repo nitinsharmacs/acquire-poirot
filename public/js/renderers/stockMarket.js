@@ -45,6 +45,21 @@ const highlightStockMarket = (tileId) => {
   stockMarketEle.appendChild(buildControls);
 };
 
+const createBuyControls = () => {
+  return ['div', { class: 'build-controls-holder' }, {},
+    ['button', { class: 'build-button' }, { onclick: buyStocks }, 'Buy'],
+    ['button', { class: 'skip-button' }, { onclick: skipBuy }, 'Skip']
+  ];
+};
+
+const highlightStockMarketToBuy = () => {
+  const stockMarketElement = document.querySelector('#stock-market');
+  highlight(stockMarketElement);
+
+  const buyControls = createDOMTree(createBuyControls());
+  stockMarketElement.appendChild(buyControls);
+};
+
 // main
 const renderStockMarket = ({ corporations }) => {
   const stockMarket = document.querySelector('#stock-market');

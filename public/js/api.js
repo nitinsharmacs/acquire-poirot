@@ -56,5 +56,10 @@ const API = {
         throw new Error('Can\'t purchase stocks');
       }
       return res.json();
-    })
+    }),
+
+  skipBuy: () => fetch('/api/skip-buy', {
+    method: 'POST',
+  })
+    .then(res => res.json()),
 };
