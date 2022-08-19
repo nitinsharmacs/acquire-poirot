@@ -41,12 +41,8 @@ const highlightStockMarket = (tileId) => {
   const buildControls = createDOMTree(createBuildControls(tileId));
   const stockMarketEle = document.querySelector('#stock-market');
 
-  const backdropTemplate = ['div', { class: 'overlay' }, {}];
-  stockMarketEle.style['z-index'] = 10;
-  stockMarketEle.style.background = 'white';
+  highlight(stockMarketEle);
   stockMarketEle.appendChild(buildControls);
-  document.body.appendChild(...createElements([backdropTemplate]));
-  return true;
 };
 
 const removeHighlight = () => {
