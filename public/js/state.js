@@ -100,6 +100,10 @@ class GameState {
   isInDrawTileState() {
     return this.isMyTurn() && this.turn.state === 'draw-tile';
   }
+
+  getActiveCorporations() {
+    return this.corporations.filter(corporation => corporation.active);
+  }
 }
 
 class Board {
