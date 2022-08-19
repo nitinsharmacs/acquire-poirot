@@ -20,16 +20,19 @@ const skipBuild = () => {
     });
 };
 
-const buildCorporation = (tileId) => {
-  const corporation = gameState.getInactiveCorporation();
-  if (!corporation) {
+const buildCorporation = (event, tileId) => {
+  event.preventDefault();
+  const formData = new FormData(event.target);
+  const corporationId = formData.get('corporation');
+
+  if (!corporationId) {
     return;
   }
 
-  API.buildCorporation(tileId, corporation.id)
+  API.buildCorporation(tileId, corporationId)
     .then(res => {
       const { corporation: { tiles }, case: step } = res.data;
-      gameState.buildCorporation(corporation.id, tiles);
+      gameState.buildCorporation(corporationId, tiles);
       gameState.updateState(step);
       handleView(gameState);
     });
