@@ -169,6 +169,10 @@ class Game {
     this.turn.buildState();
   }
 
+  mergeState() {
+    this.turn.mergeState();
+  }
+
   buyStocksState() {
     this.turn.buyStocksState();
   }

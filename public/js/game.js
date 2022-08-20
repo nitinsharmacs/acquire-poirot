@@ -71,6 +71,7 @@ const placeTile = (tileId) => {
       gameState.placeTile(tileId);
       storeItem('tileId', tileId);
 
+      gameState.updateCorporations(res.data.corporations);
       gameState.updateState(res.data.case);
       return handleView(gameState);
     });

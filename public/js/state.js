@@ -84,12 +84,20 @@ class GameState {
     this.turn.state = newState;
   }
 
+  updateCorporations(corporations) {
+    this.corporations = corporations;
+  }
+
   isInPlaceTileState() {
     return this.isMyTurn() && this.turn.state === 'place-tile';
   }
 
   isInBuildState() {
     return this.isMyTurn() && this.turn.state === 'build';
+  }
+
+  isInMergeState() {
+    return this.isMyTurn() && this.turn.state === 'merge';
   }
 
   isInBuyState() {
