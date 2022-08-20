@@ -160,7 +160,7 @@ class Game {
   }
 
   determineSafe(corporation) {
-    if (corporation.isSafe) {
+    if (corporation.isSafeCorporation()) {
       this.logs.push(`${corporation.name} is safe`);
     }
   }

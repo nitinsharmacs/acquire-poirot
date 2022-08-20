@@ -207,7 +207,7 @@ describe('Post /api/place-tile', () => {
         .expect('content-type', /json/)
         .expect(200, () => {
           assert.ok(corporation.getSize() >= 11);
-          assert.ok(corporation.isSafe);
+          assert.ok(corporation.isSafeCorporation());
           done();
         });
     });
