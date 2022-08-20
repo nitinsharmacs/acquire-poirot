@@ -158,6 +158,7 @@ const highlightStockMarket = ({ corporations }, tileId) => {
 
   const stockMarketEle = select('#stock-market');
   highlight(stockMarketEle);
+  addBackDrop();
 };
 
 // main

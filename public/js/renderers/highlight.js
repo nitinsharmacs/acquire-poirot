@@ -5,7 +5,6 @@ const addBackDrop = () =>
 
 const highlight = (element) => {
   element.classList.add('highlight-element');
-  addBackDrop();
 };
 
 const removeOverlay = () => {
