@@ -193,7 +193,7 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
 .place-button-holder {
@@ -563,15 +563,16 @@ button:hover {
 
 .focus-tile {
   animation-name: blink;
-  animation-duration: 0.5s;
+  animation-duration: 0.4s;
   animation-direction: alternate;
   animation-iteration-count: infinite;
-  animation-timing-function: linear;
   --animation-color: rgb(166, 164, 164);
+  --animation-font-color: black;
 }
 
 .selected-tile {
   --animation-color: hsl(0deg 0% 35%);
+  --animation-font-color: white;
 }
 
 @keyframes blink {
@@ -579,15 +580,8 @@ button:hover {
     background-color: lightgray;
   }
 
-  49% {
-    background-color: lightgray;
-  }
-
-  50% {
-    background-color: var(--animation-color);
-  }
-
   100% {
+    color: var(--animation-font-color);
     background-color: var(--animation-color);
   }
 }
