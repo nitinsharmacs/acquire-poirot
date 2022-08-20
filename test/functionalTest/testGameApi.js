@@ -137,6 +137,32 @@ describe('POST /api/place-tile', () => {
         .expect('content-type', /json/)
         .expect(200, done);
     });
+
+  it('should merge two corporations',
+    (done) => {
+      const player = game.turn.player;
+      const tile = game.board.tiles.find(tile => tile.id === '3a');
+      player.tiles.push(tile);
+
+      const corporation1 = game.getCorporation('america');
+      game.board.placeTile({ id: '1a' });
+      game.board.placeTile({ id: '2a' });
+      game.buildCorporation(corporation1.id, '1a', 'user');
+
+      const corporation2 = game.getCorporation('zeta');
+      game.board.placeTile({ id: '4a' });
+      game.board.placeTile({ id: '5a' });
+      game.board.placeTile({ id: '6a' });
+      game.buildCorporation(corporation2.id, '4a', 'user');
+
+      const tileId = '3a';
+      request(app)
+        .post('/api/place-tile')
+        .send(`id=${tileId}`)
+        .expect('content-type', /json/)
+        .expect({ data: { case: 'buy-stocks' }, message: 'placed tile' })
+        .expect(200, done);
+    });
 });
 
 describe('POST /api/draw-tile', () => {
