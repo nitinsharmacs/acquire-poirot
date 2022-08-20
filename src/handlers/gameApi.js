@@ -14,20 +14,13 @@ const loadGame = (req, res) => {
 const startGame = (req, res) => {
   const { game } = req;
 
-  if (game.host.id !== req.session.playerId) {
+  if (!game.isHost(req.session.playerId)) {
     return res.status(400).json({ message: 'Only host can start game' });
   }
 
-  game.players.forEach(player => player.drawTile());
-
+  game.drawInitialTiles();
   game.reorder();
-
-  game.players.forEach(player => {
-    player.placeFirstTile();
-    player.money = 6000;
-    getInitialTiles(player);
-  });
-
+  game.setup();
   game.start();
 
   res.json({ message: 'success' });
@@ -41,7 +34,7 @@ const drawTile = (req, res) => {
     return res.status(400).json({ message: 'Can\'t draw a tile' });
   }
 
-  const tile = game.currentPlayer.drawTile();
+  const tile = game.drawTile();
   res.json({ data: tile, message: 'Drawn a tile' });
 };
 
@@ -51,9 +44,8 @@ const placeTile = (req, res) => {
     session: { playerId },
     body: { id }
   } = req;
-  const player = getPlayer(game.players, playerId);
 
-  const tile = player.placeTile({ id });
+  const tile = game.placeTile({ id });
   const { step, tiles, corporation } = nextStep(game, id);
 
   if (step === 'grow') {
@@ -138,7 +130,7 @@ const buildCorporation = (req, res) => {
 const skipBuildCorp = (req, res) => {
   const { game } = req;
 
-  game.currentPlayer.skipBuild();
+  game.skipBuild();
   if (game.isAnyCorporationActive()) {
     game.buyStocksState();
   } else {
@@ -154,7 +146,7 @@ const skipBuildCorp = (req, res) => {
 const skipBuyStocks = (req, res) => {
   const { game } = req;
 
-  game.currentPlayer.skipBuy();
+  game.skipBuy();
   game.drawTileState();
 
   res.json({

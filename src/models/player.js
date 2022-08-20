@@ -46,7 +46,6 @@ class Player {
 
   placeTile({ id }) {
     const tile = this.#findTile(id);
-
     this.game.board.placeTile(tile);
     this.game.logs.push(`${this.name} placed ${tile.id}`);
 

@@ -51,8 +51,7 @@ class Game {
 
   start() {
     this.started = true;
-    this.currentPlayer = this.players[0];
-    this.turn = new Turn(this.currentPlayer);
+    this.turn = new Turn(this.players[0]);
   }
 
   addPlayer(player) {
@@ -80,21 +79,27 @@ class Game {
 
   changeTurn() {
     const currentPlayerPosition = this.players.findIndex(player => {
-      return player.id === this.currentPlayer.id;
+      return player.id === this.turn.player.id;
     });
     const totalPlayers = this.players.length;
     const nextPlayerPosition = (currentPlayerPosition + 1) % totalPlayers;
-    this.currentPlayer = this.players[nextPlayerPosition];
-
-    this.turn = new Turn(this.currentPlayer);
+    this.turn = new Turn(this.players[nextPlayerPosition]);
   }
 
   isPlayerIdle(playerId) {
-    return this.currentPlayer.id !== playerId;
+    return this.turn.player.id !== playerId;
   }
 
   hasStarted() {
     return this.started;
+  }
+
+  placeTile({ id }) {
+    this.turn.player.placeTile({ id });
+  }
+
+  drawTile() {
+    return this.turn.player.drawTile();
   }
 
   calculateStockPrice(corporation) {
@@ -110,7 +115,7 @@ class Game {
   }
 
   sellStocks(stocks, playerId) {
-    const player = this.findPlayer(playerId);
+    const player = this.turn.player;
     const stockLogs = [];
 
     stocks.forEach(({ corporationId, numOfStocks }) => {
@@ -125,6 +130,10 @@ class Game {
 
   getPlayer(playerId) {
     return this.players.find(player => player.id === playerId);
+  }
+
+  playerExists(playerId) {
+    return this.getPlayer(playerId) ? true : false;
   }
 
   getCorporation(corporationId) {
@@ -170,10 +179,37 @@ class Game {
     return this.corporations.some(corporation => !corporation.active);
   }
 
+  skipBuy() {
+    this.turn.player.skipBuy();
+  }
+
+  skipBuild() {
+    this.turn.player.skipBuild();
+  }
+
   // getters ---------------
 
   get state() {
     return this.turn.state;
+  }
+
+  isHost(playerId) {
+    return this.host.id === playerId;
+  }
+
+  drawInitialTiles() {
+    this.players.forEach(player => player.drawTile());
+  }
+
+  setup() {
+    this.players.forEach(player => {
+      player.placeFirstTile();
+      player.money = 6000;
+
+      for (let index = 0; index < 6; index++) {
+        player.getTile();
+      }
+    });
   }
 }
 
