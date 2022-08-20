@@ -58,9 +58,9 @@ const gamePage = () => `<html>
             </div>
           </div>
         </div>
-        <div class="stock-market" id="stock-market">
+        <form class="stock-market" id="stock-market">
 
-        </div>
+        </form>
       </section>
     </div>
   </div>
