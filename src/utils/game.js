@@ -1,3 +1,5 @@
+const lodash = require('lodash');
+
 const getPlayer = (players, playerId) => {
   return players.find(player => player.id === playerId);
 };
@@ -125,16 +127,23 @@ const nextStep = (game, tileId) => {
   }
 
   if (activeCorporations.length === 1) {
-    const [corporation] = activeCorporations;
     game.buyStocksState();
-    return { step: 'grow', corporation, tiles: placedTiles };
+    return { step: 'grow', corporations: activeCorporations, tiles: placedTiles };
+  }
+
+  if (activeCorporations.length >= 2) {
+    game.buyStocksState();
+    return { step: 'merge', corporations: activeCorporations, tiles: placedTiles };
   }
 
   return { step: '' };
 };
 
-const getCase = (step) => {
-
+const sortCorporations = (corporations) => {
+  const sortedCorporations = lodash.sortBy(corporations, ({ tiles }) => {
+    return tiles.length;
+  });
+  return sortedCorporations;
 };
 
 module.exports = {
@@ -144,5 +153,6 @@ module.exports = {
   nextStep,
   findAdjancetTiles,
   findPlacedTiles,
-  findTilesChain
+  findTilesChain,
+  sortCorporations
 };

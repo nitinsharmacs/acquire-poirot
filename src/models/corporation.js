@@ -35,6 +35,11 @@ class Corporation {
     this.tiles = tiles;
   }
 
+  defunct() {
+    this.tiles = [];
+    this.active = false;
+  }
+
   getSize() {
     return this.tiles.length;
   }

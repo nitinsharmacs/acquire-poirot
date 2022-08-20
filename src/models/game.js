@@ -2,7 +2,7 @@ const lodash = require('lodash');
 const { Corporation } = require('./corporation.js');
 const { createBoard } = require('./board.js');
 const { createTiles } = require('../utils/createTiles.js');
-const { findTilesChain } = require('../utils/game.js');
+const { findTilesChain, sortCorporations } = require('../utils/game.js');
 const { informationCard } = require('./informationCard.js');
 const { Turn } = require('./turn.js');
 
@@ -185,6 +185,14 @@ class Game {
 
   skipBuild() {
     this.turn.player.skipBuild();
+  }
+
+  // merge corporations ---------
+  merge(corporations, tiles) {
+    const [smallCorp, bigCorp] = sortCorporations(corporations);
+    bigCorp.grow(tiles);
+    smallCorp.defunct();
+    this.logs.push(`${bigCorp.name} acquired ${smallCorp.name}`);
   }
 
   // getters ---------------
