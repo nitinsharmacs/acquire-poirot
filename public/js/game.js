@@ -93,8 +93,7 @@ const handleView = (game) => {
   if (game.isInBuyState()) {
     renderBoard(game);
     renderPlayerResources(game);
-    renderStockMarket(game);
-    highlightStockMarketToBuy();
+    highlightStockMarketToBuy(game);
   }
 
   if (game.isInDrawTileState()) {
