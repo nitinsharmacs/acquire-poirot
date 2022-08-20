@@ -82,6 +82,7 @@ const handleView = (game) => {
 
   if (game.isInPlaceTileState()) {
     renderPlayerResources(game);
+    highlightTilesOnBoard(game);
     highlightTiles(game);
   }
 

@@ -26,7 +26,13 @@ const placeTileOnBoard = (event) => {
   const tileId = formData.get('tile');
 
   placeTile(tileId);
+};
 
+const unselectTile = (tile) => {
+  const tileElement = document.getElementById(tile.id);
+  const tileEle = select(`#tile-${tile.id}`);
+  tileElement.classList.remove('highlight-tile');
+  tileEle.classList.remove('selected-tile');
 };
 
 const selectTile = (event, tiles) => {
@@ -36,10 +42,10 @@ const selectTile = (event, tiles) => {
   const buttonElement = select('.place-tile-button');
   buttonElement.hidden = false;
 
-  tiles.forEach(tile => {
-    const tileElement = document.getElementById(tile.id);
-    tileElement.classList.remove('highlight-tile');
-  });
+  tiles.forEach(unselectTile);
+
+  const tileEle = select(`#tile-${inputElement.id}`);
+  tileEle.classList.add('selected-tile');
   inputElement.classList.add('highlight-tile');
 };
 
@@ -65,14 +71,26 @@ const createPlaceButton = () => {
   return createDOMTree(buttonTemplate);
 };
 
+const highlightTilesOnBoard = ({ player }) => {
+  const playerTiles = player.tiles;
+
+  playerTiles.forEach((tile) => {
+    const tileElement = select(`#tile-${tile.id}`);
+    tileElement.classList.add('focus-tile');
+  });
+};
+
 const highlightTiles = ({ player }) => {
   const tilesElement = createElements(tileSelection(player));
   const tilesComponent = select('.component-tiles');
   tilesComponent.replaceChildren(...tilesElement);
 
   const playerTilesElement = select('.player-tiles');
+  const boardElement = select('.board');
   const placeTileFormElement = playerTilesElement.querySelector('form');
+
   highlight(playerTilesElement);
+  highlight(boardElement);
 
   placeTileFormElement.appendChild(createPlaceButton());
 };

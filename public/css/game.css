@@ -423,7 +423,8 @@ body {
 }
 
 .highlight-element {
-  background-color: white;
+  /* background-color: white; */
+  background-color: rgb(232, 228, 228);
   z-index: 10;
 }
 
@@ -439,6 +440,7 @@ body {
   display: flex;
   justify-content: space-around;
   align-items: center;
+  margin-top: 10px;
 }
 
 .corporation-col {
@@ -544,6 +546,7 @@ body {
 }
 
 .skip-button {
+  position: relative;
   width: 80px;
   border-radius: 10px 0px 0px 10px;
 }
@@ -556,6 +559,37 @@ body {
 
 button:hover {
   background-color: grey;
+}
+
+.focus-tile {
+  animation-name: blink;
+  animation-duration: 0.5s;
+  animation-direction: alternate;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  --animation-color: rgb(166, 164, 164);
+}
+
+.selected-tile {
+  --animation-color: hsl(0deg 0% 35%);
+}
+
+@keyframes blink {
+  0% {
+    background-color: lightgray;
+  }
+
+  49% {
+    background-color: lightgray;
+  }
+
+  50% {
+    background-color: var(--animation-color);
+  }
+
+  100% {
+    background-color: var(--animation-color);
+  }
 }
 
 .buy-controls {
