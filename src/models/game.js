@@ -159,6 +159,12 @@ class Game {
     return corporation;
   }
 
+  determineSafe(corporation) {
+    if (corporation.isSafe) {
+      this.logs.push(`${corporation.name} is safe`);
+    }
+  }
+
   buildState() {
     this.turn.buildState();
   }

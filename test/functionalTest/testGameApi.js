@@ -100,7 +100,7 @@ describe('POST /api/place-tile', () => {
   game.addPlayer(new Player('user-4', 'peter', game));
   const app = initApp(session('123', 'user'), games);
 
-  before((done) => {
+  beforeEach((done) => {
     request(app)
       .post('/api/start-game')
       .expect('content-type', /json/)
@@ -118,6 +118,26 @@ describe('POST /api/place-tile', () => {
         .expect('content-type', /json/)
         .expect(200, done);
     });
+});
+
+describe('Post /api/place-tile', () => {
+  const games = new Games();
+  const host = { name: 'sam', id: 'user' };
+
+  const game = newGame('123', host, 4);
+  games.add(game);
+  game.addPlayer(new Player('user', 'sam', game));
+  game.addPlayer(new Player('user-2', 'harry', game));
+  game.addPlayer(new Player('user-3', 'nilam', game));
+  game.addPlayer(new Player('user-4', 'peter', game));
+  const app = initApp(session('123', 'user'), games);
+
+  beforeEach((done) => {
+    request(app)
+      .post('/api/start-game')
+      .expect('content-type', /json/)
+      .expect(200, done);
+  });
 
   it('should grow corporation',
     (done) => {
@@ -135,7 +155,61 @@ describe('POST /api/place-tile', () => {
         .post('/api/place-tile')
         .send(`id=${tileId}`)
         .expect('content-type', /json/)
-        .expect(200, done);
+        .expect(200, () => {
+          assert.ok(corporation.getSize() >= 3);
+          done();
+        });
+    });
+});
+
+describe('Post /api/place-tile', () => {
+  const games = new Games();
+  const host = { name: 'sam', id: 'user' };
+
+  const game = newGame('123', host, 4);
+  games.add(game);
+  game.addPlayer(new Player('user', 'sam', game));
+  game.addPlayer(new Player('user-2', 'harry', game));
+  game.addPlayer(new Player('user-3', 'nilam', game));
+  game.addPlayer(new Player('user-4', 'peter', game));
+  const app = initApp(session('123', 'user'), games);
+
+  beforeEach((done) => {
+    request(app)
+      .post('/api/start-game')
+      .expect('content-type', /json/)
+      .expect(200, done);
+  });
+
+  it('Should determine a corporation is safe',
+    (done) => {
+      const player = game.turn.player;
+      const tile = game.board.tiles.find(tile => tile.id === '4b');
+      player.tiles.push(tile);
+
+      const corporation = game.getCorporation('america');
+      game.board.placeTile({ id: '1a' });
+      game.board.placeTile({ id: '2a' });
+      game.board.placeTile({ id: '3a' });
+      game.board.placeTile({ id: '1b' });
+      game.board.placeTile({ id: '2b' });
+      game.board.placeTile({ id: '3b' });
+      game.board.placeTile({ id: '1c' });
+      game.board.placeTile({ id: '2c' });
+      game.board.placeTile({ id: '3c' });
+      game.board.placeTile({ id: '1d' });
+      game.buildCorporation(corporation.id, '1a', 'user');
+
+      const tileId = '4b';
+      request(app)
+        .post('/api/place-tile')
+        .send(`id=${tileId}`)
+        .expect('content-type', /json/)
+        .expect(200, () => {
+          assert.ok(corporation.getSize() >= 11);
+          assert.ok(corporation.isSafe);
+          done();
+        });
     });
 
   it('should merge two corporations',

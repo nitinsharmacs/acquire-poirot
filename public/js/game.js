@@ -72,7 +72,6 @@ const placeTile = (tileId) => {
       storeItem('tileId', tileId);
 
       gameState.updateState(res.data.case);
-      console.log('game state', res.data.case);
       return handleView(gameState);
     });
 };
