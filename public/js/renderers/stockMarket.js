@@ -155,6 +155,7 @@ const showControls = (corporations) => {
 const highlightStockMarketToBuy = (game) => {
   const stockMarketElement = select('#stock-market');
   highlight(stockMarketElement);
+  addBackDrop();
 
   const canBeBoughtOf = game.availableToBuy();
   showControls(canBeBoughtOf);
