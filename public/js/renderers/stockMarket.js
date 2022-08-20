@@ -10,6 +10,11 @@ const createCorporation = (corporation) => {
     ['div', { class: 'corporation-info' }, {},
       ['p', {}, {}, corporation.name],
       ['p', {}, {}, `${corporation.stocksLeft} `],
+    ],
+    ['div', { class: 'buy-controls' }, {},
+      ['button', { class: 'increase-btn' }, {}, '▲'],
+      ['input', { type: 'textbox', class: 'stock-value' }, {}],
+      ['button', { class: 'decrease-btn' }, {}, '▼']
     ]
   ];
 };
@@ -127,10 +132,19 @@ const createBuyControls = () => {
   ];
 };
 
-const highlightStockMarketToBuy = () => {
+const showControls = (corporations) => {
+  corporations.forEach(({ id }) => {
+    const corpElement = select(`.corporation>#${id}`);
+    const ctrlElement = corpElement.parentNode.querySelector('.buy-controls');
+    show(ctrlElement);
+  });
+};
+
+const highlightStockMarketToBuy = (game) => {
   const stockMarketElement = select('#stock-market');
   highlight(stockMarketElement);
-
+  const canBeBoughtOf = game.availableToBuy();
+  showControls(canBeBoughtOf);
   const buyControls = createDOMTree(createBuyControls());
   stockMarketElement.appendChild(buyControls);
 };

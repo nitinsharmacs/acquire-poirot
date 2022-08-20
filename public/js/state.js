@@ -103,6 +103,11 @@ class GameState {
   getActiveCorporations() {
     return this.corporations.filter(corporation => corporation.active);
   }
+
+  availableToBuy() {
+    return this.getActiveCorporations().filter(
+      ({ stocksLeft }) => stocksLeft > 0);
+  }
 }
 
 class Board {

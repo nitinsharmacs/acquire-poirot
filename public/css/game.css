@@ -457,7 +457,7 @@ body {
   column-gap: 1em;
   align-items: center;
   margin: 1em 0;
-  width: 180px;
+  width: 230px;
 }
 
 .corporation-img {
@@ -556,4 +556,35 @@ body {
 
 button:hover {
   background-color: grey;
+}
+
+.buy-controls {
+  width: 30px;
+  height: 60px;
+  visibility: hidden;
+}
+
+.decrease-btn,
+.increase-btn {
+  height: 30%;
+  width: 100%;
+}
+
+.decrease-btn {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.increase-btn {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.stock-value {
+  height: 40%;
+  width: 100%;
+  border-top: none;
+  border-bottom: none;
+  outline: none;
+  text-align: center;
 }
