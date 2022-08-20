@@ -52,10 +52,11 @@ const API = {
     body: JSON.stringify({ stocks })
   })
     .then(res => {
-      if (res.status !== 200) {
-        throw new Error('Can\'t purchase stocks');
-      }
-      return res.json();
+      return res.json().then(data => {
+        if (res.status !== 200) {
+          throw new Error(data.message);
+        }
+      });
     }),
 
   skipBuy: () => fetch('/api/skip-buy', {

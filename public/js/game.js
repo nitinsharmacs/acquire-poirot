@@ -33,18 +33,19 @@ const buildCorporation = (tileId, corporationId) => {
 };
 
 const buyStocks = (stocks) => {
+  let message = '';
   API.buyStocks(stocks)
     .then(res => {
       gameState.sellStocks(stocks);
 
       gameState.updateState(res.data.case);
+      return res;
     })
-    .catch(() => {
-      // has to remove : it is just for until interactive for buy stocks comes
-      gameState.updateState('draw-tile');
+    .catch((res) => {
+      message = res.message;
     })
     .finally(() => {
-      handleView(gameState);
+      handleView(gameState, message);
     });
 };
 
@@ -68,7 +69,7 @@ const placeTile = (tileId) => {
     });
 };
 
-const handleView = (game) => {
+const handleView = (game, message = '') => {
   removeHighLight();
 
   if (game.isInPlaceTileState()) {
@@ -85,7 +86,7 @@ const handleView = (game) => {
 
   if (game.isInBuyState()) {
     renderBoard(game);
-    renderStockMarket(game);
+    renderStockMarket(game, message);
     renderPlayerResources(game);
     highlightStockMarketToBuy(game);
   }

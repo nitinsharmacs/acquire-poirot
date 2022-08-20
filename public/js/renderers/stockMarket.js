@@ -187,12 +187,12 @@ const stocksToBuy = (form) => {
 };
 
 // main
-const renderStockMarket = ({ corporations }) => {
+const renderStockMarket = ({ corporations }, message = '') => {
   const stockMarket = select('#stock-market');
-
   const elements = [
     ['h3', { class: 'component-heading' }, {}, 'Stock Market'],
-    createCorporationsHTML(corporations)
+    createCorporationsHTML(corporations),
+    ['p', { class: 'buy-stock-error' }, {}, message]
   ];
 
   stockMarket.replaceChildren(...createElements(elements));
