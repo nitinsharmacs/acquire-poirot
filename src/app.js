@@ -26,13 +26,11 @@ const { Games } = require('./models/games.js');
 
 const {
   USERS_DB_PATH,
-  GAME_TEMPLATE_PATH,
   SESSION_KEY
 } = process.env;
 
 const resources = {
   USERS_DB_PATH,
-  GAME_TEMPLATE_PATH
 };
 
 const appConfig = {
