@@ -234,7 +234,6 @@ describe('Post /api/place-tile', () => {
         .post('/api/place-tile')
         .send(`id=${tileId}`)
         .expect('content-type', /json/)
-        .expect({ data: { case: 'buy-stocks' }, message: 'placed tile' })
         .expect(200, done);
     });
 });

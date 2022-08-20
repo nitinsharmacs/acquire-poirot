@@ -8,6 +8,10 @@ class Turn {
     this.state = 'build';
   }
 
+  mergeState() {
+    this.state = 'merge';
+  }
+
   buyStocksState() {
     this.state = 'buy-stocks';
   }

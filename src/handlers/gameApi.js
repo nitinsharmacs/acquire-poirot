@@ -55,7 +55,12 @@ const placeTile = (req, res) => {
     game.merge(corporations, tiles);
   }
 
-  res.json({ data: { tile, case: game.state }, message: 'placed tile' });
+  res.json({
+    data: {
+      tile, case: game.state,
+      corporations: game.corporations
+    }, message: 'placed tile'
+  });
 };
 
 const changeTurn = (req, res) => {
