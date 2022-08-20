@@ -11,11 +11,12 @@ const createCorporation = (corporation) => {
       ['p', {}, {}, corporation.name],
       ['p', {}, {}, `${corporation.stocksLeft} `],
     ],
-    ['div', { class: 'buy-controls' }, {},
-      ['button', { class: 'increase-btn' }, {}, '▲'],
-      ['input', { type: 'textbox', class: 'stock-value' }, {}],
-      ['button', { class: 'decrease-btn' }, {}, '▼']
-    ]
+    ['input',
+      {
+        type: 'number', name: `${corporation.id}`, class: 'stock-value',
+        min: '0', max: `${Math.min(3, corporation.stocksLeft)}`, value: 0
+      },
+      {}],
   ];
 };
 
@@ -127,15 +128,26 @@ const createCorpsWhileBuild = (corporations, tileId) => {
 
 const createBuyControls = () => {
   return ['div', { class: 'build-controls-holder' }, {},
-    ['button', { class: 'build-button' }, { onclick: buyStocks }, 'Buy'],
-    ['button', { class: 'skip-buy-button' }, { onclick: skipBuy }, 'Skip']
+    ['button', { class: 'build-button', type: 'submit' }, {
+      onclick: (event) => {
+        event.preventDefault();
+        const form = select('#stock-market');
+        buyStocks(stocksToBuy(form));
+      }
+    }, 'Buy'],
+    ['button', { class: 'skip-buy-button' }, {
+      onclick: (event) => {
+        event.preventDefault();
+        skipBuy();
+      }
+    }, 'Skip']
   ];
 };
 
 const showControls = (corporations) => {
   corporations.forEach(({ id }) => {
     const corpElement = select(`.corporation>#${id}`);
-    const ctrlElement = corpElement.parentNode.querySelector('.buy-controls');
+    const ctrlElement = corpElement.parentNode.querySelector('.stock-value');
     show(ctrlElement);
   });
 };
@@ -143,8 +155,10 @@ const showControls = (corporations) => {
 const highlightStockMarketToBuy = (game) => {
   const stockMarketElement = select('#stock-market');
   highlight(stockMarketElement);
+
   const canBeBoughtOf = game.availableToBuy();
   showControls(canBeBoughtOf);
+
   const buyControls = createDOMTree(createBuyControls());
   stockMarketElement.appendChild(buyControls);
 };
@@ -159,6 +173,16 @@ const highlightStockMarket = ({ corporations }, tileId) => {
   const stockMarketEle = select('#stock-market');
   highlight(stockMarketEle);
   addBackDrop();
+};
+
+const stocksToBuy = (form) => {
+  const formData = [...new FormData(form).entries()];
+  return formData.reduce((stocks, [key, value]) => {
+    if (value > 0) {
+      stocks.push({ corporationId: key, numOfStocks: parseInt(value) });
+    }
+    return stocks;
+  }, []);
 };
 
 // main

@@ -586,33 +586,21 @@ button:hover {
   }
 }
 
-.buy-controls {
-  width: 30px;
-  height: 60px;
-  visibility: hidden;
-}
-
-.decrease-btn,
-.increase-btn {
-  height: 30%;
-  width: 100%;
-}
-
-.decrease-btn {
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-}
-
-.increase-btn {
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  height: 40px;
+  width: 40px;
+  margin: 0;
 }
 
 .stock-value {
-  height: 40%;
-  width: 100%;
-  border-top: none;
-  border-bottom: none;
+  height: 40px;
+  width: 40px;
+  font-size: 1em;
+  color: gray;
+  visibility: hidden;
   outline: none;
   text-align: center;
+  border: 2px solid lightgray;
+  border-radius: 5px;
 }
