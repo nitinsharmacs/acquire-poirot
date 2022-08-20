@@ -5,6 +5,7 @@ class Corporation {
     this.active = false;
     this.stocksLeft = 25;
     this.tiles = [];
+    this.isSafe = false;
   }
 
   areStocksAvailable(count) {
@@ -31,8 +32,14 @@ class Corporation {
     this.active = true;
   }
 
+  determineIfSafe() {
+    const isSafe = this.getSize() >= 11;
+    this.isSafe = isSafe;
+  }
+
   grow(tiles) {
     this.tiles = tiles;
+    this.determineIfSafe();
   }
 
   defunct() {
