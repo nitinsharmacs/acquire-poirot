@@ -34,9 +34,7 @@ const createBuildControls = () => {
     { class: 'build-controls-holder' }, {},
     ['button', { class: 'build-button', type: 'submit', style },
       {},
-      'Build'],
-    ['button', { class: 'skip-button', type: 'button' }, { onclick: skipBuild },
-      'Skip']
+      'Build']
   ];
 };
 
@@ -66,11 +64,14 @@ const selectCorp = (event, corporations) => {
   corpInfoEle.classList.add('highlight-info');
 };
 
+const corpBuildClass = (corporation) =>
+  corporation.active ? 'disabled-corporation' : 'hover';
+
 const corpWhileBuild = (corporations) => (corporation) => {
   return ['div', { class: 'corporation' }, {},
     ['div',
       {
-        class: `corporation-img ${corpClass(corporation)}`,
+        class: `corporation-img ${corpBuildClass(corporation)}`,
         id: corporation.id
       },
       { onclick: (event) => selectCorp(event, corporations) },
@@ -107,7 +108,13 @@ const createCorpsWhileBuild = (corporations, tileId) => {
     { class: 'stocks-holder' },
     {
       onsubmit: (event) => buildCorpOnBoard(event, tileId)
-    }, ['div', { class: 'corporations' }, {},
+    },
+    ['div', { class: 'skip-button-holder' }, {},
+      [
+        'button', { class: 'skip-button' }, { onclick: skipBuild }, 'Skip'
+      ]
+    ],
+    ['div', { class: 'corporations' }, {},
       corpColumn(corporations.slice(0, 4), corporations),
       corpColumn(corporations.slice(4), corporations)
     ], [...createBuildControls()]];
@@ -116,7 +123,7 @@ const createCorpsWhileBuild = (corporations, tileId) => {
 const createBuyControls = () => {
   return ['div', { class: 'build-controls-holder' }, {},
     ['button', { class: 'build-button' }, { onclick: buyStocks }, 'Buy'],
-    ['button', { class: 'skip-button' }, { onclick: skipBuy }, 'Skip']
+    ['button', { class: 'skip-buy-button' }, { onclick: skipBuy }, 'Skip']
   ];
 };
 
