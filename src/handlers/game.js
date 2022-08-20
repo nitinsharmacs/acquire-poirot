@@ -28,7 +28,7 @@ const joinGame = (req, res) => {
     return res.status(404).send('Game not found');
   }
 
-  const playerExists = getPlayer(game.players, playerId);
+  const playerExists = game.playerExists(playerId);
 
   if (playerExists && game.hasStarted()) {
     req.session.gameId = id;

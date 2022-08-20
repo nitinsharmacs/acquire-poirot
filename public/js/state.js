@@ -6,7 +6,6 @@ class GameState {
     board,
     cluster,
     logs,
-    currentPlayer,
     corporations,
     gameSize,
     turn,
@@ -17,7 +16,6 @@ class GameState {
     this.board = board;
     this.cluster = cluster;
     this.logs = logs;
-    this.currentPlayer = currentPlayer;
     this.corporations = corporations;
     this.step = 1;
     this.gameSize = gameSize;
@@ -26,7 +24,7 @@ class GameState {
   }
 
   isMyTurn() {
-    return this.player.id === this.currentPlayer.id;
+    return this.player.id === this.turn.player.id;
   }
 
   #findCorpration(corporationId) {
@@ -200,7 +198,6 @@ const createState = (game) => {
     board: new Board(game.board),
     cluster: game.cluster,
     logs: game.logs,
-    currentPlayer: game.currentPlayer,
     corporations: createCorporations(game.corporations),
     gameSize: game.gameSize,
     informationCard: game.informationCard,

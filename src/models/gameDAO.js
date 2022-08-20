@@ -25,12 +25,11 @@ const createTurnDAO = (turn = {}) => {
 
 const createGameDAO = (game, playerId) => {
   const gameDAO = {
-    player: playerDAO(getPlayer(game.players, playerId)),
+    player: playerDAO(game.getPlayer(playerId)),
     players: createPlayersDAO(game.players),
     board: game.board,
     cluster: game.cluster,
     logs: game.logs,
-    currentPlayer: otherPlayerDAO(game.currentPlayer),
     corporations: game.corporations,
     gameSize: game.gameSize,
     started: game.started,

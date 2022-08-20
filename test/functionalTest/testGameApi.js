@@ -77,7 +77,7 @@ describe('POST /api/start-game', () => {
   it('should remove tile from player\'s tiles and place it on board',
     (done) => {
       const game = app.games.find('123');
-      const player = game.players.find(player => player.id === 'user');
+      const player = game.turn.player;
       const tileId = player.tiles[0].id;
 
       request(app)
@@ -109,7 +109,7 @@ describe('POST /api/place-tile', () => {
 
   it('should remove tile from player\'s tiles and place it on board',
     (done) => {
-      const player = game.players.find(player => player.id === 'user');
+      const player = game.turn.player;
       const tileId = player.tiles[0].id;
 
       request(app)
@@ -121,7 +121,7 @@ describe('POST /api/place-tile', () => {
 
   it('should grow corporation',
     (done) => {
-      const player = game.getPlayer('user');
+      const player = game.turn.player;
       const tile = game.board.tiles.find(tile => tile.id === '3a');
       player.tiles.push(tile);
 
@@ -154,7 +154,7 @@ describe('POST /api/draw-tile', () => {
     game.reorder();
     game.start();
 
-    currentPlayer = game.currentPlayer;
+    currentPlayer = game.turn.player;
     done();
   });
 
@@ -171,7 +171,6 @@ describe('POST /api/draw-tile', () => {
         }
         const playerTile = currentPlayer.tiles[currentPlayer.tiles.length - 1];
         const [drawLog] = games.find('123').logs.slice(-1);
-
         assert.deepStrictEqual(res.body.data, playerTile);
         assert.strictEqual(drawLog, currentPlayer.name + ' drew a tile');
         done();
