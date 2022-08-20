@@ -135,7 +135,55 @@ describe('nextStep', () => {
     game.start();
     assert.deepStrictEqual(nextStep(game, '5a'), {
       step: 'grow',
-      corporation, tiles
+      corporations: [corporation], tiles
+    });
+  });
+
+  it('Should determine next move as merge corporations', () => {
+    const game = newGame('game1234', { id: 'user123', name: 'user' }, 3);
+    const player = new Player('user123', 'user');
+
+    game.addPlayer(player);
+    game.board.tiles[2].placed = true;
+    game.board.tiles[3].placed = true;
+    game.board.tiles[5].placed = true;
+    game.board.tiles[6].placed = true;
+
+    const corporation1 = game.buildCorporation('america', '4a', 'user123');
+    const corporation2 = game.buildCorporation('zeta', '6a', 'user123');
+    const corporations = [corporation1, corporation2];
+
+    const tiles = [
+      {
+        'id': '5a',
+        'label': '5A',
+        'placed': false
+      },
+      {
+        'id': '4a',
+        'label': '4A',
+        'placed': true
+      },
+      {
+        'id': '6a',
+        'label': '6A',
+        'placed': true
+      },
+      {
+        'id': '3a',
+        'label': '3A',
+        'placed': true
+      },
+      {
+        'id': '7a',
+        'label': '7A',
+        'placed': true
+      }
+    ];
+    game.start();
+    assert.deepStrictEqual(nextStep(game, '5a'), {
+      step: 'merge',
+      corporations, tiles
     });
   });
 });

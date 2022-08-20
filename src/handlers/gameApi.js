@@ -1,5 +1,5 @@
 const { createGameDAO } = require('../models/gameDAO.js');
-const { getPlayer, getInitialTiles, nextStep } = require('../utils/game.js');
+const { getPlayer, getInitialTiles, nextStep, merge } = require('../utils/game.js');
 
 const loadGame = (req, res) => {
   const { game, session: { playerId } } = req;
@@ -41,15 +41,17 @@ const drawTile = (req, res) => {
 const placeTile = (req, res) => {
   const {
     game,
-    session: { playerId },
     body: { id }
   } = req;
 
   const tile = game.placeTile({ id });
-  const { step, tiles, corporation } = nextStep(game, id);
+  const { step, tiles, corporations } = nextStep(game, id);
 
   if (step === 'grow') {
-    corporation.grow(tiles);
+    corporations[0].grow(tiles);
+  }
+  if (step === 'merge') {
+    game.merge(corporations, tiles);
   }
 
   res.json({ data: { tile, case: game.state }, message: 'placed tile' });
