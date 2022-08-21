@@ -27,17 +27,12 @@ class GameState {
     return this.player.id === this.turn.player.id;
   }
 
-  #findCorpration(corporationId) {
-    return this.corporations.find(corpration =>
-      corpration.id === corporationId);
-  }
-
   getInactiveCorporation() {
     return this.corporations.find(corporation => !corporation.active);
   }
 
   buildCorporation(corporationId, tiles) {
-    const corporation = this.#findCorpration(corporationId);
+    const corporation = this.#findCorporation(corporationId);
 
     corporation.tiles = tiles;
     corporation.active = true;
@@ -54,7 +49,7 @@ class GameState {
     this.player.placeTile(tileId, this.board);
   }
 
-  findCorporation(corporationId) {
+  #findCorporation(corporationId) {
     return this.corporations.find(({ id }) => id === corporationId);
   }
 
@@ -72,7 +67,7 @@ class GameState {
 
   sellStocks(stocks) {
     stocks.forEach(({ corporationId, numOfStocks }) => {
-      const corporation = this.findCorporation(corporationId);
+      const corporation = this.#findCorporation(corporationId);
       corporation.reduceStocks(numOfStocks);
       this.player.addStocks(corporation, numOfStocks);
       const stockPrice = this.calculateStockPrice(corporation);
@@ -85,7 +80,9 @@ class GameState {
   }
 
   updateCorporations(corporations) {
-    this.corporations = corporations;
+    corporations.forEach(({ id, tiles }) => {
+      this.#findCorporation(id).tiles = tiles;
+    });
   }
 
   isInPlaceTileState() {
