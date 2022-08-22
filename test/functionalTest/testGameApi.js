@@ -9,6 +9,10 @@ const { Player } = require('../../src/models/player.js');
 const placeTiles = (game, tileIds) => tileIds.forEach((id) => game
   .placeTile({ id }));
 
+const addPlayers = (game, players) => {
+  players.forEach(({ id, name }) => game.addPlayer(new Player(id, name)));
+};
+
 const session = (gameId, playerId) => () => (req, res, next) => {
   req.session = {};
   req.session.playerId = playerId;
@@ -56,10 +60,12 @@ describe('POST /api/start-game', () => {
 
   const game = newGame('123', host, 4);
   games.add(game);
-  game.addPlayer(new Player('user', 'sam'));
-  game.addPlayer(new Player('user-2', 'harry'));
-  game.addPlayer(new Player('user-3', 'nilam'));
-  game.addPlayer(new Player('user-4', 'peter'));
+  const players = [
+    { id: 'user', name: 'sam' },
+    { id: 'user-2', name: 'harry' },
+    { id: 'user-3', name: 'nilam' },
+    { id: 'user-4', name: 'peter' }];
+  addPlayers(game, players);
   const app = initApp(session('123', 'user'), games);
 
   it('should reorder the player, place tiles and start the game', (done) => {
@@ -89,10 +95,12 @@ describe('POST /api/place-tile', () => {
 
   const game = newGame('123', host, 4);
   games.add(game);
-  game.addPlayer(new Player('user', 'sam'));
-  game.addPlayer(new Player('user-2', 'harry'));
-  game.addPlayer(new Player('user-3', 'nilam'));
-  game.addPlayer(new Player('user-4', 'peter'));
+  const players = [
+    { id: 'user', name: 'sam' },
+    { id: 'user-2', name: 'harry' },
+    { id: 'user-3', name: 'nilam' },
+    { id: 'user-4', name: 'peter' }];
+  addPlayers(game, players);
   const app = initApp(session('123', 'user'), games);
 
   beforeEach((done) => {
@@ -121,10 +129,12 @@ describe('Post /api/place-tile', () => {
 
   const game = newGame('123', host, 4);
   games.add(game);
-  game.addPlayer(new Player('user', 'sam'));
-  game.addPlayer(new Player('user-2', 'harry'));
-  game.addPlayer(new Player('user-3', 'nilam'));
-  game.addPlayer(new Player('user-4', 'peter'));
+  const players = [
+    { id: 'user', name: 'sam' },
+    { id: 'user-2', name: 'harry' },
+    { id: 'user-3', name: 'nilam' },
+    { id: 'user-4', name: 'peter' }];
+  addPlayers(game, players);
   const app = initApp(session('123', 'user'), games);
 
   beforeEach((done) => {
@@ -141,8 +151,7 @@ describe('Post /api/place-tile', () => {
       player.tiles.push(tile);
 
       const corporation = game.getCorporation('america');
-      game.board.placeTile('1a');
-      game.board.placeTile('2a');
+      placeTiles(game, ['1a', '2a']);
       game.buildCorporation(corporation.id, '1a', 'user');
 
       const tileId = '3a';
@@ -163,10 +172,12 @@ describe('Post /api/place-tile', () => {
 
   const game = newGame('123', host, 4);
   games.add(game);
-  game.addPlayer(new Player('user', 'sam'));
-  game.addPlayer(new Player('user-2', 'harry'));
-  game.addPlayer(new Player('user-3', 'nilam'));
-  game.addPlayer(new Player('user-4', 'peter'));
+  const players = [
+    { id: 'user', name: 'sam' },
+    { id: 'user-2', name: 'harry' },
+    { id: 'user-3', name: 'nilam' },
+    { id: 'user-4', name: 'peter' }];
+  addPlayers(game, players);
   const app = initApp(session('123', 'user'), games);
 
   beforeEach((done) => {
@@ -206,14 +217,11 @@ describe('Post /api/place-tile', () => {
       player.tiles.push(tile);
 
       const corporation1 = game.getCorporation('america');
-      game.board.placeTile('1a');
-      game.board.placeTile('2a');
+      placeTiles(game, ['1a', '2a']);
       game.buildCorporation(corporation1.id, '1a', 'user');
 
       const corporation2 = game.getCorporation('zeta');
-      game.board.placeTile('4a');
-      game.board.placeTile('5a');
-      game.board.placeTile('6a');
+      placeTiles(game, ['4a', '5a', '6a']);
       game.buildCorporation(corporation2.id, '4a', 'user');
 
       const tileId = '3a';
@@ -233,9 +241,11 @@ describe('POST /api/draw-tile', () => {
 
     const game = newGame('123', host, 4);
     games.add(game);
-    game.addPlayer(new Player('user', 'sam'));
-    game.addPlayer(new Player('user-2', 'harry'));
-    game.addPlayer(new Player('user-3', 'nilam'));
+    const players = [
+      { id: 'user', name: 'sam' },
+      { id: 'user-2', name: 'harry' },
+      { id: 'user-3', name: 'nilam' }];
+    addPlayers(game, players);
     game.players.forEach(player => game.giveTile(player));
     game.reorder();
     game.start();
@@ -288,9 +298,7 @@ describe('POST /api/build-corporation', () => {
 
   it('should build a corporation',
     (done) => {
-      game.board.tiles[0].placed = true;
-      game.board.tiles[1].placed = true;
-
+      placeTiles(game, ['1a', '2a']);
       request(app)
         .post('/api/build-corporation')
         .send('id=1a&&corporationId=america')
@@ -317,8 +325,7 @@ describe('POST /api/skip-build', () => {
 
   it('should skip building a corporation',
     (done) => {
-      game.board.tiles[0].placed = true;
-      game.board.tiles[1].placed = true;
+      placeTiles(game, ['1a', '2a']);
       game.buyStocksState();
 
       request(app)
@@ -371,6 +378,7 @@ describe('POST /api/buy-stocks', () => {
       let corporation = game.findCorporation('america');
       corporation.active = true;
       corporation.tiles.push('1a', '1b');
+
       corporation = game.findCorporation('zeta');
       corporation.active = true;
       corporation.tiles.push('1d', '1f');
