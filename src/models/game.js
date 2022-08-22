@@ -245,10 +245,17 @@ class Game {
     });
   }
 
-  updateDefunctLogs(defunctShareHolders) {
-    defunctShareHolders.forEach(({ id, stock }) => {
+  updateDefunctLogs(stockHolders) {
+    stockHolders.forEach(({ id, stock }) => {
       const player = this.getPlayer(id);
       this.logs.defunctCorporation(player.name, stock);
+    });
+  }
+
+  updateBonusLogs(defunctShareHolders) {
+    defunctShareHolders.forEach(({ id, money }) => {
+      const player = this.getPlayer(id);
+      this.logs.bonusDistribution(player.name, money);
     });
   }
 
@@ -264,6 +271,7 @@ class Game {
     bigCorp.grow(tiles);
     smallCorp.defunct();
     this.updateDefunctLogs(stockHolders);
+    this.updateBonusLogs(defunctShareHolders);
   }
 
   // getters ---------------
