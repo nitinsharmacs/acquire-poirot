@@ -14,7 +14,7 @@ describe('Game', () => {
 
       const expected = [host, player];
 
-      const actual = game.getPlayers();
+      const actual = game.players;
 
       assert.deepStrictEqual(actual, expected);
     });

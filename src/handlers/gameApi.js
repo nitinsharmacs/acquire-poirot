@@ -18,8 +18,6 @@ const startGame = (req, res) => {
     return res.status(400).json({ message: 'Only host can start game' });
   }
 
-  game.drawInitialTiles();
-  game.reorder();
   game.setup();
   game.start();
 
@@ -86,14 +84,6 @@ const areStocksAvailable = (game, stocks) => {
 
 const isValidStockCount = (stocks) => {
   return totalNumOfStocks(stocks) < 4;
-};
-
-const getRequiredMoney = (game, stocks) => {
-  return stocks.reduce((requireMoney, { corporationId, numOfStocks }) => {
-    const corporation = game.findCorporation(corporationId);
-    const { stockPrice } = game.marketPrice(corporation);
-    return stockPrice * numOfStocks;
-  }, 0);
 };
 
 const buyStocks = (req, res) => {

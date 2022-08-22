@@ -33,6 +33,8 @@ const findNearestTile = (tiles) => {
 };
 
 class Game {
+  #players;
+
   constructor({ id,
     players,
     board,
@@ -44,7 +46,7 @@ class Game {
     logs
   }) {
     this.id = id;
-    this.players = players;
+    this.#players = players;
     this.board = board;
     this.cluster = cluster;
     this.corporations = corporations;
@@ -55,37 +57,55 @@ class Game {
     this.informationCard = informationCard;
   }
 
+  #drawInitialTiles() {
+    this.players.forEach(player => {
+      this.logs.drewTile(player.name);
+      this.giveTile(player);
+    });
+  }
+
+  #reorder() {
+    const playersTiles = this.players.map(player => player.tiles[0]);
+    const nearestTile = findNearestTile(playersTiles);
+    const nearestTilePos = playersTiles.findIndex((tile) => tile.id === nearestTile.id);
+    this.#players = this.players.slice(nearestTilePos).concat(this.players.slice(0, nearestTilePos));
+  }
+
+  setup() {
+    this.#drawInitialTiles();
+    this.#reorder();
+    this.players.forEach(player => {
+      const tile = player.placeFirstTile();
+      this.board.placeTile(tile.id);
+      this.logs.placedTile(player.name, tile.id);
+      player.addMoney(6000);
+
+      for (let index = 0; index < 6; index++) {
+        this.giveTile(player);
+      }
+    });
+  }
+
   start() {
     this.started = true;
     this.turn = new Turn(this.players[0]);
   }
 
   addPlayer(player) {
-    this.players.push(player);
-  }
-
-  getPlayers() {
-    return this.players;
+    this.#players.push(player);
   }
 
   findCorporation(corporationId) {
     return this.corporations.find(({ id }) => id === corporationId);
   }
 
-  reorder() {
-    const playersTiles = this.players.map(player => player.tiles[0]);
-    const nearestTile = findNearestTile(playersTiles);
-    const nearestTilePos = playersTiles.findIndex((tile) => tile.id === nearestTile.id);
-    this.players = this.players.slice(nearestTilePos).concat(this.players.slice(0, nearestTilePos));
-  }
-
   changeTurn() {
-    const currentPlayerPosition = this.players.findIndex(player => {
+    const currentPlayerPosition = this.#players.findIndex(player => {
       return player.id === this.turn.player.id;
     });
-    const totalPlayers = this.players.length;
+    const totalPlayers = this.#players.length;
     const nextPlayerPosition = (currentPlayerPosition + 1) % totalPlayers;
-    this.turn = new Turn(this.players[nextPlayerPosition]);
+    this.turn = new Turn(this.#players[nextPlayerPosition]);
   }
 
   isPlayerIdle(playerId) {
@@ -163,7 +183,7 @@ class Game {
   }
 
   getPlayer(playerId) {
-    return this.players.find(player => player.id === playerId);
+    return this.#players.find(player => player.id === playerId);
   }
 
   playerExists(playerId) {
@@ -263,7 +283,7 @@ class Game {
     const [smallCorp, bigCorp] = sortCorporations(corporations);
     this.logs.merged(bigCorp.name, smallCorp.name);
 
-    const stockHolders = defunctStockHolder(this.players, smallCorp.id);
+    const stockHolders = defunctStockHolder(this.#players, smallCorp.id);
     const bonus = this.marketPrice(smallCorp);
     const defunctShareHolders = computeBonus(stockHolders, bonus);
 
@@ -275,6 +295,9 @@ class Game {
   }
 
   // getters ---------------
+  get players() {
+    return this.#players;
+  }
 
   get state() {
     return this.turn.state;
@@ -282,26 +305,6 @@ class Game {
 
   isHost(playerId) {
     return this.host.id === playerId;
-  }
-
-  drawInitialTiles() {
-    this.players.forEach(player => {
-      this.logs.drewTile(player.name);
-      this.giveTile(player);
-    });
-  }
-
-  setup() {
-    this.players.forEach(player => {
-      const tile = player.placeFirstTile();
-      this.board.placeTile(tile.id);
-      this.logs.placedTile(player.name, tile.id);
-      player.addMoney(6000);
-
-      for (let index = 0; index < 6; index++) {
-        this.giveTile(player);
-      }
-    });
   }
 }
 

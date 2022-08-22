@@ -635,13 +635,15 @@ input[type=number]::-webkit-outer-spin-button {
   height: 40px;
   width: 40px;
   font-size: 1em;
-  color: gray;
+  color: transparent;
+  text-shadow: 0 0 0 #808080;
   visibility: hidden;
   outline: none;
   text-align: center;
   border: 2px solid lightgray;
   border-radius: 5px;
 }
+
 
 .buy-stock-error {
   margin-top: 1em;
