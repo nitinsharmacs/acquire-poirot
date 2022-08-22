@@ -64,6 +64,7 @@ const placeTile = (tileId) => {
       storeItem('tileId', tileId);
 
       gameState.updateCorporations(res.data.corporations);
+      gameState.updateCurrentPlayerMoney(res.data.money);
       gameState.updateState(res.data.case);
       return handleView(gameState);
     });

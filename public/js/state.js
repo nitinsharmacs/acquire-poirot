@@ -79,6 +79,10 @@ class GameState {
     this.turn.state = newState;
   }
 
+  updateCurrentPlayerMoney(money) {
+    this.player.money = money;
+  }
+
   updateCorporations(corporations) {
     corporations.forEach(({ id, tiles }) => {
       this.#findCorporation(id).tiles = tiles;

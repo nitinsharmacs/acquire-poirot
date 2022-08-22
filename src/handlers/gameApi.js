@@ -41,9 +41,10 @@ const drawTile = (req, res) => {
 const placeTile = (req, res) => {
   const {
     game,
-    body: { id }
+    body: { id },
+    session: { playerId }
   } = req;
-
+  const player = game.findPlayer(playerId);
   const tile = game.placeTile({ id });
   const { step, tiles, corporations } = nextStep(game, id);
 
@@ -58,7 +59,8 @@ const placeTile = (req, res) => {
   res.json({
     data: {
       tile, case: game.state,
-      corporations: game.corporations
+      corporations: game.corporations,
+      money: player.money
     }, message: 'placed tile'
   });
 };

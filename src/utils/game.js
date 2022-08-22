@@ -170,15 +170,21 @@ const createTiles = () => {
   return tiles;
 };
 
+const defunctStocks = (stocks, defunctId) =>
+  stocks.find(({ corporationId }) => corporationId === defunctId);
+
+const sortStockHolders = (players) =>
+  lodash.sortBy(players, ({ stock }) => stock.count);
+
 const defunctStockHolder = (players, defunctId) => {
   const playerData = [];
   players.forEach(({ id, stocks }) => {
-    const stock = stocks.find(({ corporationId }) => corporationId === defunctId);
+    const stock = defunctStocks(stocks, defunctId);
     if (stock) {
       playerData.push({ id, stock });
     }
   });
-  return lodash.sortBy(playerData, ({ stock }) => stock.count);
+  return sortStockHolders(playerData);
 };
 
 const findEqualStockHolders = (stockHolders) => {
