@@ -1,7 +1,12 @@
 const lodash = require('lodash');
 const { Corporation } = require('./corporation.js');
 const { createBoard } = require('./board.js');
-const { findTilesChain, sortCorporations, createTiles } = require('../utils/game.js');
+const {
+  findTilesChain,
+  sortCorporations, createTiles,
+  defunctStockHolder,
+  findMajorityMinority
+} = require('../utils/game.js');
 const { informationCard } = require('./informationCard.js');
 const { Turn } = require('./turn.js');
 
@@ -197,11 +202,45 @@ class Game {
   }
 
   // merge corporations ---------
+
+  #calculateBonus(corporation) {
+    const corporationSize = corporation.getSize();
+
+    const corporationColumn = this.informationCard.find(column =>
+      column.corporations.includes(corporation.id));
+
+    const priceBySize = corporationColumn.pricesBySize.find(({ range }) => {
+      return isBetween(corporationSize, range);
+    });
+
+    const { majority, minority } = priceBySize;
+    return { majorityBonus: majority, minorityBonus: minority };
+  }
+
+  #distributeBonus(stockHolder, bonus) {
+    if (!stockHolder) {
+      return;
+    }
+    stockHolder.forEach(({ id }) => {
+      const player = this.findPlayer(id);
+      if (player) {
+        player.money += bonus / stockHolder.length;
+      }
+    });
+  }
+
   merge(corporations, tiles) {
     const [smallCorp, bigCorp] = sortCorporations(corporations);
+    this.logs.push(`${bigCorp.name} acquired ${smallCorp.name}`);
+
+    const stockHolders = defunctStockHolder(this.players, smallCorp.id);
+    const { majority, minority } = findMajorityMinority(stockHolders);
+    const { majorityBonus, minorityBonus } = this.#calculateBonus(smallCorp);
+
+    this.#distributeBonus(majority, majorityBonus);
+    this.#distributeBonus(minority, minorityBonus);
     bigCorp.grow(tiles);
     smallCorp.defunct();
-    this.logs.push(`${bigCorp.name} acquired ${smallCorp.name}`);
   }
 
   // getters ---------------

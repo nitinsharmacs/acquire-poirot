@@ -170,6 +170,42 @@ const createTiles = () => {
   return tiles;
 };
 
+const defunctStockHolder = (players, defunctId) => {
+  const playerData = [];
+  players.forEach(({ id, stocks }) => {
+    const stock = stocks.find(({ corporationId }) => corporationId === defunctId);
+    if (stock) {
+      playerData.push({ id, stock });
+    }
+  });
+  return lodash.sortBy(playerData, ({ stock }) => stock.count);
+};
+
+const findEqualStockHolders = (stockHolders) => {
+  let index = stockHolders.length - 1;
+  const bonusReceivers = [stockHolders[index]];
+
+  while (index >= 0 && stockHolders[index - 1]) {
+    if (stockHolders[index].stock.count !== stockHolders[index - 1].stock.count) {
+      return bonusReceivers;
+    }
+    bonusReceivers.push(stockHolders[index - 1]);
+    index--;
+  }
+  return bonusReceivers;
+};
+
+const findMajorityMinority = (stockHolders) => {
+  const majority = findEqualStockHolders(stockHolders);
+  const limit = stockHolders.length - majority.length;
+  if (limit === 0) {
+    return { majority };
+  }
+  const remStockHolders = stockHolders.slice(0, limit);
+  const minority = findEqualStockHolders(remStockHolders);
+  return { majority, minority };
+};
+
 module.exports = {
   getPlayer,
   getInitialTiles,
@@ -180,5 +216,7 @@ module.exports = {
   findTilesChain,
   sortCorporations,
   randomInt,
-  createTiles
+  createTiles,
+  defunctStockHolder,
+  findMajorityMinority
 };
