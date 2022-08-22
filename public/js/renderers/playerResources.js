@@ -12,7 +12,7 @@ const playerTiles = ({ tiles }) => {
 
 const playerStocks = ({ stocks }) => {
   return stocks.map(stock => ['div',
-    { class: 'stock', id: stock.corporationId }, {},
+    { class: `stock ${stock.corporationId}-stock` }, {},
     ['p', {}, {}, stock.corporationName],
     ['p', {}, {}, `${stock.count}`]
   ]

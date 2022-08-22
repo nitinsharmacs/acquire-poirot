@@ -1,5 +1,5 @@
 const corpClass = (corporation) =>
-  corporation.active ? 'disabled-corporation' : '';
+  corporation.active ? `disabled-${corporation.id}` : corporation.id;
 
 const createCorporation = (corporation) => {
   return ['div', { class: 'corporation' }, {},
@@ -71,7 +71,7 @@ const selectCorp = (event, corporations) => {
 };
 
 const corpBuildClass = (corporation) =>
-  corporation.active ? 'disabled-corporation' : 'hover';
+  corporation.active ? `disabled-${corporation.id}` : `${corporation.id} hover`;
 
 const corpWhileBuild = (corporations) => (corporation) => {
   return ['div', { class: 'corporation' }, {},
@@ -86,7 +86,7 @@ const corpWhileBuild = (corporations) => (corporation) => {
           type: 'radio',
           id: corporation.id,
           name: 'corporation',
-          value: corporation.id
+          value: corporation.id,
         }, { hidden: true }]],
     ['div', { class: 'corporation-info' }, {},
       ['p', {}, {}, corporation.name],
