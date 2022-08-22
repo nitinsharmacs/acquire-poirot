@@ -34,7 +34,7 @@ describe('GET /api/loadgame', () => {
 
   const game = newGame('123', host, 4);
   games.add(game);
-  game.addPlayer(new Player('user', 'sam', game));
+  game.addPlayer(new Player('user', 'sam'));
   const app = initApp(session('123', 'user'), games);
 
   it('should response with game data', (done) => {
@@ -60,10 +60,10 @@ describe('POST /api/start-game', () => {
 
   const game = newGame('123', host, 4);
   games.add(game);
-  game.addPlayer(new Player('user', 'sam', game));
-  game.addPlayer(new Player('user-2', 'harry', game));
-  game.addPlayer(new Player('user-3', 'nilam', game));
-  game.addPlayer(new Player('user-4', 'peter', game));
+  game.addPlayer(new Player('user', 'sam'));
+  game.addPlayer(new Player('user-2', 'harry'));
+  game.addPlayer(new Player('user-3', 'nilam'));
+  game.addPlayer(new Player('user-4', 'peter'));
   const app = initApp(session('123', 'user'), games);
 
   it('should reorder the player, place tiles and start the game', (done) => {
@@ -93,10 +93,10 @@ describe('POST /api/place-tile', () => {
 
   const game = newGame('123', host, 4);
   games.add(game);
-  game.addPlayer(new Player('user', 'sam', game));
-  game.addPlayer(new Player('user-2', 'harry', game));
-  game.addPlayer(new Player('user-3', 'nilam', game));
-  game.addPlayer(new Player('user-4', 'peter', game));
+  game.addPlayer(new Player('user', 'sam'));
+  game.addPlayer(new Player('user-2', 'harry'));
+  game.addPlayer(new Player('user-3', 'nilam'));
+  game.addPlayer(new Player('user-4', 'peter'));
   const app = initApp(session('123', 'user'), games);
 
   beforeEach((done) => {
@@ -125,10 +125,10 @@ describe('Post /api/place-tile', () => {
 
   const game = newGame('123', host, 4);
   games.add(game);
-  game.addPlayer(new Player('user', 'sam', game));
-  game.addPlayer(new Player('user-2', 'harry', game));
-  game.addPlayer(new Player('user-3', 'nilam', game));
-  game.addPlayer(new Player('user-4', 'peter', game));
+  game.addPlayer(new Player('user', 'sam'));
+  game.addPlayer(new Player('user-2', 'harry'));
+  game.addPlayer(new Player('user-3', 'nilam'));
+  game.addPlayer(new Player('user-4', 'peter'));
   const app = initApp(session('123', 'user'), games);
 
   beforeEach((done) => {
@@ -167,10 +167,10 @@ describe('Post /api/place-tile', () => {
 
   const game = newGame('123', host, 4);
   games.add(game);
-  game.addPlayer(new Player('user', 'sam', game));
-  game.addPlayer(new Player('user-2', 'harry', game));
-  game.addPlayer(new Player('user-3', 'nilam', game));
-  game.addPlayer(new Player('user-4', 'peter', game));
+  game.addPlayer(new Player('user', 'sam'));
+  game.addPlayer(new Player('user-2', 'harry'));
+  game.addPlayer(new Player('user-3', 'nilam'));
+  game.addPlayer(new Player('user-4', 'peter'));
   const app = initApp(session('123', 'user'), games);
 
   beforeEach((done) => {
@@ -245,9 +245,9 @@ describe('POST /api/draw-tile', () => {
 
     const game = newGame('123', host, 4);
     games.add(game);
-    game.addPlayer(new Player('user', 'sam', game));
-    game.addPlayer(new Player('user-2', 'harry', game));
-    game.addPlayer(new Player('user-3', 'nilam', game));
+    game.addPlayer(new Player('user', 'sam'));
+    game.addPlayer(new Player('user-2', 'harry'));
+    game.addPlayer(new Player('user-3', 'nilam'));
     game.players.forEach(player => game.giveTile(player));
     game.reorder();
     game.start();
@@ -290,7 +290,7 @@ describe('POST /api/build-corporation', () => {
 
   const game = newGame('123', host, 1);
   games.add(game);
-  game.addPlayer(new Player('user', 'sam', game));
+  game.addPlayer(new Player('user', 'sam'));
   const app = initApp(session('123', 'user'), games);
 
   before((done) => {
@@ -302,8 +302,6 @@ describe('POST /api/build-corporation', () => {
 
   it('should build a corporation',
     (done) => {
-      const player = game.getPlayer('user');
-      const tileId = player.tiles[0].id;
       game.board.tiles[0].placed = true;
       game.board.tiles[1].placed = true;
 
@@ -321,7 +319,7 @@ describe('POST /api/skip-build', () => {
 
   const game = newGame('123', host, 1);
   games.add(game);
-  game.addPlayer(new Player('user', 'sam', game));
+  game.addPlayer(new Player('user', 'sam'));
   const app = initApp(session('123', 'user'), games);
 
   before((done) => {
@@ -333,8 +331,6 @@ describe('POST /api/skip-build', () => {
 
   it('should skip building a corporation',
     (done) => {
-      const player = game.getPlayer('user');
-      const tileId = player.tiles[0].id;
       game.board.tiles[0].placed = true;
       game.board.tiles[1].placed = true;
       game.buyStocksState();
@@ -356,7 +352,7 @@ describe('POST /api/buy-stocks', () => {
 
   const game = newGame('123', host, 1);
   games.add(game);
-  game.addPlayer(new Player('user', 'sam', game));
+  game.addPlayer(new Player('user', 'sam'));
   const app = initApp(session('123', 'user'), games);
 
   beforeEach((done) => {
