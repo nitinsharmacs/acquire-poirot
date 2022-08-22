@@ -4,6 +4,7 @@ const Sinon = require('sinon');
 const { newGame } = require('../../src/models/game.js');
 const { Games } = require('../../src/models/games.js');
 const { Player } = require('../../src/models/player.js');
+const { createTiles } = require('../../src/utils/game.js');
 
 const session = (gameId, playerId) => () => (req, res, next) => {
   req.session = {};

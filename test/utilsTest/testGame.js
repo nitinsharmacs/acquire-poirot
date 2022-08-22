@@ -1,10 +1,10 @@
 const assert = require('assert');
 const { newGame } = require('../../src/models/game.js');
 const { Player } = require('../../src/models/player.js');
-const { createTiles } = require('../../src/utils/createTiles.js');
 const { findAdjancetTiles,
   nextStep,
-  findTilesChain
+  findTilesChain,
+  createTiles
 } = require('../../src/utils/game.js');
 
 describe('findAdjacentTiles', () => {

@@ -1,6 +1,5 @@
 const { totalNumOfStocks } = require('../../src/handlers/gameApi.js');
 const assert = require('assert');
-const { Game } = require('../../src/models/game.js');
 
 describe('totalNumOfStocks', () => {
   it('Should return total number of stocks for a corporation', () => {

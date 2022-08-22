@@ -1,6 +1,4 @@
-const randomInt = (limit) => {
-  return Math.floor(Math.random() * limit);
-};
+const { randomInt } = require('../utils/game.js');
 
 class Player {
   constructor(id, name, game) {
