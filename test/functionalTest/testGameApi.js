@@ -247,7 +247,7 @@ describe('POST /api/draw-tile', () => {
       { id: 'user-3', name: 'nilam' }];
     addPlayers(game, players);
     game.players.forEach(player => game.giveTile(player));
-    game.reorder();
+    game.setup();
     game.start();
 
     currentPlayer = game.turn.player;

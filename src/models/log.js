@@ -44,8 +44,8 @@ class Logs {
     this.#logs.push(`${corporation} is safe`);
   }
 
-  defunctCorporation(name, stock) {
-    const message = `has ${stock.count} stocks of ${stock.corporationName}`;
+  defunctCorporation(name, { count, corporationName }) {
+    const message = `has ${count} stocks of ${corporationName}`;
     this.#addPlayerLog(name, message);
   }
 
