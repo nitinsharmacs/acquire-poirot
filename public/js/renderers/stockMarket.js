@@ -16,7 +16,7 @@ const createCorporation = (corporation) => {
         type: 'number', name: `${corporation.id}`, class: 'stock-value',
         min: '0', max: `${Math.min(3, corporation.stocksLeft)}`, value: 0
       },
-      {}],
+      { onchange: validateInput }],
   ];
 };
 
@@ -115,30 +115,45 @@ const createCorpsWhileBuild = (corporations, tileId) => {
     {
       onsubmit: (event) => buildCorpOnBoard(event, tileId)
     },
-    ['div', { class: 'skip-button-holder' }, {},
-      [
-        'button', { class: 'skip-button' }, { onclick: skipBuild }, 'Skip'
-      ]
-    ],
+    createSkipButton(skipBuild),
     ['div', { class: 'corporations' }, {},
       corpColumn(corporations.slice(0, 4), corporations),
       corpColumn(corporations.slice(4), corporations)
     ], [...createBuildControls()]];
 };
 
+const validateInput = () => {
+  const form = select('#stock-market');
+  const stocks = stocksToBuy(form);
+  const buyButtonElement = select('.buy-button');
+
+  if (stocks.length < 1) {
+    hide(buyButtonElement);
+    return;
+  }
+  show(buyButtonElement);
+};
+
 const createBuyControls = () => {
-  return ['div', { class: 'build-controls-holder' }, {},
-    ['button', { class: 'build-button', type: 'submit' }, {
+  const style = createStyle('visibility', 'hidden');
+
+  return ['div', { class: 'buy-controls-holder' }, {},
+    ['button', { class: 'buy-button', type: 'submit', style }, {
       onclick: (event) => {
         event.preventDefault();
         const form = select('#stock-market');
         buyStocks(stocksToBuy(form));
       }
-    }, 'Buy'],
-    ['button', { class: 'skip-buy-button' }, {
+    }, 'Buy']
+  ];
+};
+
+const createSkipButton = (listener) => {
+  return ['div', { class: 'skip-button-holder' }, {},
+    ['button', { class: 'skip-button' }, {
       onclick: (event) => {
         event.preventDefault();
-        skipBuy();
+        listener();
       }
     }, 'Skip']
   ];
@@ -152,6 +167,11 @@ const showControls = (corporations) => {
   });
 };
 
+const insertSkipButton = () => {
+  const skipBtnHolderElement = select('.skip-button-holder');
+  skipBtnHolderElement.replaceWith(createDOMTree(createSkipButton(skipBuy)));
+};
+
 const highlightStockMarketToBuy = (game) => {
   const stockMarketElement = select('#stock-market');
   highlight(stockMarketElement);
@@ -162,6 +182,7 @@ const highlightStockMarketToBuy = (game) => {
 
   const buyControls = createDOMTree(createBuyControls());
   stockMarketElement.appendChild(buyControls);
+  insertSkipButton();
 };
 
 const highlightStockMarket = ({ corporations }, tileId) => {
@@ -191,6 +212,7 @@ const renderStockMarket = ({ corporations }, message = '') => {
   const stockMarket = select('#stock-market');
   const elements = [
     ['h3', { class: 'component-heading' }, {}, 'Stock Market'],
+    ['div', { class: 'skip-button-holder' }, {}],
     createCorporationsHTML(corporations),
     ['p', { class: 'buy-stock-error' }, {}, message]
   ];
