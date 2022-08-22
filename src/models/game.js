@@ -1,8 +1,7 @@
 const lodash = require('lodash');
 const { Corporation } = require('./corporation.js');
 const { createBoard } = require('./board.js');
-const { createTiles } = require('../utils/createTiles.js');
-const { findTilesChain, sortCorporations } = require('../utils/game.js');
+const { findTilesChain, sortCorporations, createTiles } = require('../utils/game.js');
 const { informationCard } = require('./informationCard.js');
 const { Turn } = require('./turn.js');
 

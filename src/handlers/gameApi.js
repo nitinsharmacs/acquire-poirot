@@ -1,5 +1,5 @@
 const { createGameDAO } = require('../models/gameDAO.js');
-const { getPlayer, getInitialTiles, nextStep, merge } = require('../utils/game.js');
+const { nextStep } = require('../utils/game.js');
 
 const loadGame = (req, res) => {
   const { game, session: { playerId } } = req;

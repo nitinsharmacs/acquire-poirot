@@ -1,4 +1,4 @@
-const { createTiles } = require('../utils/createTiles.js');
+const { createTiles } = require('../utils/game.js');
 
 class Board {
   constructor(tiles) {

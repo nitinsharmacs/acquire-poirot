@@ -1,5 +1,9 @@
 const lodash = require('lodash');
 
+const randomInt = (limit) => {
+  return Math.floor(Math.random() * limit);
+};
+
 const getPlayer = (players, playerId) => {
   return players.find(player => player.id === playerId);
 };
@@ -146,6 +150,26 @@ const sortCorporations = (corporations) => {
   return sortedCorporations;
 };
 
+const tileLabel = (col, row) => `${col}${row}`;
+
+const tileId = (col, row) => tileLabel(col, row).toLowerCase();
+
+const createTiles = () => {
+  const tiles = [];
+
+  const rowId = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
+  for (let rowIndex = 0; rowIndex < 9; rowIndex++) {
+    for (let colIndex = 1; colIndex <= 12; colIndex++) {
+      tiles.push({
+        label: tileLabel(colIndex, rowId[rowIndex]),
+        id: tileId(colIndex, rowId[rowIndex]),
+        placed: false
+      });
+    }
+  }
+  return tiles;
+};
+
 module.exports = {
   getPlayer,
   getInitialTiles,
@@ -154,5 +178,7 @@ module.exports = {
   findAdjancetTiles,
   findPlacedTiles,
   findTilesChain,
-  sortCorporations
+  sortCorporations,
+  randomInt,
+  createTiles
 };

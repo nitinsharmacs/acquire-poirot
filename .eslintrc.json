@@ -93,7 +93,7 @@
         "max": 1
       }
     ],
-    "no-unused-vars": "off"
+    "no-unused-vars": "warn"
   },
   "overrides": [
     {
