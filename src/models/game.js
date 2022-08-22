@@ -244,6 +244,12 @@ class Game {
     });
   }
 
+  updateDefunctLogs(defunctShareHolders) {
+    defunctShareHolders.forEach(({ id, stock }) => {
+      const player = this.getPlayer(id);
+      this.logs.push(`${player.name} have ${stock.count} stocks of ${stock.corporationName}`);
+    });
+  }
   merge(corporations, tiles) {
     const [smallCorp, bigCorp] = sortCorporations(corporations);
     this.logs.merged(bigCorp.name, smallCorp.name);
@@ -255,6 +261,7 @@ class Game {
     this.#distributeBonus(defunctShareHolders);
     bigCorp.grow(tiles);
     smallCorp.defunct();
+    this.updateDefunctLogs(stockHolders);
   }
 
   // getters ---------------
