@@ -475,4 +475,29 @@ describe('POST /api/buy-stocks', () => {
           }),
           done);
     });
+
+  it('should not buy stocks when player doesn\'t have sufficient money',
+    (done) => {
+      const corporation = game.findCorporation('america');
+      const player = game.findPlayer('user');
+      corporation.stocksLeft = 12;
+      player.money = 200;
+      game.buyStocksState();
+
+      request(app)
+        .post('/api/buy-stocks')
+        .set('content-type', 'application/json')
+        .send(JSON.stringify({
+          stocks: [{
+            corporationId: 'america',
+            numOfStocks: 3
+          }]
+        }))
+        .expect(422,
+          JSON.stringify({
+            message: 'Insufficient money',
+            data: { case: 'buy-stocks' }
+          }),
+          done);
+    });
 });

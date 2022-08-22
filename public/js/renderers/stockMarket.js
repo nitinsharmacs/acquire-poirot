@@ -175,7 +175,6 @@ const insertSkipButton = () => {
 const highlightStockMarketToBuy = (game) => {
   const stockMarketElement = select('#stock-market');
   highlight(stockMarketElement);
-  // addBackDrop();
 
   const canBeBoughtOf = game.availableToBuy();
   showControls(canBeBoughtOf);
@@ -194,7 +193,6 @@ const highlightStockMarket = ({ corporations }, tileId) => {
 
   const stockMarketEle = select('#stock-market');
   highlight(stockMarketEle);
-  // addBackDrop();
 };
 
 const stocksToBuy = (form) => {

@@ -75,6 +75,14 @@ class Player {
   deductMoney(toBeDeducted) {
     this.money -= toBeDeducted;
   }
+
+  addMoney(toBeAdded) {
+    this.money += toBeAdded;
+  }
+
+  getMoney() {
+    return this.money;
+  }
 }
 
 module.exports = { Player };

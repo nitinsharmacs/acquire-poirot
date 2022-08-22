@@ -135,7 +135,7 @@ class Player {
     this.id = id;
     this.name = name;
     this.tiles = tiles || [];
-    this.money = money || 6000;
+    this.money = money;
     this.stocks = stocks;
   }
 
