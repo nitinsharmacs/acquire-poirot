@@ -49,6 +49,11 @@ class Logs {
     this.#addPlayerLog(name, message);
   }
 
+  bonusDistribution(name, bonus) {
+    const message = `received Rs.${bonus} bonus`;
+    this.#addPlayerLog(name, message);
+  }
+
   resetLogs() {
     this.#logs = [];
   }
