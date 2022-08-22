@@ -33,7 +33,7 @@ const hostGame = (req, res) => {
     },
     +noOfPlayers
   );
-  const gameHost = new Player(playerId, playerName, game);
+  const gameHost = new Player(playerId, playerName);
   game.addPlayer(gameHost);
 
   const games = req.app.games.games;

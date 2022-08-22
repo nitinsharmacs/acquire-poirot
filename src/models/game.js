@@ -217,11 +217,11 @@ class Game {
   }
 
   skipBuy() {
-    this.turn.player.skipBuy();
+    this.logs.push(`${this.turn.player.name} skipped buying stocks`);
   }
 
   skipBuild() {
-    this.turn.player.skipBuild();
+    this.logs.push(`${this.turn.player.name} skipped building corporation`);
   }
 
   // merge corporations ---------

@@ -1,5 +1,5 @@
 const { Player } = require('../models/player.js');
-const { getPlayer, createGameLink } = require('../utils/game.js');
+const { createGameLink } = require('../utils/game.js');
 const { lobbyPage } = require('../views/lobby.js');
 const { landingPage } = require('../views/index.js');
 const { gamePage } = require('../views/game.js');
@@ -43,7 +43,7 @@ const joinGame = (req, res) => {
   }
 
   if (!playerExists) {
-    const player = new Player(playerId, playerName, game);
+    const player = new Player(playerId, playerName);
     game.addPlayer(player);
   }
 

@@ -1,8 +1,7 @@
 class Player {
-  constructor(id, name, game) {
+  constructor(id, name) {
     this.id = id;
     this.name = name;
-    this.game = game;
     this.tiles = [];
     this.money = 0;
     this.stocks = [];
@@ -20,14 +19,6 @@ class Player {
     const [tile] = this.tiles;
     this.tiles.splice(0, 1);
     return tile;
-  }
-
-  skipBuild() {
-    this.game.logs.push(`${this.name} skipped building corporation`);
-  }
-
-  skipBuy() {
-    this.game.logs.push(`${this.name} skipped buying stocks`);
   }
 
   addStocks({ id, name }, noOfStocks = 0) {
