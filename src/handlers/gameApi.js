@@ -44,7 +44,7 @@ const placeTile = (req, res) => {
     body: { id },
     session: { playerId }
   } = req;
-  const player = game.findPlayer(playerId);
+  const player = game.getPlayer(playerId);
   const tile = game.placeTile({ id });
   const { step, tiles, corporations } = nextStep(game, id);
 

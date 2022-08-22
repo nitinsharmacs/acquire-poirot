@@ -121,7 +121,6 @@ class Game {
     const priceBySize = corporationColumn.pricesBySize.find(({ range }) => {
       return isBetween(corporationSize, range);
     });
-    console.log('calcstock price', corporation);
     return priceBySize.stockPrice;
   }
 
@@ -243,7 +242,7 @@ class Game {
       return;
     }
     stockHolder.forEach(({ id }) => {
-      const player = this.findPlayer(id);
+      const player = this.getPlayer(id);
       if (player) {
         player.money += bonus / stockHolder.length;
       }
