@@ -88,20 +88,6 @@ const isValidStockCount = (stocks) => {
   return totalNumOfStocks(stocks) < 4;
 };
 
-const getRequiredMoney = (game, stocks) => {
-  return stocks.reduce((requireMoney, { corporationId, numOfStocks }) => {
-    const corporation = game.findCorporation(corporationId);
-    const stockPrice = game.calculateStockPrice(corporation);
-    return stockPrice * numOfStocks;
-  }, 0);
-};
-
-const isMoneySufficient = (game, playerId, stocks) => {
-  const currentMoney = game.findPlayer(playerId).getMoney();
-  const requiredMoney = getRequiredMoney(game, stocks);
-  return currentMoney >= requiredMoney;
-};
-
 const buyStocks = (req, res) => {
   const {
     game,
@@ -125,7 +111,7 @@ const buyStocks = (req, res) => {
     return;
   }
 
-  if (!isMoneySufficient(game, playerId, stocks)) {
+  if (!game.isMoneySufficient(playerId, stocks)) {
     res.status(422).json({
       message: 'Insufficient money',
       data: { case: game.state }
