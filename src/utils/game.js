@@ -188,15 +188,21 @@ const defunctStockHolder = (players, defunctId) => {
   return sortStockHolders(playerData);
 };
 
+const isStockCountEqual = (stockHolder1, stockHolder2) =>
+  stockHolder1.stock.count === stockHolder2.stock.count;
+
 const findEqualStockHolders = (stockHolders) => {
   let index = stockHolders.length - 1;
   const bonusReceivers = [stockHolders[index]];
 
   while (index >= 0 && stockHolders[index - 1]) {
-    if (stockHolders[index].stock.count !== stockHolders[index - 1].stock.count) {
+    const currentHolder = stockHolders[index];
+    const nextHolder = stockHolders[index - 1];
+
+    if (!isStockCountEqual(currentHolder, nextHolder)) {
       return bonusReceivers;
     }
-    bonusReceivers.push(stockHolders[index - 1]);
+    bonusReceivers.push(nextHolder);
     index--;
   }
   return bonusReceivers;
@@ -213,24 +219,28 @@ const findMajorityMinority = (stockHolders) => {
   return { majority, minority };
 };
 
+const distributeMoney = (stockHolders, money) => {
+  return stockHolders.map(({ id }) => {
+    return { id, money };
+  });
+};
+
 const computeBonus = (stockHolders, bonus) => {
   const { majorityBonus, minorityBonus } = bonus;
   const { majority, minority } = findMajorityMinority(stockHolders);
-  const beneficiaries = [];
 
   if (!minority || majority.length >= 2) {
     const money = (majorityBonus + minorityBonus) / majority.length;
-    majority.forEach(({ id }) => beneficiaries.push({ id, money }));
-    return beneficiaries;
+    return distributeMoney(majority, money);
   }
 
   if (minority.length >= 1) {
-    majority.forEach(({ id }) => beneficiaries.push({ id, money: majorityBonus }));
+    const majorityHolders = distributeMoney(majority, majorityBonus);
 
     const money = minorityBonus / minority.length;
-    minority.forEach(({ id }) => beneficiaries.push({ id, money }));
+    const minorityHolders = distributeMoney(minority, money);
 
-    return beneficiaries;
+    return [...majorityHolders, ...minorityHolders];
   }
 };
 

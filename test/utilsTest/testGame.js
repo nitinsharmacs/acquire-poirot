@@ -4,7 +4,8 @@ const { Player } = require('../../src/models/player.js');
 const { findAdjancetTiles,
   nextStep,
   findTilesChain,
-  createTiles
+  createTiles,
+  computeBonus
 } = require('../../src/utils/game.js');
 
 describe('findAdjacentTiles', () => {
@@ -274,4 +275,51 @@ describe('findTilesChain', () => {
 
     assert.deepStrictEqual(findTilesChain('2b', tiles), expected);
   });
+});
+
+describe('computeBonus', () => {
+  it('should give majority and minority bonus to a majority holder', () => {
+    const stockHolders = [{ id: 'a', stock: { id: 'zeta', count: 4 } }];
+    const bonus = { majorityBonus: 100, minorityBonus: 50 };
+    const expected = [{ id: 'a', money: 150 }];
+    assert.deepStrictEqual(computeBonus(stockHolders, bonus), expected);
+  });
+
+  it('should divide majority and minority bonus between majority holders',
+    () => {
+      const stockHolders = [
+        { id: 'a', stock: { id: 'zeta', count: 4 } },
+        { id: 'b', stock: { id: 'zeta', count: 4 } }
+      ];
+      const bonus = { majorityBonus: 100, minorityBonus: 50 };
+      const expected = [{ id: 'b', money: 75 }, { id: 'a', money: 75 }];
+      assert.deepStrictEqual(computeBonus(stockHolders, bonus), expected);
+    });
+
+  it('should give majority & minority bonus to a majority & minority holder',
+    () => {
+      const stockHolders = [
+        { id: 'b', stock: { id: 'zeta', count: 3 } },
+        { id: 'a', stock: { id: 'zeta', count: 4 } }
+      ];
+      const bonus = { majorityBonus: 100, minorityBonus: 50 };
+      const expected = [{ id: 'a', money: 100 }, { id: 'b', money: 50 }];
+      assert.deepStrictEqual(computeBonus(stockHolders, bonus), expected);
+    });
+
+  it('should divide minority bonus between minority holders',
+    () => {
+      const stockHolders = [
+        { id: 'c', stock: { id: 'zeta', count: 3 } },
+        { id: 'b', stock: { id: 'zeta', count: 3 } },
+        { id: 'a', stock: { id: 'zeta', count: 4 } }
+      ];
+      const bonus = { majorityBonus: 100, minorityBonus: 50 };
+      const expected = [
+        { id: 'a', money: 100 },
+        { id: 'b', money: 25 },
+        { id: 'c', money: 25 }
+      ];
+      assert.deepStrictEqual(computeBonus(stockHolders, bonus), expected);
+    });
 });
