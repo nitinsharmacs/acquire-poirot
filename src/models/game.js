@@ -222,7 +222,7 @@ class Game {
   setup() {
     this.players.forEach(player => {
       player.placeFirstTile();
-      player.money = 6000;
+      player.addMoney(6000);
 
       for (let index = 0; index < 6; index++) {
         player.getTile();
