@@ -40,13 +40,6 @@ describe('GET /api/loadgame', () => {
   game.addPlayer(new Player('user', 'sam'));
   const app = initApp(session('123', 'user'), games);
 
-  it('should response with game data', (done) => {
-    request(app)
-      .get('/api/loadgame')
-      .expect(200)
-      .expect('content-type', /^application\/json/, done);
-  });
-
   it('should response with game data when game started', (done) => {
     game.start();
     request(app)
