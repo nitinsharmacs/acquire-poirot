@@ -9,9 +9,9 @@
   --component-border-radius: 5px;
   --component-padding: 0.5em;
   --hydra-border: #ff9433;
-  --hydra-bg: #fbe8d6;
+  --hydra-bg: #fae2cc;
   --sackson-border: #ff5661;
-  --sackson-bg: #fbd3d6;
+  --sackson-bg: #f9e5e6;
   --quantum-border: #58e0f8;
   --quantum-bg: #d0e8ec;
   --america-border: #1c7ed6;
@@ -95,44 +95,51 @@ body {
 }
 
 .hydra {
-  background-image: url('/images/corps/hydra.jpg');
+  background-image: url('/images/corps/hydra.png');
+  background-color: var(--hydra-bg);
   background-size: cover;
   color: black;
 }
 
 .sackson {
-  background-image: url('/images/corps/sackson.jpg');
+  background-image: url('/images/corps/sackson.png');
+  background-color: var(--sackson-bg);
   background-size: cover;
   color: black;
 }
 
 .quantum {
   color: black;
-  background-image: url('/images/corps/quantum.jpeg');
+  background-image: url('/images/corps/quantum.png');
+  background-color: var(--quantum-bg);
   background-size: cover;
 }
 
 .america {
-  background-image: url('/images/corps/america.jpg');
+  background-image: url('/images/corps/america.png');
+  background-color: var(--america-bg);
   background-size: cover;
   color: black;
 }
 
 .zeta {
   color: black;
-  background-image: url('/images/corps/zeta.jpg');
+  background-image: url('/images/corps/zeta.png');
+  background-color: var(--zeta-bg);
   background-size: cover;
 }
 
 .phoenix {
   color: black;
-  background-image: url('/images/corps/phoenix.jpg');
+  background-image: url('/images/corps/phoenix.png');
+  background-color: var(--phoenix-bg);
   background-size: cover;
 }
 
 .fusion {
   color: black;
-  background-image: url('/images/corps/fusion.jpg');
+  background-image: url('/images/corps/fusion.png');
+  background-color: var(--fusion-bg);
   background-size: cover;
 }
 
@@ -490,8 +497,8 @@ body {
 }
 
 .corporation-img {
-  width: 60px;
-  height: 60px;
+  width: 65px;
+  height: 65px;
   border-radius: var(--component-border-radius);
 }
 
