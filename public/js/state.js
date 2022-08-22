@@ -84,8 +84,10 @@ class GameState {
   }
 
   updateCorporations(corporations) {
-    corporations.forEach(({ id, tiles }) => {
-      this.#findCorporation(id).tiles = tiles;
+    corporations.forEach(({ id, tiles, active }) => {
+      const corporation = this.#findCorporation(id);
+      corporation.tiles = tiles;
+      corporation.active = active;
     });
   }
 

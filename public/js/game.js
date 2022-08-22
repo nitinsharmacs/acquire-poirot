@@ -82,6 +82,7 @@ const handleView = (game, message = '') => {
   if (game.isInBuildState()) {
     renderBoard(game);
     renderPlayerResources(game);
+    renderStockMarket(game, message);
     highlightStockMarket(game, getItem('tileId'));
   }
 
