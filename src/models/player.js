@@ -1,5 +1,3 @@
-const { randomInt } = require('../utils/game.js');
-
 class Player {
   constructor(id, name, game) {
     this.id = id;
@@ -18,28 +16,14 @@ class Player {
     this.tiles = this.tiles.filter(tile => tile.id !== tileId);
   }
 
-  getTile() {
-    const tilePos = randomInt(this.game.cluster.length);
-    const tile = this.game.cluster[tilePos];
-
-    this.game.cluster.splice(tilePos, 1);
+  addTile(tile) {
     this.tiles.push(tile);
-
-    return tile;
-  }
-
-  drawTile() {
-    const tile = this.getTile();
-    this.game.logs.push(`${this.name} drew a tile`);
-
-    return tile;
   }
 
   placeFirstTile() {
     const [tile] = this.tiles;
-    this.game.board.placeTile(tile);
-    this.game.logs.push(`${this.name} placed ${tile.id}`);
     this.tiles.splice(0, 1);
+    return tile;
   }
 
   placeTile({ id }) {
