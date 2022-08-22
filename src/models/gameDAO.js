@@ -17,7 +17,7 @@ const createGameDAO = (game, playerId) => {
     players: createPlayersDAO(game.players),
     board: game.board,
     cluster: game.cluster,
-    logs: game.logs,
+    logs: game.logs.logs,
     corporations: game.corporations,
     gameSize: game.gameSize,
     started: game.started,
