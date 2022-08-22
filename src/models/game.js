@@ -247,9 +247,10 @@ class Game {
   updateDefunctLogs(defunctShareHolders) {
     defunctShareHolders.forEach(({ id, stock }) => {
       const player = this.getPlayer(id);
-      this.logs.push(`${player.name} have ${stock.count} stocks of ${stock.corporationName}`);
+      this.logs.defunctCorporation(player.name, stock);
     });
   }
+
   merge(corporations, tiles) {
     const [smallCorp, bigCorp] = sortCorporations(corporations);
     this.logs.merged(bigCorp.name, smallCorp.name);
