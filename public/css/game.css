@@ -10,18 +10,18 @@
   --component-padding: 0.5em;
   --hydra-border: #ff9433;
   --hydra-bg: #fbe8d6;
-  --sackson-bg: #fbd3d6;
   --sackson-border: #ff5661;
-  --quantum-bg: #d0e8ec;
+  --sackson-bg: #fbd3d6;
   --quantum-border: #58e0f8;
-  --america-bg: #d2e4f4;
+  --quantum-bg: #d0e8ec;
   --america-border: #1c7ed6;
-  --fusion-bg: #d7eddb;
+  --america-bg: #d2e4f4;
   --fusion-border: #36b24d;
-  --phoenix-bg: #e2daf8;
+  --fusion-bg: #d7eddb;
   --phoenix-border: #7746f1;
-  --zeta-bg: #fbf1d7;
+  --phoenix-bg: #e2daf8;
   --zeta-border: #ffc936;
+  --zeta-bg: #fbf1d7;
   --tile-size: 65px;
 }
 
@@ -95,49 +95,49 @@ body {
 }
 
 .hydra {
-  border: 2px solid var(--hydra-border);
-  background-color: var(--hydra-bg);
+  background-image: url('/images/corps/hydra.jpg');
+  background-size: cover;
   color: black;
 }
 
 .sackson {
-  border: 2px solid var(--sackson-border);
-  background-color: var(--sackson-bg);
+  background-image: url('/images/corps/sackson.jpg');
+  background-size: cover;
   color: black;
 }
 
 .quantum {
-  border: 2px solid var(--quantum-border);
   color: black;
-  background-color: var(--quantum-bg);
+  background-image: url('/images/corps/quantum.jpeg');
+  background-size: cover;
 }
 
 .america {
-  border: 2px solid var(--america-border);
-  background-color: var(--america-bg);
+  background-image: url('/images/corps/america.jpg');
+  background-size: cover;
   color: black;
 }
 
 .zeta {
-  border: 2px solid var(--zeta-border);
   color: black;
-  background-color: var(--zeta-bg);
+  background-image: url('/images/corps/zeta.jpg');
+  background-size: cover;
 }
 
 .phoenix {
-  border: 2px solid var(--phoenix-border);
   color: black;
-  background-color: var(--phoenix-bg);
+  background-image: url('/images/corps/phoenix.jpg');
+  background-size: cover;
 }
 
 .fusion {
-  border: 2px solid var(--fusion-border);
   color: black;
-  background-color: var(--fusion-bg);
+  background-image: url('/images/corps/fusion.jpg');
+  background-size: cover;
 }
 
 .disabled-corporation {
-  background-color: white !important;
+  background-image: white !important;
   pointer-events: none;
 }
 
@@ -299,37 +299,65 @@ body {
   width: 120px;
 }
 
-#hydra {
+.disabled-hydra {
+  border: 2px solid var(--hydra-border);
+}
+
+.hydra-stock {
   border: 2px solid var(--hydra-border);
   background-color: var(--hydra-bg);
 }
 
-#sackson {
+.disabled-sackson {
+  border: 2px solid var(--sackson-border);
+}
+
+.sackson-stock {
   border: 2px solid var(--sackson-border);
   background-color: var(--sackson-bg);
 }
 
-#quantum {
+.disabled-quantum {
+  border: 2px solid var(--quantum-border);
+}
+
+.quantum-stock {
   border: 2px solid var(--quantum-border);
   background-color: var(--quantum-bg);
 }
 
-#america {
+.disabled-america {
+  border: 2px solid var(--america-border);
+}
+
+.america-stock {
   border: 2px solid var(--america-border);
   background-color: var(--america-bg);
 }
 
-#zeta {
+.disabled-zeta {
+  border: 2px solid var(--zeta-border);
+}
+
+.zeta-stock {
   border: 2px solid var(--zeta-border);
   background-color: var(--zeta-bg);
 }
 
-#phoenix {
+.disabled-phoenix {
+  border: 2px solid var(--phoenix-border);
+}
+
+.phoenix-stock {
   border: 2px solid var(--phoenix-border);
   background-color: var(--phoenix-bg);
 }
 
-#fusion {
+.disabled-fusion {
+  border: 2px solid var(--fusion-border);
+}
+
+.fusion-stock {
   border: 2px solid var(--fusion-border);
   background-color: var(--fusion-bg);
 }

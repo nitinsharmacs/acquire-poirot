@@ -30,6 +30,7 @@ const createTiles = (tiles, corporations) => {
   return tiles.map(tile => {
     const corporationClass = getCorporationClass(tile.id, corporations);
     const placed = tile.placed ? 'placed' : '';
+    const contents = corporationClass ? '' : tileLabel(tile);
     return [
       'div',
       {
@@ -37,7 +38,7 @@ const createTiles = (tiles, corporations) => {
         id: `tile-${tile.id}`
       },
       {},
-      ...tileLabel(tile)
+      ...contents
     ];
   });
 };
