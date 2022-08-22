@@ -155,7 +155,7 @@ const showControls = (corporations) => {
 const highlightStockMarketToBuy = (game) => {
   const stockMarketElement = select('#stock-market');
   highlight(stockMarketElement);
-  addBackDrop();
+  // addBackDrop();
 
   const canBeBoughtOf = game.availableToBuy();
   showControls(canBeBoughtOf);
@@ -173,7 +173,7 @@ const highlightStockMarket = ({ corporations }, tileId) => {
 
   const stockMarketEle = select('#stock-market');
   highlight(stockMarketEle);
-  addBackDrop();
+  // addBackDrop();
 };
 
 const stocksToBuy = (form) => {
