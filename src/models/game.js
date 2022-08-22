@@ -254,8 +254,8 @@ const createCorporations = () => {
       name: 'Quantum'
     },
     {
-      id: 'phoneix',
-      name: 'Phoneix'
+      id: 'phoenix',
+      name: 'Phoenix'
     },
     {
       id: 'sackson',
