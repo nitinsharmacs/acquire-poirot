@@ -249,7 +249,7 @@ describe('POST /api/draw-tile', () => {
     game.addPlayer(new Player('user', 'sam', game));
     game.addPlayer(new Player('user-2', 'harry', game));
     game.addPlayer(new Player('user-3', 'nilam', game));
-    game.players.forEach(player => player.drawTile());
+    game.players.forEach(player => game.giveTile(player));
     game.reorder();
     game.start();
 

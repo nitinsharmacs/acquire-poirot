@@ -3,7 +3,7 @@ const { Corporation } = require('./corporation.js');
 const { createBoard } = require('./board.js');
 const {
   findTilesChain,
-  sortCorporations, createTiles,
+  sortCorporations, createTiles, randomInt,
   defunctStockHolder,
   findMajorityMinority
 } = require('../utils/game.js');
@@ -98,12 +98,22 @@ class Game {
     return this.started;
   }
 
+  giveTile(player) {
+    const tileIndex = randomInt(this.cluster.length);
+    const tile = this.cluster[tileIndex];
+
+    this.cluster.splice(tileIndex, 1);
+    player.addTile(tile);
+    return tile;
+  }
+
   placeTile({ id }) {
     this.turn.player.placeTile({ id });
   }
 
   drawTile() {
-    return this.turn.player.drawTile();
+    this.logs.push(`${this.turn.player.name} drew a tile`);
+    return this.giveTile(this.turn.player);
   }
 
   calculateStockPrice(corporation) {
@@ -118,7 +128,7 @@ class Game {
     return priceBySize.stockPrice;
   }
 
-  sellStocks(stocks, playerId) {
+  sellStocks(stocks) {
     const player = this.turn.player;
     const stockLogs = [];
 
@@ -254,16 +264,21 @@ class Game {
   }
 
   drawInitialTiles() {
-    this.players.forEach(player => player.drawTile());
+    this.players.forEach(player => {
+      this.logs.push(`${player.name} drew a tile`);
+      this.giveTile(player);
+    });
   }
 
   setup() {
     this.players.forEach(player => {
-      player.placeFirstTile();
+      const tile = player.placeFirstTile();
+      this.board.placeTile(tile);
+      this.logs.push(`${player.name} placed ${tile.id}`);
       player.addMoney(6000);
 
       for (let index = 0; index < 6; index++) {
-        player.getTile();
+        this.giveTile(player);
       }
     });
   }
