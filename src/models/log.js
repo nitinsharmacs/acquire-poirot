@@ -32,7 +32,7 @@ class Logs {
   boughtStocks(name, stocks) {
     const stockLogs = stocks.map(({ corporation, numOfStocks }) => {
       return `${numOfStocks} of ${corporation}`;
-    }).join(',');
+    }).join(', ');
     this.#addPlayerLog(name, `bought ${stockLogs}`);
   }
 
@@ -44,9 +44,9 @@ class Logs {
     this.#logs.push(`${corporation} is safe`);
   }
 
-  defunctCorporation(playerName, stock) {
-    const message = `have ${stock.count} of ${stock.corporationName}`;
-    this.#addPlayerLog(playerName, message);
+  defunctCorporation(name, stock) {
+    const message = `has ${stock.count} stocks of ${stock.corporationName}`;
+    this.#addPlayerLog(name, message);
   }
 
   resetLogs() {

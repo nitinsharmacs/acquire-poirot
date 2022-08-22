@@ -106,6 +106,7 @@ class Game {
   }
 
   placeTile({ id }) {
+    this.logs.resetLogs();
     this.turn.player.removeTile(id);
     const tile = this.board.placeTile(id);
     this.logs.placedTile(this.turn.player.name, id);
