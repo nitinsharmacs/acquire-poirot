@@ -8,12 +8,8 @@ class Player {
     this.stocks = [];
   }
 
-  #findTile(tileId) {
-    return this.tiles.find(tile => tile.id === tileId);
-  }
-
-  #removeTile(tileId) {
-    this.tiles = this.tiles.filter(tile => tile.id !== tileId);
+  removeTile(id) {
+    this.tiles = this.tiles.filter(tile => tile.id !== id);
   }
 
   addTile(tile) {
@@ -23,15 +19,6 @@ class Player {
   placeFirstTile() {
     const [tile] = this.tiles;
     this.tiles.splice(0, 1);
-    return tile;
-  }
-
-  placeTile({ id }) {
-    const tile = this.#findTile(id);
-    this.game.board.placeTile(tile);
-    this.game.logs.push(`${this.name} placed ${tile.id}`);
-
-    this.#removeTile(id);
     return tile;
   }
 
