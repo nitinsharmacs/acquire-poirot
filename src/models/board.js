@@ -9,9 +9,10 @@ class Board {
     return this.tiles.find(tile => tile.id === tileId);
   }
 
-  placeTile({ id }) {
+  placeTile(id) {
     const tile = this.tiles.find(tile => tile.id === id);
     tile.placed = true;
+    return tile;
   }
 
   buildCorporation({ id }, corporation) {

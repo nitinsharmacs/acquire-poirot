@@ -5,7 +5,6 @@ const Sinon = require('sinon');
 const { newGame } = require('../../src/models/game.js');
 const { Games } = require('../../src/models/games.js');
 const { Player } = require('../../src/models/player.js');
-const { findTilesChain } = require('../../src/utils/game.js');
 
 const session = (gameId, playerId) => () => (req, res, next) => {
   req.session = {};
@@ -146,8 +145,8 @@ describe('Post /api/place-tile', () => {
       player.tiles.push(tile);
 
       const corporation = game.getCorporation('america');
-      game.board.placeTile({ id: '1a' });
-      game.board.placeTile({ id: '2a' });
+      game.board.placeTile('1a');
+      game.board.placeTile('2a');
       game.buildCorporation(corporation.id, '1a', 'user');
 
       const tileId = '3a';
@@ -188,16 +187,16 @@ describe('Post /api/place-tile', () => {
       player.tiles.push(tile);
 
       const corporation = game.getCorporation('america');
-      game.board.placeTile({ id: '1a' });
-      game.board.placeTile({ id: '2a' });
-      game.board.placeTile({ id: '3a' });
-      game.board.placeTile({ id: '1b' });
-      game.board.placeTile({ id: '2b' });
-      game.board.placeTile({ id: '3b' });
-      game.board.placeTile({ id: '1c' });
-      game.board.placeTile({ id: '2c' });
-      game.board.placeTile({ id: '3c' });
-      game.board.placeTile({ id: '1d' });
+      game.board.placeTile('1a');
+      game.board.placeTile('2a');
+      game.board.placeTile('3a');
+      game.board.placeTile('1b');
+      game.board.placeTile('2b');
+      game.board.placeTile('3b');
+      game.board.placeTile('1c');
+      game.board.placeTile('2c');
+      game.board.placeTile('3c');
+      game.board.placeTile('1d');
       game.buildCorporation(corporation.id, '1a', 'user');
 
       const tileId = '4b';
@@ -219,14 +218,14 @@ describe('Post /api/place-tile', () => {
       player.tiles.push(tile);
 
       const corporation1 = game.getCorporation('america');
-      game.board.placeTile({ id: '1a' });
-      game.board.placeTile({ id: '2a' });
+      game.board.placeTile('1a');
+      game.board.placeTile('2a');
       game.buildCorporation(corporation1.id, '1a', 'user');
 
       const corporation2 = game.getCorporation('zeta');
-      game.board.placeTile({ id: '4a' });
-      game.board.placeTile({ id: '5a' });
-      game.board.placeTile({ id: '6a' });
+      game.board.placeTile('4a');
+      game.board.placeTile('5a');
+      game.board.placeTile('6a');
       game.buildCorporation(corporation2.id, '4a', 'user');
 
       const tileId = '3a';

@@ -104,7 +104,10 @@ class Game {
   }
 
   placeTile({ id }) {
-    this.turn.player.placeTile({ id });
+    this.turn.player.removeTile(id);
+    const tile = this.board.placeTile(id);
+    this.logs.push(`${this.turn.player.name} placed ${id}`);
+    return tile;
   }
 
   drawTile() {
@@ -283,7 +286,7 @@ class Game {
   setup() {
     this.players.forEach(player => {
       const tile = player.placeFirstTile();
-      this.board.placeTile(tile);
+      this.board.placeTile(tile.id);
       this.logs.push(`${player.name} placed ${tile.id}`);
       player.addMoney(6000);
 
