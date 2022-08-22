@@ -91,7 +91,6 @@ const highlightTiles = ({ player }) => {
 
   highlight(playerTilesElement);
   highlight(boardElement);
-  addBackDrop();
 
   placeTileFormElement.appendChild(createPlaceButton());
 };
