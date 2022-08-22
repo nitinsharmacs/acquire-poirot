@@ -1,8 +1,6 @@
-const { Games } = require('../../src/models/games');
-const { newGame } = require('../../src/models/game');
-
 const assert = require('assert');
 const { Player } = require('../../src/models/player');
+const { newGame } = require('../../src/models/game');
 
 describe('Game', () => {
   describe('addPlayer', () => {

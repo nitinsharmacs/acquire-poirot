@@ -70,10 +70,6 @@ class Game {
     return this.corporations.find(({ id }) => id === corporationId);
   }
 
-  findPlayer(playerId) {
-    return this.players.find(({ id }) => id === playerId);
-  }
-
   reorder() {
     const playersTiles = this.players.map(player => player.tiles[0]);
     const nearestTile = findNearestTile(playersTiles);
@@ -125,6 +121,7 @@ class Game {
     const priceBySize = corporationColumn.pricesBySize.find(({ range }) => {
       return isBetween(corporationSize, range);
     });
+    console.log('calcstock price', corporation);
     return priceBySize.stockPrice;
   }
 
@@ -140,6 +137,20 @@ class Game {
       stockLogs.push(`${numOfStocks} stocks of ${corporation.name}`);
     });
     this.logs.push(`${player.name} bought ` + stockLogs.join(', '));
+  }
+
+  choosenStocksCost(stocks) {
+    return stocks.reduce((requireMoney, { corporationId, numOfStocks }) => {
+      const corporation = this.findCorporation(corporationId);
+      const stockPrice = this.calculateStockPrice(corporation);
+      return stockPrice * numOfStocks;
+    }, 0);
+  }
+
+  isMoneySufficient(playerId, stocks) {
+    const playerMoney = this.getPlayer(playerId).getMoney();
+    const requiredMoney = this.choosenStocksCost(stocks);
+    return playerMoney >= requiredMoney;
   }
 
   getPlayer(playerId) {

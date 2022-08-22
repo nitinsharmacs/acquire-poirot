@@ -479,7 +479,7 @@ describe('POST /api/buy-stocks', () => {
   it('should not buy stocks when player doesn\'t have sufficient money',
     (done) => {
       const corporation = game.findCorporation('america');
-      const player = game.findPlayer('user');
+      const player = game.getPlayer('user');
       corporation.stocksLeft = 12;
       player.money = 200;
       game.buyStocksState();
