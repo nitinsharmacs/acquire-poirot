@@ -256,9 +256,7 @@ describe('POST /api/draw-tile', () => {
           done(err);
         }
         const playerTile = currentPlayer.tiles[currentPlayer.tiles.length - 1];
-        const [drawLog] = games.find('123').logs.slice(-1);
         assert.deepStrictEqual(res.body.data, playerTile);
-        assert.strictEqual(drawLog, currentPlayer.name + ' drew a tile');
         done();
       });
   });

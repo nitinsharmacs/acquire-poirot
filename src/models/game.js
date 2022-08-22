@@ -9,6 +9,7 @@ const {
 } = require('../utils/game.js');
 const { informationCard } = require('./informationCard.js');
 const { Turn } = require('./turn.js');
+const { Logs } = require('./log.js');
 
 const getSameRowTiles = (letter, tiles) => {
   return tiles.filter(tile => tile.id.includes(letter));
@@ -39,7 +40,8 @@ class Game {
     corporations,
     host,
     gameSize,
-    informationCard
+    informationCard,
+    logs
   }) {
     this.id = id;
     this.players = players;
@@ -48,7 +50,7 @@ class Game {
     this.corporations = corporations;
     this.host = host;
     this.gameSize = gameSize;
-    this.logs = [];
+    this.logs = logs;
     this.started = false;
     this.informationCard = informationCard;
   }
@@ -106,12 +108,12 @@ class Game {
   placeTile({ id }) {
     this.turn.player.removeTile(id);
     const tile = this.board.placeTile(id);
-    this.logs.push(`${this.turn.player.name} placed ${id}`);
+    this.logs.placedTile(this.turn.player.name, id);
     return tile;
   }
 
   drawTile() {
-    this.logs.push(`${this.turn.player.name} drew a tile`);
+    this.logs.drewTile(this.turn.player.name);
     return this.giveTile(this.turn.player);
   }
 
@@ -131,7 +133,7 @@ class Game {
 
   sellStocks(stocks) {
     const player = this.turn.player;
-    const stockLogs = [];
+    const logsData = [];
 
     stocks.forEach(({ corporationId, numOfStocks }) => {
       const corporation = this.findCorporation(corporationId);
@@ -140,9 +142,9 @@ class Game {
       const { stockPrice } = this.marketPrice(corporation);
 
       player.deductMoney(stockPrice * numOfStocks);
-      stockLogs.push(`${numOfStocks} stocks of ${corporation.name}`);
+      logsData.push({ numOfStocks, corporation: corporation.name });
     });
-    this.logs.push(`${player.name} bought ` + stockLogs.join(', '));
+    this.logs.boughtStocks(player.name, logsData);
   }
 
   choosenStocksCost(stocks) {
@@ -185,14 +187,14 @@ class Game {
       player.addStocks(corporation, stocksCount);
       corporation.reduceStocks(stocksCount);
     }
-    this.logs.push(`${player.name} built ${corporation.name} on ${tileId}`);
 
+    this.logs.built(player.name, corporation.name);
     return corporation;
   }
 
   determineSafe(corporation) {
     if (corporation.isSafeCorporation()) {
-      this.logs.push(`${corporation.name} is safe`);
+      this.logs.declaredSafe(corporation.name);
     }
   }
 
@@ -221,11 +223,11 @@ class Game {
   }
 
   skipBuy() {
-    this.logs.push(`${this.turn.player.name} skipped buying stocks`);
+    this.logs.skippedBuy(this.turn.player.name);
   }
 
   skipBuild() {
-    this.logs.push(`${this.turn.player.name} skipped building corporation`);
+    this.logs.skippedBuild(this.turn.player.name);
   }
 
   // merge corporations ---------
@@ -244,7 +246,7 @@ class Game {
 
   merge(corporations, tiles) {
     const [smallCorp, bigCorp] = sortCorporations(corporations);
-    this.logs.push(`${bigCorp.name} acquired ${smallCorp.name}`);
+    this.logs.merged(bigCorp.name, smallCorp.name);
 
     const stockHolders = defunctStockHolder(this.players, smallCorp.id);
     const bonus = this.marketPrice(smallCorp);
@@ -267,7 +269,7 @@ class Game {
 
   drawInitialTiles() {
     this.players.forEach(player => {
-      this.logs.push(`${player.name} drew a tile`);
+      this.logs.drewTile(player.name);
       this.giveTile(player);
     });
   }
@@ -276,7 +278,7 @@ class Game {
     this.players.forEach(player => {
       const tile = player.placeFirstTile();
       this.board.placeTile(tile.id);
-      this.logs.push(`${player.name} placed ${tile.id}`);
+      this.logs.placedTile(player.name, tile.id);
       player.addMoney(6000);
 
       for (let index = 0; index < 6; index++) {
@@ -338,7 +340,8 @@ const newGame = (id, host, gameSize) => {
     cluster,
     corporations,
     gameSize,
-    informationCard
+    informationCard,
+    logs: new Logs()
   });
 };
 
