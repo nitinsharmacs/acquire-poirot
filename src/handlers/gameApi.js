@@ -52,6 +52,7 @@ const placeTile = (req, res) => {
   }
   if (step === 'merge') {
     game.merge(corporations, tiles);
+    corporations.forEach(corporation => game.determineSafe(corporation));
   }
 
   res.json({
