@@ -5,7 +5,7 @@ const {
   findTilesChain,
   sortCorporations, createTiles, randomInt,
   defunctStockHolder,
-  findMajorityMinority
+  computeBonus
 } = require('../utils/game.js');
 const { informationCard } = require('./informationCard.js');
 const { Turn } = require('./turn.js');
@@ -115,7 +115,7 @@ class Game {
     return this.giveTile(this.turn.player);
   }
 
-  calculateStockPrice(corporation) {
+  marketPrice(corporation) {
     const corporationSize = corporation.getSize();
 
     const corporationColumn = this.informationCard.find(column =>
@@ -124,7 +124,9 @@ class Game {
     const priceBySize = corporationColumn.pricesBySize.find(({ range }) => {
       return isBetween(corporationSize, range);
     });
-    return priceBySize.stockPrice;
+
+    const { majority, minority, stockPrice } = priceBySize;
+    return { minorityBonus: minority, majorityBonus: majority, stockPrice };
   }
 
   sellStocks(stocks) {
@@ -135,7 +137,9 @@ class Game {
       const corporation = this.findCorporation(corporationId);
       corporation.reduceStocks(numOfStocks);
       player.addStocks(corporation, numOfStocks);
-      player.deductMoney(this.calculateStockPrice(corporation) * numOfStocks);
+      const { stockPrice } = this.marketPrice(corporation);
+
+      player.deductMoney(stockPrice * numOfStocks);
       stockLogs.push(`${numOfStocks} stocks of ${corporation.name}`);
     });
     this.logs.push(`${player.name} bought ` + stockLogs.join(', '));
@@ -144,7 +148,7 @@ class Game {
   choosenStocksCost(stocks) {
     return stocks.reduce((requireMoney, { corporationId, numOfStocks }) => {
       const corporation = this.findCorporation(corporationId);
-      const stockPrice = this.calculateStockPrice(corporation);
+      const { stockPrice } = this.marketPrice(corporation);
       return stockPrice * numOfStocks;
     }, 0);
   }
@@ -226,28 +230,14 @@ class Game {
 
   // merge corporations ---------
 
-  #calculateBonus(corporation) {
-    const corporationSize = corporation.getSize();
-
-    const corporationColumn = this.informationCard.find(column =>
-      column.corporations.includes(corporation.id));
-
-    const priceBySize = corporationColumn.pricesBySize.find(({ range }) => {
-      return isBetween(corporationSize, range);
-    });
-
-    const { majority, minority } = priceBySize;
-    return { majorityBonus: majority, minorityBonus: minority };
-  }
-
-  #distributeBonus(stockHolder, bonus) {
-    if (!stockHolder) {
+  #distributeBonus(stockHolders) {
+    if (!stockHolders) {
       return;
     }
-    stockHolder.forEach(({ id }) => {
+    stockHolders.forEach(({ id, money }) => {
       const player = this.getPlayer(id);
       if (player) {
-        player.money += bonus / stockHolder.length;
+        player.money += money;
       }
     });
   }
@@ -257,11 +247,10 @@ class Game {
     this.logs.push(`${bigCorp.name} acquired ${smallCorp.name}`);
 
     const stockHolders = defunctStockHolder(this.players, smallCorp.id);
-    const { majority, minority } = findMajorityMinority(stockHolders);
-    const { majorityBonus, minorityBonus } = this.#calculateBonus(smallCorp);
+    const bonus = this.marketPrice(smallCorp);
+    const defunctShareHolders = computeBonus(stockHolders, bonus);
 
-    this.#distributeBonus(majority, majorityBonus);
-    this.#distributeBonus(minority, minorityBonus);
+    this.#distributeBonus(defunctShareHolders);
     bigCorp.grow(tiles);
     smallCorp.defunct();
   }

@@ -6,6 +6,9 @@ const { newGame } = require('../../src/models/game.js');
 const { Games } = require('../../src/models/games.js');
 const { Player } = require('../../src/models/player.js');
 
+const placeTiles = (game, tileIds) => tileIds.forEach((id) => game
+  .placeTile({ id }));
+
 const session = (gameId, playerId) => () => (req, res, next) => {
   req.session = {};
   req.session.playerId = playerId;
@@ -185,18 +188,10 @@ describe('Post /api/place-tile', () => {
       const player = game.turn.player;
       const tile = game.board.tiles.find(tile => tile.id === '4b');
       player.tiles.push(tile);
-
       const corporation = game.getCorporation('america');
-      game.board.placeTile('1a');
-      game.board.placeTile('2a');
-      game.board.placeTile('3a');
-      game.board.placeTile('1b');
-      game.board.placeTile('2b');
-      game.board.placeTile('3b');
-      game.board.placeTile('1c');
-      game.board.placeTile('2c');
-      game.board.placeTile('3c');
-      game.board.placeTile('1d');
+      placeTiles(game,
+        ['1a', '2a', '3a', '1b', '2b', '3b', '1c', '2c', '3c', '1d']);
+
       game.buildCorporation(corporation.id, '1a', 'user');
 
       const tileId = '4b';

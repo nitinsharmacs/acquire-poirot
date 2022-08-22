@@ -178,6 +178,7 @@ const sortStockHolders = (players) =>
 
 const defunctStockHolder = (players, defunctId) => {
   const playerData = [];
+
   players.forEach(({ id, stocks }) => {
     const stock = defunctStocks(stocks, defunctId);
     if (stock) {
@@ -212,6 +213,27 @@ const findMajorityMinority = (stockHolders) => {
   return { majority, minority };
 };
 
+const computeBonus = (stockHolders, bonus) => {
+  const { majorityBonus, minorityBonus } = bonus;
+  const { majority, minority } = findMajorityMinority(stockHolders);
+  const beneficiaries = [];
+
+  if (!minority || majority.length >= 2) {
+    const money = (majorityBonus + minorityBonus) / majority.length;
+    majority.forEach(({ id }) => beneficiaries.push({ id, money }));
+    return beneficiaries;
+  }
+
+  if (minority.length >= 1) {
+    majority.forEach(({ id }) => beneficiaries.push({ id, money: majorityBonus }));
+
+    const money = minorityBonus / minority.length;
+    minority.forEach(({ id }) => beneficiaries.push({ id, money }));
+
+    return beneficiaries;
+  }
+};
+
 module.exports = {
   getPlayer,
   getInitialTiles,
@@ -224,5 +246,5 @@ module.exports = {
   randomInt,
   createTiles,
   defunctStockHolder,
-  findMajorityMinority
+  computeBonus
 };

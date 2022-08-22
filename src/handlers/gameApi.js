@@ -88,6 +88,14 @@ const isValidStockCount = (stocks) => {
   return totalNumOfStocks(stocks) < 4;
 };
 
+const getRequiredMoney = (game, stocks) => {
+  return stocks.reduce((requireMoney, { corporationId, numOfStocks }) => {
+    const corporation = game.findCorporation(corporationId);
+    const { stockPrice } = game.marketPrice(corporation);
+    return stockPrice * numOfStocks;
+  }, 0);
+};
+
 const buyStocks = (req, res) => {
   const {
     game,
