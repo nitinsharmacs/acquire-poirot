@@ -1,6 +1,5 @@
 class Turn {
   constructor() {
-    // this.player = player;
     this.state = 'place-tile';
   }
 
