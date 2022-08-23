@@ -173,7 +173,8 @@ class Game {
     return stocks.reduce((requireMoney, { corporationId, numOfStocks }) => {
       const corporation = this.findCorporation(corporationId);
       const { stockPrice } = this.marketPrice(corporation);
-      return stockPrice * numOfStocks;
+      const currCorpCost = stockPrice * numOfStocks;
+      return requireMoney + currCorpCost;
     }, 0);
   }
 
