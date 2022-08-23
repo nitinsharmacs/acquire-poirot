@@ -6,7 +6,8 @@ const { findAdjancetTiles,
   findTilesChain,
   createTiles,
   computeBonus,
-  findMajorityMinority
+  findMajorityMinority,
+  getPlayer
 } = require('../../src/utils/game.js');
 
 const placeTile = (tiles, tilePositions) => {
@@ -279,7 +280,9 @@ describe('computeBonus', () => {
   it('should give majority and minority bonus to a majority holder', () => {
     const stockHolders = [{ id: 'a', stock: { id: 'zeta', count: 4 } }];
     const bonus = { majorityBonus: 100, minorityBonus: 50 };
-    const expected = [{ id: 'a', money: 150 }];
+    const expected = [
+      { id: 'a', money: 150, bonusType: 'majority and minority' }];
+
     assert.deepStrictEqual(computeBonus(stockHolders, bonus), expected);
   });
 
@@ -290,7 +293,10 @@ describe('computeBonus', () => {
         { id: 'b', stock: { id: 'zeta', count: 4 } }
       ];
       const bonus = { majorityBonus: 100, minorityBonus: 50 };
-      const expected = [{ id: 'b', money: 75 }, { id: 'a', money: 75 }];
+      const expected = [
+        { id: 'b', money: 75, bonusType: 'majority and minority' },
+        { id: 'a', money: 75, bonusType: 'majority and minority' }
+      ];
       assert.deepStrictEqual(computeBonus(stockHolders, bonus), expected);
     });
 
@@ -301,7 +307,10 @@ describe('computeBonus', () => {
         { id: 'a', stock: { id: 'zeta', count: 4 } }
       ];
       const bonus = { majorityBonus: 100, minorityBonus: 50 };
-      const expected = [{ id: 'a', money: 100 }, { id: 'b', money: 50 }];
+
+      const expected = [
+        { id: 'a', money: 100, bonusType: 'majority' },
+        { id: 'b', money: 50, bonusType: 'minority' }];
       assert.deepStrictEqual(computeBonus(stockHolders, bonus), expected);
     });
 
@@ -314,9 +323,9 @@ describe('computeBonus', () => {
       ];
       const bonus = { majorityBonus: 100, minorityBonus: 50 };
       const expected = [
-        { id: 'a', money: 100 },
-        { id: 'b', money: 25 },
-        { id: 'c', money: 25 }
+        { id: 'a', money: 100, bonusType: 'majority' },
+        { id: 'b', money: 25, bonusType: 'minority' },
+        { id: 'c', money: 25, bonusType: 'minority' }
       ];
       assert.deepStrictEqual(computeBonus(stockHolders, bonus), expected);
     });
@@ -376,5 +385,12 @@ describe('findMajorityMinority', () => {
     };
     const actual = findMajorityMinority(stockHolders);
     assert.deepStrictEqual(actual, expected);
+  });
+});
+
+describe('getPlayers', () => {
+  it('should return player from players', () => {
+    const players = [{ id: 'a' }, { id: 'b' }, { id: 'c' }];
+    assert.deepStrictEqual(getPlayer(players, 'b'), { id: 'b' });
   });
 });

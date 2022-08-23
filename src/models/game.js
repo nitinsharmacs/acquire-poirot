@@ -269,9 +269,9 @@ class Game {
   }
 
   updateBonusLogs(defunctShareHolders) {
-    defunctShareHolders.forEach(({ id, money }) => {
+    defunctShareHolders.forEach(({ id, money, bonusType }) => {
       const player = this.getPlayer(id);
-      this.logs.bonusDistribution(player.name, money);
+      this.logs.bonusDistribution(player.name, money, bonusType);
     });
   }
 

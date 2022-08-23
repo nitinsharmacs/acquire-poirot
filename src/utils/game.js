@@ -213,9 +213,9 @@ const findMajorityMinority = (stockHolders) => {
   return { majority, minority };
 };
 
-const distributeMoney = (stockHolders, money) => {
+const distributeMoney = (stockHolders, money, bonusType) => {
   return stockHolders.map(({ id }) => {
-    return { id, money };
+    return { id, money, bonusType };
   });
 };
 
@@ -223,16 +223,22 @@ const computeBonus = (stockHolders, bonus) => {
   const { majorityBonus, minorityBonus } = bonus;
   const { majority, minority } = findMajorityMinority(stockHolders);
 
+  const bonusType = {
+    majority: 'majority',
+    minority: 'minority',
+    both: 'majority and minority'
+  };
+
   if (!minority || majority.length >= 2) {
     const money = (majorityBonus + minorityBonus) / majority.length;
-    return distributeMoney(majority, money);
+    return distributeMoney(majority, money, bonusType.both);
   }
 
   if (minority.length >= 1) {
-    const majorityHolders = distributeMoney(majority, majorityBonus);
+    const majorityHolders = distributeMoney(majority, majorityBonus, bonusType.majority);
 
     const money = minorityBonus / minority.length;
-    const minorityHolders = distributeMoney(minority, money);
+    const minorityHolders = distributeMoney(minority, money, bonusType.minority);
 
     return [...majorityHolders, ...minorityHolders];
   }
