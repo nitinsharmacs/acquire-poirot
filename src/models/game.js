@@ -8,7 +8,6 @@ const {
   computeBonus
 } = require('../utils/game.js');
 const informationCard = require('../../resources/informationCard.json');
-const { Turn } = require('./turn.js');
 const { Logs } = require('./log.js');
 
 const getSameRowTiles = (letter, tiles) => {
@@ -89,7 +88,7 @@ class Game {
   start() {
     this.started = true;
     this.currentPlayer = this.players[0];
-    this.turn = new Turn();
+    this.stage = 'place-tile';
   }
 
   addPlayer(player) {
@@ -107,7 +106,7 @@ class Game {
     const totalPlayers = this.#players.length;
     const nextPlayerPosition = (currentPlayerPosition + 1) % totalPlayers;
     this.currentPlayer = this.#players[nextPlayerPosition];
-    this.turn = new Turn();
+    this.stage = 'place-tile';
   }
 
   isPlayerIdle(playerId) {
@@ -216,19 +215,19 @@ class Game {
   }
 
   buildState() {
-    this.turn.buildState();
+    this.stage = 'build';
   }
 
   mergeState() {
-    this.turn.mergeState();
+    this.stage = 'merge';
   }
 
   buyStocksState() {
-    this.turn.buyStocksState();
+    this.stage = 'buy-stocks';
   }
 
   drawTileState() {
-    this.turn.drawTileState();
+    this.stage = 'draw-tile';
   }
 
   isAnyCorporationActive() {
@@ -300,7 +299,7 @@ class Game {
   }
 
   get state() {
-    return this.turn.state;
+    return this.stage;
   }
 }
 

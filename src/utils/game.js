@@ -8,12 +8,6 @@ const getPlayer = (players, playerId) => {
   return players.find(player => player.id === playerId);
 };
 
-const getInitialTiles = (player) => {
-  for (let index = 0; index < 6; index++) {
-    player.getTile();
-  }
-};
-
 const createGameLink = (host, gameId) => {
   return `http://${host}/join/${gameId}`;
 };
@@ -246,7 +240,6 @@ const computeBonus = (stockHolders, bonus) => {
 
 module.exports = {
   getPlayer,
-  getInitialTiles,
   createGameLink,
   nextStep,
   findAdjancetTiles,
