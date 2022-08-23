@@ -123,7 +123,6 @@ describe('nextStep', () => {
 
     game.placeTile({ id: '3a' });
     game.placeTile({ id: '4a' });
-    console.log(game.board.tiles[3]);
     const corporation = game.buildCorporation('america', '4a', 'user123');
 
     const tiles = [
