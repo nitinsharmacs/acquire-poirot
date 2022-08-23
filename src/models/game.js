@@ -112,7 +112,6 @@ class Game {
 
   isPlayerIdle(playerId) {
     return !this.currentPlayer.isSame(playerId);
-    // return this.turn.player.id !== playerId;
   }
 
   hasStarted() {
@@ -156,7 +155,6 @@ class Game {
   }
 
   sellStocks(stocks) {
-    // const player = this.turn.player;
     const logsData = [];
 
     stocks.forEach(({ corporationId, numOfStocks }) => {
@@ -193,14 +191,8 @@ class Game {
     return this.getPlayer(playerId) ? true : false;
   }
 
-  // getCorporation(corporationId) {
-  //   return this.corporations.find(corporation =>
-  //     corporation.id === corporationId);
-  // }
-
   buildCorporation(corporationId, tileId) {
     const corporation = this.findCorporation(corporationId);
-    // const player = this.getPlayer(playerId);
 
     const tiles = findTilesChain(tileId, this.board.tiles);
     corporation.addTiles(tiles);
