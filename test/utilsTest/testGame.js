@@ -5,8 +5,15 @@ const { findAdjancetTiles,
   nextStep,
   findTilesChain,
   createTiles,
-  computeBonus
+  computeBonus,
+  findMajorityMinority
 } = require('../../src/utils/game.js');
+
+const placeTile = (tiles, tilePositions) => {
+  tilePositions.forEach(position => {
+    tiles[position].placed = true;
+  });
+};
 
 describe('findAdjacentTiles', () => {
   const tiles = createTiles();
@@ -202,8 +209,7 @@ describe('findTilesChain', () => {
 
   it('should find the chain of placed tiles of a tile', () => {
     const tiles = createTiles();
-    tiles[0].placed = true;
-    tiles[1].placed = true;
+    placeTile(tiles, [0, 1]);
 
     const expected = [
       { label: '3A', id: '3a', placed: false },
@@ -216,10 +222,7 @@ describe('findTilesChain', () => {
 
   it('should find tiles chain from two separate tiles chains', () => {
     const tiles = createTiles();
-    tiles[0].placed = true;
-    tiles[2].placed = true;
-    tiles[3].placed = true;
-    tiles[12].placed = true;
+    placeTile(tiles, [0, 2, 3, 12]);
 
     const expected = [
       { label: '2A', id: '2a', placed: false },
@@ -233,12 +236,7 @@ describe('findTilesChain', () => {
 
   it('should find tiles chain surrounded one side with placed tiles', () => {
     const tiles = createTiles();
-    tiles[0].placed = true;
-    tiles[2].placed = true;
-    tiles[12].placed = true;
-    tiles[13].placed = true;
-    tiles[14].placed = true;
-
+    placeTile(tiles, [0, 2, 12, 13, 14]);
     const expected = [
       { label: '2A', id: '2a', placed: false },
       { label: '1A', id: '1a', placed: true },
@@ -252,14 +250,7 @@ describe('findTilesChain', () => {
 
   it('should find tiles chain surrounded with placed tiles', () => {
     const tiles = createTiles();
-    tiles[0].placed = true;
-    tiles[1].placed = true;
-    tiles[2].placed = true;
-    tiles[12].placed = true;
-    tiles[14].placed = true;
-    tiles[24].placed = true;
-    tiles[25].placed = true;
-    tiles[26].placed = true;
+    placeTile(tiles, [0, 1, 2, 12, 14, 24, 25, 26]);
 
     const expected = [
       { label: '2B', id: '2b', placed: false },
@@ -322,4 +313,61 @@ describe('computeBonus', () => {
       ];
       assert.deepStrictEqual(computeBonus(stockHolders, bonus), expected);
     });
+});
+
+describe.only('findMajorityMinority', () => {
+  it('should find a majority and minority holder', () => {
+    const stockHolders = [
+      { id: 'b', stock: { id: 'zeta', count: 3 } },
+      { id: 'a', stock: { id: 'zeta', count: 4 } }
+    ];
+    const expected = {
+      majority: [{ id: 'a', stock: { id: 'zeta', count: 4 } }],
+      minority: [{ id: 'b', stock: { id: 'zeta', count: 3 } }]
+    };
+    const actual = findMajorityMinority(stockHolders);
+    assert.deepStrictEqual(actual, expected);
+  });
+
+  it('should find two majority and a minority holders', () => {
+    const stockHolders = [
+      { id: 'a', stock: { id: 'zeta', count: 3 } },
+      { id: 'b', stock: { id: 'zeta', count: 4 } },
+      { id: 'c', stock: { id: 'zeta', count: 4 } }
+    ];
+    const expected = {
+      majority: [
+        { id: 'c', stock: { id: 'zeta', count: 4 } },
+        { id: 'b', stock: { id: 'zeta', count: 4 } }],
+      minority: [{ id: 'a', stock: { id: 'zeta', count: 3 } }]
+    };
+    const actual = findMajorityMinority(stockHolders);
+    assert.deepStrictEqual(actual, expected);
+  });
+
+  it('should find a majority and two minority holders', () => {
+    const stockHolders = [
+      { id: 'a', stock: { id: 'zeta', count: 3 } },
+      { id: 'b', stock: { id: 'zeta', count: 3 } },
+      { id: 'c', stock: { id: 'zeta', count: 4 } }
+    ];
+    const expected = {
+      majority: [
+        { id: 'c', stock: { id: 'zeta', count: 4 } }],
+      minority: [
+        { id: 'b', stock: { id: 'zeta', count: 3 } },
+        { id: 'a', stock: { id: 'zeta', count: 3 } }]
+    };
+    const actual = findMajorityMinority(stockHolders);
+    assert.deepStrictEqual(actual, expected);
+  });
+
+  it('should find a majority holders', () => {
+    const stockHolders = [{ id: 'a', stock: { id: 'zeta', count: 4 } }];
+    const expected = {
+      majority: [{ id: 'a', stock: { id: 'zeta', count: 4 } }],
+    };
+    const actual = findMajorityMinority(stockHolders);
+    assert.deepStrictEqual(actual, expected);
+  });
 });

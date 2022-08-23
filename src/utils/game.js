@@ -256,5 +256,6 @@ module.exports = {
   randomInt,
   createTiles,
   defunctStockHolder,
-  computeBonus
+  computeBonus,
+  findMajorityMinority
 };
