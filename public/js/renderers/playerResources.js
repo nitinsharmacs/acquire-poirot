@@ -19,58 +19,6 @@ const playerStocks = ({ stocks }) => {
   );
 };
 
-const placeTileOnBoard = (event) => {
-  event.preventDefault();
-
-  const formData = new FormData(event.target);
-  const tileId = formData.get('tile');
-
-  placeTile(tileId);
-};
-
-const unselectTile = (tile) => {
-  const tileElement = document.getElementById(tile.id);
-  const tileEle = select(`#tile-${tile.id}`);
-  tileElement.classList.remove('highlight-tile');
-  tileEle.classList.remove('selected-tile');
-};
-
-const selectTile = (event, tiles) => {
-  const inputElement = event.target;
-  const radio = inputElement.querySelector('input');
-  radio.checked = true;
-  const buttonElement = select('.place-tile-button');
-  buttonElement.hidden = false;
-
-  tiles.forEach(unselectTile);
-
-  const tileEle = select(`#tile-${inputElement.id}`);
-  tileEle.classList.add('selected-tile');
-  inputElement.classList.add('highlight-tile');
-};
-
-// TODO: consider renaming this function
-const tileSelection = ({ tiles }) => {
-  return tiles.map(tile => {
-
-    return ['div',
-      { class: 'tile-item', id: tile.id },
-      { onclick: (event) => selectTile(event, tiles) },
-      ['input',
-        { type: 'radio', id: tile.id, name: 'tile', value: tile.id }, {}],
-      ...tileLabel(tile)
-    ];
-  });
-};
-
-const createPlaceButton = () => {
-  const buttonTemplate = ['div', { class: 'place-button-holder' }, {},
-    ['button', { class: 'place-tile-button' }, { hidden: true },
-      'Place'],
-  ];
-  return createDOMTree(buttonTemplate);
-};
-
 const highlightTilesOnBoard = ({ player }) => {
   const playerTiles = player.tiles;
 

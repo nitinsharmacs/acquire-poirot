@@ -17,14 +17,13 @@ class GameState {
     this.cluster = cluster;
     this.logs = logs;
     this.corporations = corporations;
-    this.step = 1;
     this.gameSize = gameSize;
     this.informationCard = informationCard;
     this.turn = turn;
   }
 
   isMyTurn() {
-    return this.player.id === this.turn.player.id;
+    return this.player.id === this.turn.playerId;
   }
 
   getInactiveCorporation() {
@@ -75,8 +74,8 @@ class GameState {
     });
   }
 
-  updateState(newState) {
-    this.turn.state = newState;
+  updateStage(newStage) {
+    this.turn.stage = newStage;
   }
 
   updateCurrentPlayerMoney(money) {
@@ -92,23 +91,23 @@ class GameState {
   }
 
   isInPlaceTileState() {
-    return this.isMyTurn() && this.turn.state === 'place-tile';
+    return this.turn.stage === 'place-tile';
   }
 
   isInBuildState() {
-    return this.isMyTurn() && this.turn.state === 'build';
+    return this.turn.stage === 'build';
   }
 
   isInMergeState() {
-    return this.isMyTurn() && this.turn.state === 'merge';
+    return this.turn.stage === 'merge';
   }
 
   isInBuyState() {
-    return this.isMyTurn() && this.turn.state === 'buy-stocks';
+    return this.turn.stage === 'buy-stocks';
   }
 
   isInDrawTileState() {
-    return this.isMyTurn() && this.turn.state === 'draw-tile';
+    return this.turn.stage === 'draw-tile';
   }
 
   getActiveCorporations() {

@@ -57,7 +57,7 @@ const placeTile = (req, res) => {
 
   res.json({
     data: {
-      tile, case: game.state,
+      tile, case: game.stage,
       corporations: game.corporations,
       money: player.money
     }, message: 'placed tile'
@@ -97,7 +97,7 @@ const buyStocks = (req, res) => {
   if (!isValidStockCount(stocks)) {
     res.status(422).json({
       message: 'Can buy maximum 3 stocks',
-      data: { case: game.state }
+      data: { case: game.stage }
     });
     return;
   }
@@ -105,7 +105,7 @@ const buyStocks = (req, res) => {
   if (!areStocksAvailable(game, stocks)) {
     res.status(422).json({
       message: 'Inactive corporation or Insufficient stocks',
-      data: { case: game.state }
+      data: { case: game.stage }
     });
     return;
   }
@@ -113,7 +113,7 @@ const buyStocks = (req, res) => {
   if (!game.isMoneySufficient(playerId, stocks)) {
     res.status(422).json({
       message: 'Insufficient money',
-      data: { case: game.state }
+      data: { case: game.stage }
     });
     return;
   }
@@ -121,7 +121,7 @@ const buyStocks = (req, res) => {
   game.drawTileState();
 
   game.sellStocks(stocks, playerId);
-  res.json({ message: 'Bought stocks', data: { case: game.state } });
+  res.json({ message: 'Bought stocks', data: { case: game.stage } });
 };
 
 const buildCorporation = (req, res) => {
@@ -139,7 +139,7 @@ const buildCorporation = (req, res) => {
 
   res.json({
     message: 'built corporation',
-    data: { corporation, case: game.state }
+    data: { corporation, case: game.stage }
   });
 };
 
@@ -155,7 +155,7 @@ const skipBuildCorp = (req, res) => {
 
   res.json({
     message: 'skip built corporation',
-    data: { case: game.state }
+    data: { case: game.stage }
   });
 };
 
@@ -167,7 +167,7 @@ const skipBuyStocks = (req, res) => {
 
   res.json({
     message: 'skip buying stocks',
-    data: { case: game.state }
+    data: { case: game.stage }
   });
 };
 

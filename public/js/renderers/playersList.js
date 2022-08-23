@@ -1,6 +1,6 @@
 // Creating game players list --------------------
 const createPlayerItem = (player, game) => {
-  const activeClass = player.id === game.turn.player.id ? 'active' : '';
+  const activeClass = player.id === game.turn.playerId ? 'active' : '';
   const activeTag = player.id === game.player.id ? '(You)' : '';
 
   return ['div',
