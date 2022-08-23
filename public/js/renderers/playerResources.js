@@ -77,22 +77,8 @@ const highlightTilesOnBoard = ({ player }) => {
   playerTiles.forEach((tile) => {
     const tileElement = select(`#tile-${tile.id}`);
     tileElement.classList.add('focus-tile');
+    tileElement.onclick = () => placeTile(tile.id);
   });
-};
-
-const highlightTiles = ({ player }) => {
-  const tilesElement = createElements(tileSelection(player));
-  const tilesComponent = select('.component-tiles');
-  tilesComponent.replaceChildren(...tilesElement);
-
-  const playerTilesElement = select('.player-tiles');
-  const boardElement = select('.board');
-  const placeTileFormElement = playerTilesElement.querySelector('form');
-
-  highlight(playerTilesElement);
-  highlight(boardElement);
-
-  placeTileFormElement.appendChild(createPlaceButton());
 };
 
 // main
@@ -106,10 +92,8 @@ const renderPlayerResources = ({ player }) => {
     ],
     ['section', { class: 'player-tiles' }, {},
       ['h3', { class: 'component-heading' }, {}, 'Tiles'],
-      ['form', {}, { onsubmit: (event) => placeTileOnBoard(event) },
-        [
-          'div', { class: 'component-tiles' }, {}, ...playerTiles(player)
-        ]
+      [
+        'div', { class: 'component-tiles' }, {}, ...playerTiles(player)
       ]
     ],
     ['section', { class: 'player-stocks' }, {},
