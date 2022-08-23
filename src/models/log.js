@@ -41,7 +41,7 @@ class Logs {
   }
 
   declaredSafe(corporation) {
-    this.#logs.push(`${corporation} is safe`);
+    this.#logs.push(`${corporation} is now a stable corporation`);
   }
 
   defunctCorporation(name, { count, corporationName }) {
@@ -49,8 +49,8 @@ class Logs {
     this.#addPlayerLog(name, message);
   }
 
-  bonusDistribution(name, bonus) {
-    const message = `received Rs.${bonus} bonus`;
+  bonusDistribution(name, bonus, bonusType) {
+    const message = `received ${bonusType} bonus of $${bonus}`;
     this.#addPlayerLog(name, message);
   }
 
