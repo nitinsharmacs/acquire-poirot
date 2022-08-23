@@ -315,7 +315,7 @@ describe('computeBonus', () => {
     });
 });
 
-describe.only('findMajorityMinority', () => {
+describe('findMajorityMinority', () => {
   it('should find a majority and minority holder', () => {
     const stockHolders = [
       { id: 'b', stock: { id: 'zeta', count: 3 } },
