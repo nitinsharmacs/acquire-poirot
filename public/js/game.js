@@ -16,7 +16,7 @@ const changePlayerTurn = () => {
 const skipBuild = () => {
   API.skipBuild()
     .then((res) => {
-      gameState.updateState(res.data.case);
+      gameState.updateStage(res.data.case);
       handleView(gameState);
     });
 };
@@ -26,7 +26,7 @@ const buildCorporation = (tileId, corporationId) => {
     .then(res => {
       const { corporation: { tiles }, case: step } = res.data;
       gameState.buildCorporation(corporationId, tiles);
-      gameState.updateState(step);
+      gameState.updateStage(step);
       storeItem('corporationId', corporationId);
       handleView(gameState);
     });
@@ -38,7 +38,7 @@ const buyStocks = (stocks) => {
     .then(res => {
       gameState.sellStocks(stocks);
 
-      gameState.updateState(res.data.case);
+      gameState.updateStage(res.data.case);
       return res;
     })
     .catch((res) => {
@@ -52,7 +52,7 @@ const buyStocks = (stocks) => {
 const skipBuy = () => {
   API.skipBuy()
     .then((res) => {
-      gameState.updateState(res.data.case);
+      gameState.updateStage(res.data.case);
       handleView(gameState);
     });
 };
@@ -65,7 +65,7 @@ const placeTile = (tileId) => {
 
       gameState.updateCorporations(res.data.corporations);
       gameState.updateCurrentPlayerMoney(res.data.money);
-      gameState.updateState(res.data.case);
+      gameState.updateStage(res.data.case);
       return handleView(gameState);
     });
 };
@@ -108,9 +108,8 @@ const startPolling = () => {
         renderScreen(game);
         if (game.isMyTurn()) {
           clearInterval(pollingId);
+          handleView(game);
         }
-
-        handleView(game);
       });
   }, 500);
 };

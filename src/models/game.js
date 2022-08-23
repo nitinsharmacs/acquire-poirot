@@ -33,6 +33,7 @@ const findNearestTile = (tiles) => {
 
 class Game {
   #players;
+  #stage;
 
   constructor({ id,
     players,
@@ -88,7 +89,7 @@ class Game {
   start() {
     this.started = true;
     this.currentPlayer = this.players[0];
-    this.stage = 'place-tile';
+    this.#stage = 'place-tile';
   }
 
   addPlayer(player) {
@@ -106,7 +107,7 @@ class Game {
     const totalPlayers = this.#players.length;
     const nextPlayerPosition = (currentPlayerPosition + 1) % totalPlayers;
     this.currentPlayer = this.#players[nextPlayerPosition];
-    this.stage = 'place-tile';
+    this.#stage = 'place-tile';
   }
 
   isPlayerIdle(playerId) {
@@ -215,19 +216,19 @@ class Game {
   }
 
   buildState() {
-    this.stage = 'build';
+    this.#stage = 'build';
   }
 
   mergeState() {
-    this.stage = 'merge';
+    this.#stage = 'merge';
   }
 
   buyStocksState() {
-    this.stage = 'buy-stocks';
+    this.#stage = 'buy-stocks';
   }
 
   drawTileState() {
-    this.stage = 'draw-tile';
+    this.#stage = 'draw-tile';
   }
 
   isAnyCorporationActive() {
@@ -298,8 +299,8 @@ class Game {
     return this.#players;
   }
 
-  get state() {
-    return this.stage;
+  get stage() {
+    return this.#stage;
   }
 }
 
