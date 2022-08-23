@@ -107,10 +107,13 @@ describe('nextStep', () => {
 
   it('Should determine next move as build co. after placing a tile', () => {
     const game = newGame('game1234', new Player('user123', 'sam'), 3);
-    game.board.tiles[2].placed = true;
-    game.board.tiles[3].placed = true;
+    const player = new Player('user123', 'user');
+    game.addPlayer(player);
 
     game.start();
+    game.placeTile({ id: '3a' });
+    game.placeTile({ id: '4a' });
+
     assert.deepStrictEqual(nextStep(game, '4a'), { step: 'build' });
   });
 

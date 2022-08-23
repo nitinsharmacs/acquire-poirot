@@ -4,9 +4,9 @@ const createPlayerDAO = (player = {}) => {
 
 const createPlayersDAO = players => players.map(createPlayerDAO);
 
-const createTurnDAO = (currentPlayer, turn = {}) => {
+const createTurnDAO = (currentPlayer, stage) => {
   return {
-    ...turn,
+    state: stage,
     player: createPlayerDAO(currentPlayer)
   };
 };
@@ -22,7 +22,7 @@ const createGameDAO = (game, playerId) => {
     gameSize: game.gameSize,
     started: game.started,
     informationCard: game.informationCard,
-    turn: createTurnDAO(game.currentPlayer, game.turn)
+    turn: createTurnDAO(game.currentPlayer, game.stage)
   };
 
   return gameDAO;
