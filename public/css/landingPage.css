@@ -1,0 +1,37 @@
+.landing-page-header {
+  padding: 2em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.username {
+  align-self: flex-end;
+}
+
+.logo {
+  font-size: 5rem;
+}
+
+.navigation {
+  display: flex;
+  gap: 1.2em;
+}
+
+.landing-options {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  row-gap: 2em;
+  height: 50%;
+}
+
+.landing-options>a {
+  display: block;
+  text-decoration: none;
+  color: black;
+  width: 160px;
+}
