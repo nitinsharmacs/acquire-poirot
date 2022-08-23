@@ -127,11 +127,10 @@ const buyStocks = (req, res) => {
 const buildCorporation = (req, res) => {
   const {
     game,
-    session: { playerId },
     body: { id, corporationId }
   } = req;
 
-  const corporation = game.buildCorporation(corporationId, id, playerId);
+  const corporation = game.buildCorporation(corporationId, id);
   if (game.isAnyCorporationActive()) {
     game.buyStocksState();
   } else {

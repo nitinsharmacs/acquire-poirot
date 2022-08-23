@@ -1,7 +1,9 @@
 class Player {
+  #name;
+
   constructor(id, name) {
     this.id = id;
-    this.name = name;
+    this.#name = name;
     this.tiles = [];
     this.money = 0;
     this.stocks = [];
@@ -42,6 +44,15 @@ class Player {
 
   getMoney() {
     return this.money;
+  }
+
+  isSame(id) {
+    return this.id === id;
+  }
+
+  //getters
+  get name() {
+    return this.#name;
   }
 }
 

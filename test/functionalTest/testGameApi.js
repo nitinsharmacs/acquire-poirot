@@ -78,7 +78,7 @@ describe('POST /api/start-game', () => {
   it('should remove tile from player\'s tiles and place it on board',
     (done) => {
       const game = app.games.find('123');
-      const player = game.turn.player;
+      const player = game.currentPlayer;
       const tileId = player.tiles[0].id;
 
       request(app)
@@ -112,7 +112,7 @@ describe('POST /api/place-tile', () => {
 
   it('should remove tile from player\'s tiles and place it on board',
     (done) => {
-      const player = game.turn.player;
+      const player = game.currentPlayer;
       const tileId = player.tiles[0].id;
 
       request(app)
@@ -146,11 +146,10 @@ describe('Post /api/place-tile', () => {
 
   it('should grow corporation',
     (done) => {
-      const player = game.turn.player;
       const tile = game.board.tiles.find(tile => tile.id === '3a');
-      player.tiles.push(tile);
+      game.currentPlayer.addTile(tile);
 
-      const corporation = game.getCorporation('america');
+      const corporation = game.findCorporation('america');
       placeTiles(game, ['1a', '2a']);
       game.buildCorporation(corporation.id, '1a', 'user');
 
@@ -189,10 +188,9 @@ describe('Post /api/place-tile', () => {
 
   it('Should determine a corporation is safe',
     (done) => {
-      const player = game.turn.player;
       const tile = game.board.tiles.find(tile => tile.id === '4b');
-      player.tiles.push(tile);
-      const corporation = game.getCorporation('america');
+      game.currentPlayer.addTile(tile);
+      const corporation = game.findCorporation('america');
       placeTiles(game,
         ['1a', '2a', '3a', '1b', '2b', '3b', '1c', '2c', '3c', '1d']);
 
@@ -205,22 +203,21 @@ describe('Post /api/place-tile', () => {
         .expect('content-type', /json/)
         .expect(200, () => {
           assert.ok(corporation.getSize() >= 11);
-          assert.ok(corporation.isSafeCorporation());
+          assert.ok(corporation.isSafe());
           done();
         });
     });
 
   it('should merge two corporations',
     (done) => {
-      const player = game.turn.player;
       const tile = game.board.tiles.find(tile => tile.id === '3a');
-      player.tiles.push(tile);
+      game.currentPlayer.addTile(tile);
 
-      const corporation1 = game.getCorporation('america');
+      const corporation1 = game.findCorporation('america');
       placeTiles(game, ['1a', '2a']);
       game.buildCorporation(corporation1.id, '1a', 'user');
 
-      const corporation2 = game.getCorporation('zeta');
+      const corporation2 = game.findCorporation('zeta');
       placeTiles(game, ['4a', '5a', '6a']);
       game.buildCorporation(corporation2.id, '4a', 'user');
 
@@ -250,7 +247,7 @@ describe('POST /api/draw-tile', () => {
     game.setup();
     game.start();
 
-    currentPlayer = game.turn.player;
+    currentPlayer = game.currentPlayer;
     done();
   });
 

@@ -117,10 +117,13 @@ describe('nextStep', () => {
   it('Should determine next move as grow corporation', () => {
     const game = newGame('game1234', { id: 'user123', name: 'user' }, 3);
     const player = new Player('user123', 'user');
-
     game.addPlayer(player);
-    game.board.tiles[2].placed = true;
-    game.board.tiles[3].placed = true;
+
+    game.start();
+
+    game.placeTile({ id: '3a' });
+    game.placeTile({ id: '4a' });
+    console.log(game.board.tiles[3]);
     const corporation = game.buildCorporation('america', '4a', 'user123');
 
     const tiles = [
@@ -152,10 +155,12 @@ describe('nextStep', () => {
     const player = new Player('user123', 'user');
 
     game.addPlayer(player);
-    game.board.tiles[2].placed = true;
-    game.board.tiles[3].placed = true;
-    game.board.tiles[5].placed = true;
-    game.board.tiles[6].placed = true;
+    game.start();
+
+    game.placeTile({ id: '3a' });
+    game.placeTile({ id: '4a' });
+    game.placeTile({ id: '6a' });
+    game.placeTile({ id: '7a' });
 
     const corporation1 = game.buildCorporation('america', '4a', 'user123');
     const corporation2 = game.buildCorporation('zeta', '6a', 'user123');
