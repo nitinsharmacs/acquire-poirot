@@ -52,7 +52,7 @@ class Corporation {
     return this.tiles.length;
   }
 
-  isSafeCorporation() {
+  isSafe() {
     return this.#isSafe;
   }
 }

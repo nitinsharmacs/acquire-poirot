@@ -88,7 +88,8 @@ class Game {
 
   start() {
     this.started = true;
-    this.turn = new Turn(this.players[0]);
+    this.currentPlayer = this.players[0];
+    this.turn = new Turn();
   }
 
   addPlayer(player) {
@@ -101,15 +102,17 @@ class Game {
 
   changeTurn() {
     const currentPlayerPosition = this.#players.findIndex(player => {
-      return player.id === this.turn.player.id;
+      return this.currentPlayer.isSame(player.id);
     });
     const totalPlayers = this.#players.length;
     const nextPlayerPosition = (currentPlayerPosition + 1) % totalPlayers;
-    this.turn = new Turn(this.#players[nextPlayerPosition]);
+    this.currentPlayer = this.#players[nextPlayerPosition];
+    this.turn = new Turn();
   }
 
   isPlayerIdle(playerId) {
-    return this.turn.player.id !== playerId;
+    return !this.currentPlayer.isSame(playerId);
+    // return this.turn.player.id !== playerId;
   }
 
   hasStarted() {
@@ -127,15 +130,15 @@ class Game {
 
   placeTile({ id }) {
     this.logs.resetLogs();
-    this.turn.player.removeTile(id);
+    this.currentPlayer.removeTile(id);
     const tile = this.board.placeTile(id);
-    this.logs.placedTile(this.turn.player.name, id);
+    this.logs.placedTile(this.currentPlayer.name, id);
     return tile;
   }
 
   drawTile() {
-    this.logs.drewTile(this.turn.player.name);
-    return this.giveTile(this.turn.player);
+    this.logs.drewTile(this.currentPlayer.name);
+    return this.giveTile(this.currentPlayer);
   }
 
   marketPrice(corporation) {
@@ -153,19 +156,19 @@ class Game {
   }
 
   sellStocks(stocks) {
-    const player = this.turn.player;
+    // const player = this.turn.player;
     const logsData = [];
 
     stocks.forEach(({ corporationId, numOfStocks }) => {
       const corporation = this.findCorporation(corporationId);
       corporation.reduceStocks(numOfStocks);
-      player.addStocks(corporation, numOfStocks);
+      this.currentPlayer.addStocks(corporation, numOfStocks);
       const { stockPrice } = this.marketPrice(corporation);
 
-      player.deductMoney(stockPrice * numOfStocks);
+      this.currentPlayer.deductMoney(stockPrice * numOfStocks);
       logsData.push({ numOfStocks, corporation: corporation.name });
     });
-    this.logs.boughtStocks(player.name, logsData);
+    this.logs.boughtStocks(this.currentPlayer.name, logsData);
   }
 
   choosenStocksCost(stocks) {
@@ -190,14 +193,14 @@ class Game {
     return this.getPlayer(playerId) ? true : false;
   }
 
-  getCorporation(corporationId) {
-    return this.corporations.find(corporation =>
-      corporation.id === corporationId);
-  }
+  // getCorporation(corporationId) {
+  //   return this.corporations.find(corporation =>
+  //     corporation.id === corporationId);
+  // }
 
-  buildCorporation(corporationId, tileId, playerId) {
-    const corporation = this.getCorporation(corporationId);
-    const player = this.getPlayer(playerId);
+  buildCorporation(corporationId, tileId) {
+    const corporation = this.findCorporation(corporationId);
+    // const player = this.getPlayer(playerId);
 
     const tiles = findTilesChain(tileId, this.board.tiles);
     corporation.addTiles(tiles);
@@ -205,16 +208,16 @@ class Game {
 
     const stocksCount = 1;
     if (corporation.areStocksAvailable(stocksCount)) {
-      player.addStocks(corporation, stocksCount);
+      this.currentPlayer.addStocks(corporation, stocksCount);
       corporation.reduceStocks(stocksCount);
     }
 
-    this.logs.built(player.name, corporation.name);
+    this.logs.built(this.currentPlayer.name, corporation.name);
     return corporation;
   }
 
   determineSafe(corporation) {
-    if (corporation.isSafeCorporation()) {
+    if (corporation.isSafe()) {
       this.logs.declaredSafe(corporation.name);
     }
   }
@@ -244,11 +247,11 @@ class Game {
   }
 
   skipBuy() {
-    this.logs.skippedBuy(this.turn.player.name);
+    this.logs.skippedBuy(this.currentPlayer.name);
   }
 
   skipBuild() {
-    this.logs.skippedBuild(this.turn.player.name);
+    this.logs.skippedBuild(this.currentPlayer.name);
   }
 
   // merge corporations ---------
@@ -294,6 +297,10 @@ class Game {
     this.updateBonusLogs(defunctShareHolders);
   }
 
+  isHost(playerId) {
+    return this.host.id === playerId;
+  }
+
   // getters ---------------
   get players() {
     return this.#players;
@@ -301,10 +308,6 @@ class Game {
 
   get state() {
     return this.turn.state;
-  }
-
-  isHost(playerId) {
-    return this.host.id === playerId;
   }
 }
 
