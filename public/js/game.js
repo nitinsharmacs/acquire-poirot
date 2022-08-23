@@ -76,7 +76,6 @@ const handleView = (game, message = '') => {
   if (game.isInPlaceTileState()) {
     renderPlayerResources(game);
     highlightTilesOnBoard(game);
-    highlightTiles(game);
   }
 
   if (game.isInBuildState()) {

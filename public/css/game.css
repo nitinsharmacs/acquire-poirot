@@ -231,19 +231,6 @@ body {
   position: relative;
 }
 
-.player-resources .tile-item::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.tile-item input {
-  display: none;
-}
-
 .player-money {
   width: 15%;
   text-align: center;
@@ -268,11 +255,6 @@ body {
   justify-content: center;
 }
 
-.highlight-tile {
-  background-color: rgba(0, 0, 0, 0.799) !important;
-  color: white;
-}
-
 .player-tiles>div,
 .component-tiles {
   display: grid;
@@ -284,7 +266,6 @@ body {
 
 .player-tiles .tile-item {
   background-color: lightgray;
-  cursor: pointer;
 }
 
 .player-stocks {
@@ -606,6 +587,7 @@ button:hover {
   animation-iteration-count: infinite;
   --animation-color: rgb(166, 164, 164);
   --animation-font-color: black;
+  cursor: pointer;
 }
 
 .selected-tile {
