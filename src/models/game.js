@@ -7,7 +7,7 @@ const {
   defunctStockHolder,
   computeBonus
 } = require('../utils/game.js');
-const { informationCard } = require('./informationCard.js');
+const informationCard = require('../../resources/informationCard.json');
 const { Turn } = require('./turn.js');
 const { Logs } = require('./log.js');
 
