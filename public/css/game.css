@@ -1,9 +1,3 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 :root {
   --component-gap: 10px;
   --component-border-radius: 5px;
@@ -23,11 +17,6 @@
   --zeta-border: #ffc936;
   --zeta-bg: #fbf1d7;
   --tile-size: 65px;
-}
-
-body {
-  font-family: 'Recursive';
-  font-size: 18px;
 }
 
 .game-page {
@@ -201,21 +190,6 @@ body {
   top: 0;
   left: 0;
   background-color: rgba(0, 0, 0, 0.3);
-}
-
-.place-button-holder {
-  margin-top: 1.5em;
-  display: flex !important;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
-
-.place-tile-button {
-  height: 2em;
-  width: 4em;
-  font-size: 1em;
-  cursor: pointer;
 }
 
 .player-resources>section {
@@ -625,7 +599,6 @@ input[type=number]::-webkit-outer-spin-button {
   border: 2px solid lightgray;
   border-radius: 5px;
 }
-
 
 .buy-stock-error {
   margin-top: 1em;
