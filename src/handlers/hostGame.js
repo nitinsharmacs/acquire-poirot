@@ -37,6 +37,7 @@ const hostGame = (req, res) => {
   game.addPlayer(gameHost);
 
   const games = req.app.games.games;
+  // todo : put game.isHost();
   const existingGame = games.find(game => game.host.id === playerId);
   if (existingGame) {
     return res.redirect('/lobby/' + existingGame.id);
