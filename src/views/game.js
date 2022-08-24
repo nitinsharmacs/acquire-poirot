@@ -16,6 +16,7 @@ const gamePage = () => `<html>
   <script src="/js/renderers/board.js"></script>
   <script src="/js/renderer.js"></script>
   <script src="/js/api.js"></script>
+  <script src="/js/poller.js"></script>
   <script src="/js/state.js"></script>
   <script src="/js/store.js"></script>
   <script src="/js/game.js"></script>

@@ -10,7 +10,7 @@ const drawTile = () => {
 
 const changePlayerTurn = () => {
   API.changeTurn()
-    .then(() => startPolling());
+    .then(() => poller.start());
 };
 
 const skipBuild = () => {
@@ -105,7 +105,7 @@ const handleView = (game, message = '') => {
     // renderLogs(game);
     // renderPlayerResources(game);
     // renderStockMarket(game, message);
-    startPolling();
+    poller.start();
   }
 
   if (game.isInBuyState()) {
@@ -122,26 +122,22 @@ const handleView = (game, message = '') => {
   }
 };
 
-// TODO : Consider renaming startPolling function name
-const startPolling = () => {
-  const pollingId = setInterval(() => {
-    API.loadGame()
-      .then(res => createState(res.game))
-      .then(game => {
-        gameState = game;
-        renderScreen(game);
-        if (game.isMyTurn()) {
-          clearInterval(pollingId);
-          handleView(game);
-        }
-      });
-  }, 500);
+let gameState;
+let poller;
+
+const refresh = (game) => {
+  gameState = createState(game);
+
+  renderScreen(gameState);
+  if (gameState.isMyTurn()) {
+    poller.stop();
+    handleView(gameState);
+  }
 };
 
-let gameState;
-
 const main = () => {
-  startPolling();
+  poller = new Poller(500, refresh);
+  poller.start();
 
   const infoCard = select('#info-card');
   const infoCardBtn = select('#info-card-btn');
