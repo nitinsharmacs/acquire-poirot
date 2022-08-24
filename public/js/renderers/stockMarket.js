@@ -2,6 +2,7 @@ const createCorporation = (corporation) => {
   const corporationClass = corporation.active ? 'disabled-corporation' : '';
 
   return ['div', { class: 'corporation' }, {},
+    ['p', { class: 'market-price' }, {}, `$${corporation.marketPrice.stockPrice || 0}`],
     ['div', {
       class: `corporation-img ${corporation.id} ${corporationClass}`,
       id: corporation.id
