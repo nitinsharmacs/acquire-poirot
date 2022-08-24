@@ -104,6 +104,10 @@ class GameState {
     return this.turn.stage === 'merge';
   }
 
+  isInTransactionState() {
+    return this.turn.stage === 'transaction';
+  }
+
   isInBuyState() {
     return this.turn.stage === 'buy-stocks';
   }

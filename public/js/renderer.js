@@ -13,6 +13,20 @@ const renderPopups = (game) => {
   }
 };
 
+const sellDefunctStocks = () => {
+  const stockCount = select('.sell-stocks').value;
+  sellStocks(stockCount);
+};
+
+const showDefunctStocksTransaction = () => {
+  const transactionPannel = document.querySelector('.logs');
+
+  const transactionHTML = [['div', {}, {},
+    ['input', { class: 'sell-stocks' }, {}, ''], ['input', { type: 'button', value: 'confirm' }, { onclick: sellDefunctStocks }]]];
+
+  transactionPannel.replaceChildren(...createElements(transactionHTML));
+};
+
 const renderScreen = (game) => {
   renderBoard(game);
   renderPlayers(game);

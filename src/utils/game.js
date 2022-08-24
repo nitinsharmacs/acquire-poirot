@@ -130,7 +130,6 @@ const nextStep = (game, tileId) => {
   }
 
   if (activeCorporations.length >= 2) {
-    game.buyStocksState();
     return { step: 'merge', corporations: activeCorporations, tiles: placedTiles };
   }
 

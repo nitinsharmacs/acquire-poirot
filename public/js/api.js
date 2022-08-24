@@ -64,4 +64,18 @@ const API = {
     method: 'POST',
   })
     .then(res => res.json()),
+
+  sellStock: (stockCount) => fetch('api/sell-stocks', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ stockCount })
+  })
+    .then(res => {
+      return res.json().then(data => {
+        if (res.status !== 200) {
+          throw new Error(data.message);
+        }
+        return data;
+      });
+    }),
 };

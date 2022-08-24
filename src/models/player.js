@@ -34,6 +34,14 @@ class Player {
     this.stocks.push({ corporationId: id, corporationName: name, count: noOfStocks });
   }
 
+  reduceStocks({ id }, noOfStocks = 0) {
+    const stocks = this.stocks.find(stock => stock.corporationId === id);
+
+    if (stocks) {
+      stocks.count -= noOfStocks;
+    }
+  }
+
   deductMoney(toBeDeducted) {
     this.money -= toBeDeducted;
   }
@@ -48,6 +56,11 @@ class Player {
 
   isSame(id) {
     return this.id === id;
+  }
+
+  hasStocks({ id }) {
+    const stocks = this.stocks.find(stock => stock.corporationId === id);
+    return stocks && stocks.count > 0;
   }
 
   //getters

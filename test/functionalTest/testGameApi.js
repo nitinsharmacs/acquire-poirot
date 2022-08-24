@@ -487,3 +487,49 @@ describe('POST /api/buy-stocks', () => {
           done);
     });
 });
+
+describe('POST /api/sell-stocks', () => {
+  const games = new Games();
+  const host = { name: 'sam', id: 'user' };
+
+  const game = newGame('123', host, 1);
+  games.add(game);
+  game.addPlayer(new Player('user', 'sam'));
+  const app = initApp(session('123', 'user'), games);
+
+  before((done) => {
+    request(app)
+      .post('/api/start-game')
+      .expect('content-type', /json/)
+      .expect(200, done);
+  });
+
+  beforeEach((done) => {
+    const tile = game.board.tiles.find(tile => tile.id === '3a');
+    game.currentPlayer.addTile(tile);
+
+    const corporation1 = game.findCorporation('america');
+    placeTiles(game, ['1a', '2a']);
+    game.buildCorporation(corporation1.id, '1a', 'user');
+
+    const corporation2 = game.findCorporation('zeta');
+    placeTiles(game, ['4a', '5a', '6a']);
+    game.buildCorporation(corporation2.id, '4a', 'user');
+
+    const tileId = '3a';
+    request(app)
+      .post('/api/place-tile')
+      .send(`id=${tileId}`)
+      .expect('content-type', /json/)
+      .expect(200, done);
+  });
+
+  it('should sell stocks of defunct corporation', (done) => {
+    request(app)
+      .post('/api/sell-stocks')
+      .send('stockCount=2')
+      .expect('content-type', /json/)
+      .expect(200, done);
+  });
+
+});
