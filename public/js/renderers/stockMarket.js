@@ -1,10 +1,10 @@
 const corpClass = (corporation) =>
-  corporation.active ? `disabled-${corporation.id}` : corporation.id;
+  corporation.active ? 'disabled-corporation' : '';
 
 const createCorporation = (corporation) => {
   return ['div', { class: 'corporation' }, {},
     ['div', {
-      class: `corporation-img ${corpClass(corporation)}`,
+      class: `corporation-img ${corporation.id} ${corpClass(corporation)}`,
       id: corporation.id
     }, {}],
     ['div', { class: 'corporation-info' }, {},
@@ -77,7 +77,7 @@ const corpWhileBuild = (corporations) => (corporation) => {
   return ['div', { class: 'corporation' }, {},
     ['div',
       {
-        class: `corporation-img ${corpBuildClass(corporation)}`,
+        class: `corporation-img ${corporation.id} ${corpClass(corporation)}`,
         id: corporation.id
       },
       { onclick: (event) => selectCorp(event, corporations) },
