@@ -1,6 +1,11 @@
 const API = {
   loadGame: () => fetch('/api/loadgame', { method: 'GET' })
-    .then(res => res.json()),
+    .then(res => {
+      if (res.status !== 200) {
+        throw new Error('Can\'t load game');
+      }
+      return res;
+    }).then(res => res.text()),
 
   placeTile: (tileId) => fetch('/api/place-tile',
     {
