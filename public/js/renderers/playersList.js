@@ -6,7 +6,7 @@ const createPlayerItem = (player, game) => {
   return ['div',
     { class: `player-item ${activeClass}` },
     {},
-    ['div', { class: 'highlight' }, {}],
+    ['div', { class: 'player-item-marker' }, {}],
     ['p', {}, {}, `${player.name}`],
     ['span', {}, {}, ` ${activeTag}`]
   ];
