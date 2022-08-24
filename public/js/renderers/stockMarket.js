@@ -1,10 +1,9 @@
-const corpClass = (corporation) =>
-  corporation.active ? 'disabled-corporation' : '';
-
 const createCorporation = (corporation) => {
+  const corporationClass = corporation.active ? 'disabled-corporation' : '';
+
   return ['div', { class: 'corporation' }, {},
     ['div', {
-      class: `corporation-img ${corporation.id} ${corpClass(corporation)}`,
+      class: `corporation-img ${corporation.id} ${corporationClass}`,
       id: corporation.id
     }, {}],
     ['div', { class: 'corporation-info' }, {},
@@ -33,74 +32,14 @@ const createCorporationsHTML = (corporations) => {
   ];
 };
 
-const selectCorp = (event, corporations) => {
-  const inputElement = event.target;
-  const targetEle = inputElement;
-  const targetEleInfo = inputElement.parentElement;
-  const corpInfoEle = targetEleInfo.querySelector('.corporation-info');
-
-  const radio = inputElement.querySelector('input');
-  radio.checked = true;
-
-  const buildButton = select('#confirm-btn');
-  enable(buildButton);
-
-  corporations.forEach(corp => {
-    const corpElement = document.getElementById(corp.id);
-    const corpInfo = corpElement.parentElement.querySelector(
-      '.corporation-info');
-
-    if (corpInfo) {
-      corpElement.classList.remove('highlight-corp');
-      corpInfo.classList.remove('highlight-info');
+const stocksToBuy = (form) => {
+  const formData = [...new FormData(form).entries()];
+  return formData.reduce((stocks, [key, value]) => {
+    if (value > 0) {
+      stocks.push({ corporationId: key, numOfStocks: parseInt(value) });
     }
-  });
-  targetEle.classList.add('highlight-corp');
-  corpInfoEle.classList.add('highlight-info');
-};
-
-const corpWhileBuild = (corporations) => (corporation) => {
-  return ['div', { class: 'corporation' }, {},
-    ['div',
-      {
-        class: `corporation-img ${corporation.id} ${corpClass(corporation)}`,
-        id: corporation.id
-      },
-      { onclick: (event) => selectCorp(event, corporations) },
-      ['input',
-        {
-          type: 'radio',
-          id: corporation.id,
-          name: 'corporation',
-          value: corporation.id,
-        }, { hidden: true }]],
-    ['div', { class: 'corporation-info' }, {},
-      ['p', {}, {}, corporation.name],
-      ['p', {}, {}, `${corporation.stocksLeft} `],
-    ]
-  ];
-};
-
-const corpColumn = (corporations, allcorps) => {
-  return ['div', { class: 'corporation-col' }, {},
-    ...corporations.map(corpWhileBuild(allcorps))
-  ];
-};
-
-const buildCorpOnBoard = (tileId) => {
-  const form = select('#stock-market');
-  const formData = new FormData(form);
-  const corporationId = formData.get('corporation');
-
-  console.log(corporationId, tileId);
-  buildCorporation(tileId, corporationId);
-};
-
-const createCorpsWhileBuild = (corporations) => {
-  return ['div', { class: 'corporations' }, {},
-    corpColumn(corporations.slice(0, 4), corporations),
-    corpColumn(corporations.slice(4), corporations)
-  ];
+    return stocks;
+  }, []);
 };
 
 const validateInput = () => {
@@ -116,7 +55,6 @@ const validateInput = () => {
 };
 
 const createBtnHolder = ({ action, skip, label }) => {
-
   const btnHolder = ['div', { class: 'button-holder' }, {},
     ['button', { class: 'btn theme-btn', type: 'submit', id: 'confirm-btn', disabled: true }, {
       onclick: (event) => {
@@ -148,53 +86,66 @@ const buySelectedStocks = () => {
   buyStocks(stocksToBuy(form));
 };
 
-const highlightStockMarketToBuy = (game) => {
+const highlightStockMarket = (btnHolder) => {
   const stockMarketElement = select('#stock-market');
   highlight(stockMarketElement);
 
-  const canBeBoughtOf = game.availableToBuy();
-  showControls(canBeBoughtOf);
+  stockMarketElement.appendChild(btnHolder);
+};
 
+const highlightStockMarketToBuy = (game) => {
   const btnHolderElement = createBtnHolder({
     action: buySelectedStocks,
     skip: skipBuy,
     label: 'Buy'
   });
-  stockMarketElement.appendChild(btnHolderElement);
+  highlightStockMarket(btnHolderElement);
+
+  const canBeBoughtOf = game.availableToBuy();
+  showControls(canBeBoughtOf);
 };
 
-const highlightStockMarket = ({ corporations }, tileId) => {
-  const corporationsEle = createDOMTree(
-    createCorpsWhileBuild(corporations, tileId));
+const highlightSelectedCorporation = (corporations, corporation) => {
+  corporations.forEach(_corporation => {
+    removeClass(_corporation, 'highlight-corp');
+    removeClass(_corporation.nextSibling, 'highlight-info');
+  });
 
-  const corporationsCompo = select('.corporations');
-  replace(corporationsCompo, corporationsEle);
+  addClass(corporation, 'highlight-corp');
+  addClass(corporation.nextSibling, 'highlight-info');
+};
 
-  const stockMarketElement = select('#stock-market');
-  highlight(stockMarketElement);
+const attachSelectEvent = (corporations, onSelect) => {
+  corporations.forEach(corporation => {
+    corporation.onclick = () => {
+      highlightSelectedCorporation(corporations, corporation);
+      onSelect(corporation.id);
+    };
+  });
+};
+
+const highlightStockMarketToBuild = (tileId) => {
+  let selectedId;
 
   const btnHolderElement = createBtnHolder({
-    action: () => buildCorpOnBoard(tileId),
+    action: () => buildCorporation(tileId, selectedId),
     skip: skipBuild,
     label: 'Build'
   });
 
-  stockMarketElement.appendChild(btnHolderElement);
-};
+  highlightStockMarket(btnHolderElement);
 
-const stocksToBuy = (form) => {
-  const formData = [...new FormData(form).entries()];
-  return formData.reduce((stocks, [key, value]) => {
-    if (value > 0) {
-      stocks.push({ corporationId: key, numOfStocks: parseInt(value) });
-    }
-    return stocks;
-  }, []);
+  const corporations = selectAll('.corporation-img');
+  attachSelectEvent(corporations, (corporationId) => {
+    selectedId = corporationId;
+    enable(select('#confirm-btn'));
+  });
 };
 
 // main
 const renderStockMarket = ({ corporations }, message = '') => {
   const stockMarket = select('#stock-market');
+
   const elements = [
     ['h3', { class: 'component-heading' }, {}, 'Stock Market'],
     createCorporationsHTML(corporations),

@@ -67,14 +67,11 @@ const createDOMTree = (rootElement) => {
 
 const replace = (ele1, ele2) => ele1.replaceWith(ele2);
 
-const select = (selectBy) => document.querySelector(selectBy);
+const select = (query) => document.querySelector(query);
+const selectAll = (query) => document.querySelectorAll(query);
 
 const show = (element) => {
   element.style.visibility = 'visible';
-};
-
-const hide = (element) => {
-  element.style.visibility = 'hidden';
 };
 
 const disable = (element) => {
@@ -85,6 +82,14 @@ const enable = (element) => element.removeAttribute('disabled');
 
 const removeClass = (element, className) => {
   element.classList.remove(className);
+};
+
+const addClass = (element, className) => {
+  element.classList.add(className);
+};
+
+const removeChildren = (element) => {
+  element.innerText = '';
 };
 
 const createStyle = (property, value) => `${property}:${value}`;

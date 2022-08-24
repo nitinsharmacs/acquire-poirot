@@ -82,7 +82,7 @@ const handleView = (game, message = '') => {
     renderBoard(game);
     renderPlayerResources(game);
     renderStockMarket(game, message);
-    highlightStockMarket(game, getItem('tileId'));
+    highlightStockMarketToBuild(getItem('tileId'));
   }
 
   if (game.isInBuyState()) {
