@@ -317,7 +317,9 @@ class Game {
     const defunctShareHolders = computeBonus(stockHolders, bonus);
 
     this.#distributeBonus(defunctShareHolders);
-    bigCorp.grow(tiles);
+
+    this.expandCorporation(bigCorp.id, tiles);
+
     smallCorp.defunct();
     this.updateDefunctLogs(stockHolders);
     this.updateBonusLogs(defunctShareHolders);
