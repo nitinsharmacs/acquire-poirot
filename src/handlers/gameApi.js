@@ -53,6 +53,7 @@ const placeTile = (req, res) => {
   }
   if (step === 'merge') {
     game.merge(corporations, tiles);
+    game.mergeState();
     corporations.forEach(corporation => game.determineSafe(corporation));
   }
 
@@ -172,6 +173,17 @@ const skipBuyStocks = (req, res) => {
   });
 };
 
+const sellStocks = (req, res) => {
+  const { game,
+    body: { stockCount }
+  } = req;
+  game.sellDefunctStocks(stockCount);
+  res.json({
+    message: 'sold stocks',
+    data: { case: 'transaction' }
+  });
+};
+
 module.exports = {
   loadGame,
   startGame,
@@ -183,5 +195,6 @@ module.exports = {
   totalNumOfStocks,
   areStocksAvailable,
   skipBuildCorp,
-  skipBuyStocks
+  skipBuyStocks,
+  sellStocks
 };

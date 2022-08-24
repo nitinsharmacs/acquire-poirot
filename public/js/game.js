@@ -50,6 +50,14 @@ const buyStocks = (stocks) => {
     });
 };
 
+const sellStocks = (stockCount) => {
+  API.sellStock(stockCount)
+    .then(res => {
+      gameState.updateStage(res.data.case);
+      handleView(gameState);
+    });
+};
+
 const skipBuy = () => {
   API.skipBuy()
     .then((res) => {
@@ -79,6 +87,13 @@ const handleView = (game, message = '') => {
     highlightTilesOnBoard(game);
   }
 
+  if (game.isInMergeState()) {
+    renderBoard(game);
+    renderPlayerResources(game);
+    renderStockMarket(game, message);
+    showDefunctStocksTransaction();
+  }
+
   if (game.isInBuildState()) {
     renderBoard(game);
     renderPlayerResources(game);
@@ -86,7 +101,15 @@ const handleView = (game, message = '') => {
     highlightStockMarketToBuild(getItem('tileId'));
   }
 
+  if (game.isInTransactionState()) {
+    // renderLogs(game);
+    // renderPlayerResources(game);
+    // renderStockMarket(game, message);
+    startPolling();
+  }
+
   if (game.isInBuyState()) {
+    renderLogs(game);
     renderBoard(game);
     renderStockMarket(game, message);
     renderPlayerResources(game);

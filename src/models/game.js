@@ -1,5 +1,6 @@
 const lodash = require('lodash');
 const { Corporation } = require('./corporation.js');
+const { MergeState } = require('./mergeState.js');
 const { createBoard } = require('./board.js');
 const {
   findTilesChain,
@@ -108,7 +109,7 @@ class Game {
       hasMoreThan40Tiles(activeCorporations);
   }
 
-  changeTurn() {
+  changeTurn(stage = 'place-tile') {
     if (this.isGameOver()) {
       this.endGameState();
       this.currentPlayer = undefined;
@@ -122,7 +123,7 @@ class Game {
     const totalPlayers = this.#players.length;
     const nextPlayerPosition = (currentPlayerPosition + 1) % totalPlayers;
     this.currentPlayer = this.#players[nextPlayerPosition];
-    this.placeTileStage();
+    this.#stage = stage;
   }
 
   isPlayerIdle(playerId) {
@@ -248,6 +249,10 @@ class Game {
     this.#stage = 'merge';
   }
 
+  transactionState() {
+    this.#stage = 'transaction';
+  }
+
   buyStocksState() {
     this.#stage = 'buy-stocks';
   }
@@ -309,20 +314,23 @@ class Game {
   }
 
   merge(corporations, tiles) {
-    const [smallCorp, bigCorp] = sortCorporations(corporations);
-    this.logs.merged(bigCorp.name, smallCorp.name);
+    const [defunctCorp, acquiringCorp] = sortCorporations(corporations);
+    this.logs.merged(acquiringCorp.name, defunctCorp.name);
 
-    const stockHolders = defunctStockHolder(this.#players, smallCorp.id);
-    const bonus = this.marketPrice(smallCorp);
+    const stockHolders = defunctStockHolder(this.#players, defunctCorp.id);
+    const bonus = this.marketPrice(defunctCorp);
     const defunctShareHolders = computeBonus(stockHolders, bonus);
 
     this.#distributeBonus(defunctShareHolders);
-
-    this.expandCorporation(bigCorp.id, tiles);
-
-    smallCorp.defunct();
     this.updateDefunctLogs(stockHolders);
     this.updateBonusLogs(defunctShareHolders);
+    this.state = new MergeState(this, defunctCorp, acquiringCorp, tiles);
+    // defunctCorp.defunct();
+    // acquiringCorp.grow(tiles);
+  }
+
+  sellDefunctStocks(stockCount) {
+    this.state.sellStocks(stockCount);
   }
 
   isHost(playerId) {
