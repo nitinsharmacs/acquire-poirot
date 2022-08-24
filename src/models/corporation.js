@@ -7,6 +7,7 @@ class Corporation {
     this.stocksLeft = 25;
     this.tiles = [];
     this.#isSafe = false;
+    this.marketPrice = 0;
   }
 
   areStocksAvailable(count) {
@@ -41,6 +42,10 @@ class Corporation {
   grow(tiles) {
     this.tiles = tiles;
     this.determineIfSafe();
+  }
+
+  updateMarketPrice(newPrice) {
+    this.marketPrice = newPrice;
   }
 
   defunct() {

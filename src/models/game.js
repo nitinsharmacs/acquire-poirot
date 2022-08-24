@@ -154,6 +154,12 @@ class Game {
     return { minorityBonus: minority, majorityBonus: majority, stockPrice };
   }
 
+  expandCorporation(corporationId, tiles) {
+    const corporation = this.findCorporation(corporationId);
+    corporation.grow(tiles);
+    corporation.updateMarketPrice(this.marketPrice(corporation));
+  }
+
   sellStocks(stocks) {
     const logsData = [];
 
@@ -198,6 +204,7 @@ class Game {
     const tiles = findTilesChain(tileId, this.board.tiles);
     corporation.addTiles(tiles);
     corporation.activate();
+    corporation.updateMarketPrice(this.marketPrice(corporation));
 
     const stocksCount = 1;
     if (corporation.areStocksAvailable(stocksCount)) {

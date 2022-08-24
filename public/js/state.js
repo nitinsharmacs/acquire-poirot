@@ -185,12 +185,13 @@ const createPlayer = ({ player }) => {
 };
 
 class Corporation {
-  constructor({ id, name, stocksLeft, active, tiles }) {
+  constructor({ id, name, stocksLeft, active, tiles, marketPrice }) {
     this.id = id;
     this.name = name;
     this.active = active;
     this.stocksLeft = stocksLeft;
     this.tiles = tiles;
+    this.marketPrice = marketPrice;
   }
 
   reduceStocks(count) {

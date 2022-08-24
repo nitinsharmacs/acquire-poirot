@@ -47,7 +47,8 @@ const placeTile = (req, res) => {
   const { step, tiles, corporations } = nextStep(game, id);
 
   if (step === 'grow') {
-    corporations[0].grow(tiles);
+    const [corporation] = corporations;
+    game.expandCorporation(corporation.id, tiles);
     game.determineSafe(corporations[0]);
   }
   if (step === 'merge') {

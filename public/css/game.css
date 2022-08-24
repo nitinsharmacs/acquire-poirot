@@ -379,7 +379,12 @@
   column-gap: 1em;
   align-items: center;
   margin: 1em 0;
-  width: 230px;
+  width: 300px;
+}
+
+.market-price {
+  width: 45px;
+  text-align: right;
 }
 
 .corporation-img {
