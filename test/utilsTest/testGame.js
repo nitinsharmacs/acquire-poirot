@@ -7,7 +7,9 @@ const { findAdjancetTiles,
   createTiles,
   computeBonus,
   findMajorityMinority,
-  getPlayer
+  getPlayer,
+  areCorporationsSafe,
+  hasMoreThan40Tiles
 } = require('../../src/utils/game.js');
 
 const placeTile = (tiles, tilePositions) => {
@@ -392,5 +394,61 @@ describe('getPlayers', () => {
   it('should return player from players', () => {
     const players = [{ id: 'a' }, { id: 'b' }, { id: 'c' }];
     assert.deepStrictEqual(getPlayer(players, 'b'), { id: 'b' });
+  });
+});
+
+describe('areCorporationsSafe', () => {
+  it('Should validate when all given corporations are safe', () => {
+    const corporations = [
+      {
+        isSafe: () => true,
+      },
+      {
+        isSafe: () => true,
+      },
+      {
+        isSafe: () => true,
+      }
+    ];
+    assert.ok(areCorporationsSafe(corporations));
+  });
+
+  it('Should invalidate when any of the given corporations is unsafe', () => {
+    const corporations = [
+      {
+        isSafe: () => true,
+      },
+      {
+        isSafe: () => false,
+      }
+    ];
+    assert.strictEqual(areCorporationsSafe(corporations), false);
+  });
+
+});
+
+describe('hasMoreThan40Tiles', () => {
+  it('Should validate when any of the given corporations has more than 40 tiles', () => {
+    const corporations = [
+      {
+        getSize: () => 41,
+      },
+      {
+        getSize: () => 30,
+      }
+    ];
+    assert.ok(hasMoreThan40Tiles(corporations));
+  });
+
+  it('Should invalidate when no corporation has more than 40 tiles', () => {
+    const corporations = [
+      {
+        getSize: () => 4,
+      },
+      {
+        getSize: () => 30,
+      }
+    ];
+    assert.strictEqual(hasMoreThan40Tiles(corporations), false);
   });
 });

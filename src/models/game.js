@@ -5,7 +5,9 @@ const {
   findTilesChain,
   sortCorporations, createTiles, randomInt,
   defunctStockHolder,
-  computeBonus
+  computeBonus,
+  areCorporationsSafe,
+  hasMoreThan40Tiles
 } = require('../utils/game.js');
 const informationCard = require('../../resources/informationCard.json');
 const { Logs } = require('./log.js');
@@ -100,14 +102,27 @@ class Game {
     return this.corporations.find(({ id }) => id === corporationId);
   }
 
+  isGameOver() {
+    const activeCorporations = this.getActiveCorporations();
+    return areCorporationsSafe(activeCorporations) ||
+      hasMoreThan40Tiles(activeCorporations);
+  }
+
   changeTurn() {
+    if (this.isGameOver()) {
+      this.endGameState();
+      this.currentPlayer = undefined;
+      return;
+    }
+
     const currentPlayerPosition = this.#players.findIndex(player => {
       return this.currentPlayer.isSame(player.id);
     });
+
     const totalPlayers = this.#players.length;
     const nextPlayerPosition = (currentPlayerPosition + 1) % totalPlayers;
     this.currentPlayer = this.#players[nextPlayerPosition];
-    this.#stage = 'place-tile';
+    this.placeTileStage();
   }
 
   isPlayerIdle(playerId) {
@@ -221,6 +236,9 @@ class Game {
       this.logs.declaredSafe(corporation.name);
     }
   }
+  placeTileStage() {
+    this.#stage = 'place-tile';
+  }
 
   buildState() {
     this.#stage = 'build';
@@ -238,12 +256,20 @@ class Game {
     this.#stage = 'draw-tile';
   }
 
+  endGameState() {
+    this.#stage = 'end-game';
+  }
+
   isAnyCorporationActive() {
     return this.corporations.some(corporation => corporation.active);
   }
 
   isAnyCorporationInactive() {
     return this.corporations.some(corporation => !corporation.active);
+  }
+
+  getActiveCorporations() {
+    return this.corporations.filter(corporation => corporation.active);
   }
 
   skipBuy() {
