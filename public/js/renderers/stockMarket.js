@@ -146,13 +146,11 @@ const highlightSelectedCorporation = (corporations, corporation) => {
       addClass(corporationInfo, 'highlight-info');
     }
   });
-  // addClass(selectIn(corporation, '.corporation-img'), 'highlight-corp');
-  // addClass(selectIn(corporation, '.corporation-info'), 'highlight-info');
 };
 
 const attachSelectEvent = (corporations, onSelect) => {
   corporations.forEach(corporation => {
-    corporation.onclick = () => {
+    selectIn(corporation, '.corporation-img').onclick = () => {
       highlightSelectedCorporation(corporations, corporation);
       onSelect(corporation.id);
     };
