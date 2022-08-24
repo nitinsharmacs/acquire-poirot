@@ -244,6 +244,17 @@ const computeBonus = (stockHolders, bonus) => {
   }
 };
 
+const areCorporationsSafe = corporations => {
+  if (corporations.length < 1) {
+    return false;
+  }
+  return corporations.every(corporation => corporation.isSafe());
+};
+
+const hasMoreThan40Tiles = corporations => {
+  return corporations.some(corporation => corporation.getSize() > 40);
+};
+
 module.exports = {
   getPlayer,
   createGameLink,
@@ -256,5 +267,7 @@ module.exports = {
   createTiles,
   defunctStockHolder,
   computeBonus,
-  findMajorityMinority
+  findMajorityMinority,
+  areCorporationsSafe,
+  hasMoreThan40Tiles
 };
