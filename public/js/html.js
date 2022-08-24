@@ -77,6 +77,12 @@ const hide = (element) => {
   element.style.visibility = 'hidden';
 };
 
+const disable = (element) => {
+  element.setAttribute('disabled', true);
+};
+
+const enable = (element) => element.removeAttribute('disabled');
+
 const removeClass = (element, className) => {
   element.classList.remove(className);
 };
