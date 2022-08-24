@@ -495,7 +495,7 @@ input[type=number]::-webkit-outer-spin-button {
   border-radius: 5px;
 }
 
-.stock-error {
+.stock-message {
   text-align: center;
   color: red;
   height: 1em;

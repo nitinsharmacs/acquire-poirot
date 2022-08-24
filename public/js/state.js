@@ -30,10 +30,11 @@ class GameState {
     return this.corporations.find(corporation => !corporation.active);
   }
 
-  buildCorporation(corporationId, tiles) {
+  buildCorporation(corporationId, marketPrice, tiles) {
     const corporation = this.#findCorporation(corporationId);
 
     corporation.tiles = tiles;
+    corporation.marketPrice = marketPrice;
     corporation.active = true;
     corporation.stocksLeft--;
     this.player.addStocks(corporation, 1);
@@ -83,10 +84,11 @@ class GameState {
   }
 
   updateCorporations(corporations) {
-    corporations.forEach(({ id, tiles, active }) => {
+    corporations.forEach(({ id, tiles, active, marketPrice }) => {
       const corporation = this.#findCorporation(id);
       corporation.tiles = tiles;
       corporation.active = active;
+      corporation.marketPrice = marketPrice;
     });
   }
 

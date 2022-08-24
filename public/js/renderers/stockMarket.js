@@ -1,11 +1,11 @@
 const createCorporation = (corporation) => {
   const corporationClass = corporation.active ? 'disabled-corporation' : '';
 
-  return ['div', { class: 'corporation' }, {},
+  return ['div', { class: 'corporation', id: corporation.id }, {},
     ['p', { class: 'market-price' }, {}, `$${corporation.marketPrice.stockPrice || 0}`],
     ['div', {
       class: `corporation-img ${corporation.id} ${corporationClass}`,
-      id: corporation.id
+
     }, {}],
     ['div', { class: 'corporation-info' }, {},
       ['p', {}, {}, corporation.name],
@@ -16,7 +16,7 @@ const createCorporation = (corporation) => {
         type: 'number', name: `${corporation.id}`, class: 'stock-value',
         min: '0', max: `${Math.min(3, corporation.stocksLeft)}`, value: 0
       },
-      { onchange: validateInput }],
+      { onchange: updateControls }],
   ];
 };
 
@@ -43,15 +43,32 @@ const stocksToBuy = (form) => {
   }, []);
 };
 
-const validateInput = () => {
+const determineTotalPrice = (stocks, corporations) => {
+  return stocks.reduce((totalPrice, { corporationId, numOfStocks }) => {
+
+    const { marketPrice } = corporations.find(({ id }) => id === corporationId);
+    return totalPrice + (marketPrice.stockPrice * numOfStocks);
+  }, 0);
+};
+const showTotalPrice = (stockPrice) => {
+  const stockMessage = select('.stock-message');
+
+  stockMessage.style.color = 'black';
+  stockMessage.replaceChildren(`Total Price : $${stockPrice}`);
+};
+
+const updateControls = (corporations) => {
   const form = select('#stock-market');
   const stocks = stocksToBuy(form);
   const buyButtonElement = select('#confirm-btn');
+
+  showTotalPrice(determineTotalPrice(stocks, corporations));
 
   if (stocks.length < 1) {
     disable(buyButtonElement);
     return;
   }
+
   enable(buyButtonElement);
 };
 
@@ -76,8 +93,8 @@ const createBtnHolder = ({ action, skip, label }) => {
 
 const showControls = (corporations) => {
   corporations.forEach(({ id }) => {
-    const corpElement = select(`.corporation>#${id}`);
-    const ctrlElement = corpElement.parentNode.querySelector('.stock-value');
+    const corporationElement = select(`#${id}`);
+    const ctrlElement = corporationElement.querySelector('input');
     show(ctrlElement);
   });
 };
@@ -94,6 +111,15 @@ const highlightStockMarket = (btnHolder) => {
   stockMarketElement.appendChild(btnHolder);
 };
 
+const attachStockSelectEvent = (corporations) => {
+  const selectInputs = selectAll('.corporation>input');
+  selectInputs.forEach(selectInput => {
+    selectInput.onchange = () => {
+      updateControls(corporations);
+    };
+  });
+};
+
 const highlightStockMarketToBuy = (game) => {
   const btnHolderElement = createBtnHolder({
     action: buySelectedStocks,
@@ -103,17 +129,25 @@ const highlightStockMarketToBuy = (game) => {
   highlightStockMarket(btnHolderElement);
 
   const canBeBoughtOf = game.availableToBuy();
+  attachStockSelectEvent(game.corporations);
   showControls(canBeBoughtOf);
 };
 
 const highlightSelectedCorporation = (corporations, corporation) => {
   corporations.forEach(_corporation => {
-    removeClass(_corporation, 'highlight-corp');
-    removeClass(_corporation.nextSibling, 'highlight-info');
-  });
+    const corporationImage = selectIn(_corporation, '.corporation-img');
+    const corporationInfo = selectIn(_corporation, '.corporation-info');
 
-  addClass(corporation, 'highlight-corp');
-  addClass(corporation.nextSibling, 'highlight-info');
+    removeClass(corporationImage, 'highlight-corp');
+    removeClass(corporationInfo, 'highlight-info');
+
+    if (_corporation.id === corporation.id) {
+      addClass(corporationImage, 'highlight-corp');
+      addClass(corporationInfo, 'highlight-info');
+    }
+  });
+  // addClass(selectIn(corporation, '.corporation-img'), 'highlight-corp');
+  // addClass(selectIn(corporation, '.corporation-info'), 'highlight-info');
 };
 
 const attachSelectEvent = (corporations, onSelect) => {
@@ -136,7 +170,7 @@ const highlightStockMarketToBuild = (tileId) => {
 
   highlightStockMarket(btnHolderElement);
 
-  const corporations = selectAll('.corporation-img');
+  const corporations = selectAll('.corporation');
   attachSelectEvent(corporations, (corporationId) => {
     selectedId = corporationId;
     enable(select('#confirm-btn'));
@@ -150,7 +184,7 @@ const renderStockMarket = ({ corporations }, message = '') => {
   const elements = [
     ['h3', { class: 'component-heading' }, {}, 'Stock Market'],
     createCorporationsHTML(corporations),
-    ['p', { class: 'stock-error' }, {}, message]
+    ['p', { class: 'stock-message' }, {}, message]
   ];
 
   stockMarket.replaceChildren(...createElements(elements));

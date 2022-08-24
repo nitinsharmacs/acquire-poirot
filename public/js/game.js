@@ -24,9 +24,10 @@ const skipBuild = () => {
 const buildCorporation = (tileId, corporationId) => {
   API.buildCorporation(tileId, corporationId)
     .then(res => {
-      const { corporation: { tiles }, case: step } = res.data;
-      gameState.buildCorporation(corporationId, tiles);
+      const { corporation: { tiles, marketPrice }, case: step } = res.data;
+      gameState.buildCorporation(corporationId, marketPrice, tiles);
       gameState.updateStage(step);
+
       storeItem('corporationId', corporationId);
       handleView(gameState);
     });

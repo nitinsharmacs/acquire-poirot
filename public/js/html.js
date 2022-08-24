@@ -69,6 +69,7 @@ const replace = (ele1, ele2) => ele1.replaceWith(ele2);
 
 const select = (query) => document.querySelector(query);
 const selectAll = (query) => document.querySelectorAll(query);
+const selectIn = (element, query) => element.querySelector(query);
 
 const show = (element) => {
   element.style.visibility = 'visible';
