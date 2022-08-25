@@ -24,11 +24,27 @@ describe('MergeState', () => {
 
   game.state = new MergeState(game, defunctCorp, acquiringCorp, tiles);
 
-  it('should add tile into player\'s tiles', () => {
+  it('should change turn to next player', () => {
     const prevPlayerId = game.currentPlayer.id;
     game.state.changeTurn('merge');
 
     assert.ok(game.currentPlayer.id !== prevPlayerId);
   });
 
+  it('should add stock sum to player\'s money', () => {
+    const prevPlayer = game.currentPlayer;
+    const prevMoney = prevPlayer.money;
+    game.state.sellStocks(2);
+    assert.strictEqual(prevPlayer.money, prevMoney + 600);
+  });
+
+  it('should add stock sum to player\'s money', () => {
+    host.stocks = [{ corporationId: 'america', count: 2 }];
+    player1.stocks = [{ corporationId: 'america', count: 2 }];
+    player2.stocks = [{ corporationId: 'america', count: 2 }];
+
+    const player = game.currentPlayer;
+    game.state.sellStocks(2);
+    assert.deepStrictEqual(player.stocks, [{ corporationId: 'america', count: 0 }]);
+  });
 });

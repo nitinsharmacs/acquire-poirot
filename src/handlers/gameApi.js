@@ -177,6 +177,14 @@ const sellStocks = (req, res) => {
   const { game,
     body: { stockCount }
   } = req;
+
+  if (!game.isValidStockCount(stockCount)) {
+    res.status(422).json({
+      message: 'Insufficient stocks',
+      data: { case: 'merge' }
+    });
+    return;
+  }
   game.sellDefunctStocks(stockCount);
   res.json({
     message: 'sold stocks',

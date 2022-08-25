@@ -12,13 +12,23 @@ const sellDefunctStocks = () => {
   sellStocks(stockCount);
 };
 
-const showDefunctStocksTransaction = () => {
-  const transactionPannel = document.querySelector('.logs');
+const removeTransationPanel = () => {
+  const tradePanel = select('.trade');
+  if (!tradePanel) {
+    return;
+  }
 
-  const transactionHTML = [['div', {}, {},
-    ['input', { class: 'sell-stocks' }, {}, ''], ['input', { type: 'button', value: 'confirm' }, { onclick: sellDefunctStocks }]]];
+  const playerActiviets = select('.player-activities');
+  playerActiviets.removeChild(tradePanel);
+};
 
-  transactionPannel.replaceChildren(...createElements(transactionHTML));
+const showDefunctStocksTransaction = (message = '') => {
+  removeTransationPanel();
+  const playerActivities = select('.player-activities');
+  const transactionHTML = [['div', { class: 'trade' }, {},
+    ['input', { class: 'sell-stocks' }, {}, ''], ['input', { type: 'button', value: 'confirm' }, { onclick: sellDefunctStocks }], ['p', {}, {}, message]]];
+
+  playerActivities.appendChild(...createElements(transactionHTML));
 };
 
 const renderScreen = (game) => {

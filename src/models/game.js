@@ -333,12 +333,19 @@ class Game {
     this.updateDefunctLogs(stockHolders);
     this.updateBonusLogs(defunctShareHolders);
     this.state = new MergeState(this, defunctCorp, acquiringCorp, tiles);
-    // defunctCorp.defunct();
-    // acquiringCorp.grow(tiles);
   }
 
   sellDefunctStocks(stockCount) {
     this.state.sellStocks(stockCount);
+  }
+
+  isValidStockCount(stockCount) {
+    return this.state.isValidStockCount(stockCount);
+  }
+
+  addStocks({ id }, stockCount) {
+    const corporation = this.findCorporation(id);
+    corporation.addStocks(stockCount);
   }
 
   isHost(playerId) {

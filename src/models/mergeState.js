@@ -12,11 +12,20 @@ class MergeState {
     this.game.changeTurn(stage);
   }
 
+  isValidStockCount(stockCount) {
+    const player = this.game.currentPlayer;
+    return player.hasStocks(this.defunctCorp, stockCount);
+  }
+
+  merge() {
+    this.defunctCorp.defunct();
+    this.acquiringCorp.grow(this.tiles);
+  }
+
   next() {
     const totalPlayers = this.game.players.length;
     if (this.count >= totalPlayers) {
-      this.defunctCorp.defunct();
-      this.acquiringCorp.grow(this.tiles);
+      this.merge();
       this.changeTurn('buy-stocks');
       return;
     }
@@ -31,6 +40,7 @@ class MergeState {
   sellStocks(stockCount) {
     const player = this.game.currentPlayer;
     player.reduceStocks(this.defunctCorp, stockCount);
+    this.defunctCorp.addStocks(+stockCount);
     const { stockPrice } = this.game.marketPrice(this.defunctCorp);
     player.addMoney(stockPrice * stockCount);
     this.next();
