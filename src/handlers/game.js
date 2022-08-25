@@ -43,7 +43,7 @@ const joinGame = (req, res) => {
   }
 
   if (!playerExists) {
-    const player = new Player(playerId, playerName);
+    const player = new Player({ id: playerId, name: playerName });
     game.addPlayer(player);
   }
 
@@ -71,9 +71,29 @@ const serveLobby = (req, res) => {
   res.send(lobbyPage(game, gameLink, playerName));
 };
 
+// only for developers. DON'T POKE HOLES :)
+const saveGame = (req, res) => {
+  const { session: { gameId }, app: { games } } = req;
+  games.save(gameId);
+
+  res.send('saved game');
+};
+
+const restoreGame = (req, res) => {
+  const { params: { gameId }, app: { games } } = req;
+
+  games.restore(gameId);
+  req.session.gameId = gameId;
+  req.session.save(() => {
+    res.redirect('/game');
+  });
+};
+
 module.exports = {
   serveLandingPage,
   serveGamePage,
   joinGame,
-  serveLobby
+  serveLobby,
+  saveGame,
+  restoreGame
 };

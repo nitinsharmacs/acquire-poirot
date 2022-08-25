@@ -12,6 +12,7 @@ const {
 } = require('../utils/game.js');
 const informationCard = require('../../resources/informationCard.json');
 const { Logs } = require('./log.js');
+const { Player } = require('./player.js');
 
 const getSameRowTiles = (letter, tiles) => {
   return tiles.filter(tile => tile.id.includes(letter));
@@ -46,7 +47,10 @@ class Game {
     host,
     gameSize,
     informationCard,
-    logs
+    logs,
+    currentPlayer,
+    started,
+    stage
   }) {
     this.id = id;
     this.#players = players;
@@ -55,9 +59,11 @@ class Game {
     this.corporations = corporations;
     this.host = host;
     this.gameSize = gameSize;
+    this.#stage = stage;
     this.logs = logs;
-    this.started = false;
+    this.started = started;
     this.informationCard = informationCard;
+    this.currentPlayer = currentPlayer;
   }
 
   #drawInitialTiles() {
@@ -348,10 +354,26 @@ class Game {
     corporation.addStocks(stockCount);
   }
 
-  isHost(playerId) {
-    return this.host.id === playerId;
+  accept(visitor) {
+    visitor.visit(this);
+    this.corporations.forEach(corporation => corporation.accept(visitor));
+    this.players.forEach(player => player.accept(visitor));
+    this.board.accept(visitor);
+    this.logs.accept(visitor);
   }
 
+  getState() {
+    return {
+      id: this.id,
+      cluster: this.cluster,
+      gameSize: this.gameSize,
+      host: this.host,
+      currentPlayer: this.currentPlayer.getState(),
+      informationCard: this.informationCard,
+      stage: this.#stage,
+      started: this.started
+    };
+  }
   // getters ---------------
   get players() {
     return this.#players;
@@ -362,8 +384,8 @@ class Game {
   }
 }
 
-const createCorporations = () => {
-  const corporations = [
+const createCorporations = (corporations) => {
+  const corps = corporations ? corporations : [
     {
       id: 'america',
       name: 'America'
@@ -394,11 +416,8 @@ const createCorporations = () => {
     }
   ];
 
-  return corporations.map(corporation =>
-    new Corporation(
-      corporation.id,
-      corporation.name
-    ));
+  return corps.map(corporation =>
+    new Corporation(corporation));
 };
 
 const newGame = (id, host, gameSize) => {
@@ -419,4 +438,21 @@ const newGame = (id, host, gameSize) => {
   });
 };
 
-module.exports = { Game, newGame, createCorporations };
+const playerInstances = (players) => players.map(player => new Player(player));
+
+const restoreGame = (game) => {
+  const board = createBoard(game.board);
+  const corporations = createCorporations(game.corporations);
+  const players = playerInstances(game.players);
+
+  return new Game({
+    ...game,
+    players,
+    corporations,
+    board,
+    currentPlayer: new Player(game.currentPlayer),
+    logs: new Logs(game.logs)
+  });
+};
+
+module.exports = { Game, newGame, createCorporations, restoreGame };

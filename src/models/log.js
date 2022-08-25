@@ -1,8 +1,8 @@
 class Logs {
   #logs;
 
-  constructor() {
-    this.#logs = [];
+  constructor(logs = []) {
+    this.#logs = logs;
   }
 
   #addPlayerLog(playerName, message) {
@@ -56,6 +56,14 @@ class Logs {
 
   resetLogs() {
     this.#logs = [];
+  }
+
+  accept(visitor) {
+    visitor.visitLogs(this);
+  }
+
+  getState() {
+    return this.#logs;
   }
 
   get logs() {

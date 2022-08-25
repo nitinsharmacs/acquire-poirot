@@ -45,7 +45,6 @@ class MergeState {
     player.addMoney(stockPrice * stockCount);
     this.next();
   }
-
 }
 
 module.exports = { MergeState };

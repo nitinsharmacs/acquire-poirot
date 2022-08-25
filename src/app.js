@@ -1,3 +1,4 @@
+const fs = require('fs');
 const express = require('express');
 const morgan = require('morgan');
 const session = require('express-session');
@@ -14,7 +15,9 @@ const { notFound } = require('./handlers/notFound.js');
 const { serveGamePage,
   joinGame,
   serveLobby,
-  serveLandingPage
+  serveLandingPage,
+  saveGame,
+  restoreGame
 } = require('./handlers/game.js');
 
 const { createAuthRouter } = require('./routers/authRoutes.js');
@@ -23,6 +26,7 @@ const { createHostRouter } = require('./routers/hostRouter');
 // models
 const DataStore = require('./dataStore.js');
 const { Games } = require('./models/games.js');
+const { GameStore } = require('./models/gameStore.js');
 
 const {
   USERS_DB_PATH,
@@ -37,7 +41,7 @@ const appConfig = {
   root: './public',
   sessionKey: SESSION_KEY,
   session,
-  games: new Games()
+  games: new Games([], new GameStore(fs))
 };
 
 const createApp = (config = appConfig, dataStore = new DataStore(resources)) => {
@@ -69,6 +73,10 @@ const createApp = (config = appConfig, dataStore = new DataStore(resources)) => 
 
   app.get('/game', restrict, injectGame, serveGamePage);
   app.use('/api', restrict, injectGame, apiRoutes);
+
+  // only for developers
+  app.get('/save', restrict, saveGame);
+  app.get('/restore/:gameId', restrict, restoreGame);
 
   app.get('/', restrict, serveLandingPage);
 

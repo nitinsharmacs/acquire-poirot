@@ -22,9 +22,22 @@ class Board {
       name: corporation.name
     };
   }
+
+  accept(visitor) {
+    visitor.visitBoard(this);
+  }
+
+  getState() {
+    return {
+      ...this
+    };
+  }
 }
 
-const createBoard = () => {
+const createBoard = (board = {}) => {
+  if (board.tiles) {
+    return new Board(board.tiles);
+  }
   return new Board(createTiles());
 };
 
