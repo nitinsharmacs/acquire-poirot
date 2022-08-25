@@ -501,3 +501,55 @@ input[type=number]::-webkit-outer-spin-button {
   height: 1em;
   margin: 0.5em 0;
 }
+
+/* ----------------------game over popup----------- */
+.popup {
+  padding: 2em 4em;
+  background-color: rgba(23, 23, 23, 0.95);
+  color: #D89216;
+  border-radius: 5px;
+  width: 40%;
+  position: absolute;
+  top: 300;
+  left: 600;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-shadow: 5px 10px 18px rgb(69, 69, 69);
+}
+
+.sample {
+  animation: animatezoom 0.5s
+}
+
+@keyframes animatezoom {
+  from {
+    transform: scale(0)
+  }
+
+  to {
+    transform: scale(1)
+  }
+}
+
+.resources-details {
+  border-collapse: collapse;
+  color: white;
+  font-size: larger;
+  text-align: center;
+}
+
+.resources-details tr {
+  border-bottom: 1px solid gray;
+}
+
+.resources-details thead {
+  background-color: grey;
+  color: black;
+  font-weight: bold;
+}
+
+.resources-details th,
+td {
+  padding: 10px;
+}

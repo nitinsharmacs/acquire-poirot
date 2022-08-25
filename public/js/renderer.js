@@ -7,12 +7,6 @@ const renderLogs = ({ logs }) => {
   logElement.replaceChildren(...createElements(logsHTML));
 };
 
-const renderPopups = (game) => {
-  if (game.turn.stage === 'end-game') {
-    return true;
-  }
-};
-
 const sellDefunctStocks = () => {
   const stockCount = select('.sell-stocks').value;
   sellStocks(stockCount);

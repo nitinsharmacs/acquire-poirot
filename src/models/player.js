@@ -1,9 +1,7 @@
 class Player {
-  #name;
-
   constructor(id, name) {
     this.id = id;
-    this.#name = name;
+    this.name = name;
     this.tiles = [];
     this.money = 0;
     this.stocks = [];
@@ -61,11 +59,6 @@ class Player {
   hasStocks({ id }) {
     const stocks = this.stocks.find(stock => stock.corporationId === id);
     return stocks && stocks.count > 0;
-  }
-
-  //getters
-  get name() {
-    return this.#name;
   }
 }
 

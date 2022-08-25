@@ -269,6 +269,10 @@ class Game {
     this.#stage = 'end-game';
   }
 
+  isInEndGameStage() {
+    return this.#stage === 'end-game';
+  }
+
   isAnyCorporationActive() {
     return this.corporations.some(corporation => corporation.active);
   }
