@@ -212,6 +212,7 @@ describe('Post /api/place-tile', () => {
     (done) => {
       const tile = game.board.tiles.find(tile => tile.id === '3a');
       game.currentPlayer.addTile(tile);
+      game.currentPlayer.stocks = [{ corporationId: 'america', count: 2 }];
 
       const corporation1 = game.findCorporation('america');
       placeTiles(game, ['1a', '2a']);

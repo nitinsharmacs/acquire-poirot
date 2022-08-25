@@ -22,11 +22,15 @@ describe('MergeState', () => {
 
   const tiles = [{ id: '1a' }, { id: '1b' }, { id: '1c' }, { id: '1d' }, { id: '1e' }];
 
-  game.state = new MergeState(game, defunctCorp, acquiringCorp, tiles);
+  player1.stocks = [{ corporationId: 'america', count: 1 }];
+  player2.stocks = [{ corporationId: 'america', count: 2 }];
+
+  game.state = new MergeState(game, { defunctCorp, acquiringCorp }, tiles, game.currentPlayer);
+  game.state.addStockHolders();
 
   it('should change turn to next player', () => {
     const prevPlayerId = game.currentPlayer.id;
-    game.state.changeTurn('merge');
+    game.state.changeTurn();
 
     assert.ok(game.currentPlayer.id !== prevPlayerId);
   });
