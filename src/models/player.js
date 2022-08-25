@@ -1,10 +1,17 @@
 class Player {
-  constructor(id, name) {
+  #name;
+  constructor({
+    id,
+    name,
+    tiles = [],
+    money = 0,
+    stocks = []
+  }) {
     this.id = id;
-    this.name = name;
-    this.tiles = [];
-    this.money = 0;
-    this.stocks = [];
+    this.#name = name;
+    this.tiles = tiles;
+    this.money = money;
+    this.stocks = stocks;
   }
 
   removeTile(id) {
@@ -58,7 +65,23 @@ class Player {
 
   hasStocks({ id }, stockCount = 1) {
     const stocks = this.stocks.find(stock => stock.corporationId === id);
-    return stocks && stocks.count >= stockCount;
+    return stocks && stocks.count > 0;
+  }
+
+  accept(visitor) {
+    visitor.visitPlayer(this);
+  }
+
+  getState() {
+    return {
+      ...this,
+      name: this.#name
+    };
+  }
+
+  //getters
+  get name() {
+    return this.#name;
   }
 }
 

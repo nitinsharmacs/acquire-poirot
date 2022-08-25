@@ -10,7 +10,7 @@ const placeTiles = (game, tileIds) => tileIds.forEach((id) => game
   .placeTile({ id }));
 
 const addPlayers = (game, players) => {
-  players.forEach(({ id, name }) => game.addPlayer(new Player(id, name)));
+  players.forEach(({ id, name }) => game.addPlayer(new Player({ id, name })));
 };
 
 const session = (gameId, playerId) => () => (req, res, next) => {
@@ -41,7 +41,7 @@ describe('GET /api/loadgame', () => {
 
   const game = newGame('123', host, 4);
   games.add(game);
-  game.addPlayer(new Player('user', 'sam'));
+  game.addPlayer(new Player({ id: 'user', name: 'sam' }));
   const app = initApp(session('123', 'user'), games);
 
   it('should response with game data when game started', (done) => {
@@ -342,7 +342,7 @@ describe('POST /api/buy-stocks', () => {
 
   const game = newGame('123', host, 1);
   games.add(game);
-  game.addPlayer(new Player('user', 'sam'));
+  game.addPlayer(new Player({ id: 'user', name: 'sam' }));
   const app = initApp(session('123', 'user'), games);
 
   beforeEach((done) => {
@@ -494,7 +494,7 @@ describe('POST /api/sell-stocks', () => {
 
   const game = newGame('123', host, 1);
   games.add(game);
-  game.addPlayer(new Player('user', 'sam'));
+  game.addPlayer(new Player({ id: 'user', name: 'sam' }));
   const app = initApp(session('123', 'user'), games);
 
   before((done) => {

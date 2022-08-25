@@ -7,8 +7,8 @@ describe('MergeState', () => {
   const game = newGame('123', { id: '213', name: 'sam' }, 3);
   const host = new Player('213', 'sam');
 
-  const player1 = new Player('32', 'harry');
-  const player2 = new Player('22', 'sonu');
+  const player1 = new Player({ id: '32', name: 'harry' });
+  const player2 = new Player({ id: '22', name: 'sonu' });
   game.addPlayer(host);
   game.addPlayer(player1);
   game.addPlayer(player2);

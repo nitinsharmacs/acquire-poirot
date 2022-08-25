@@ -8,7 +8,7 @@ const {
   buyStocks,
   skipBuildCorp,
   skipBuyStocks,
-  sellStocks
+  sellStocks,
 } = require('../handlers/gameApi.js');
 
 const router = require('express').Router();

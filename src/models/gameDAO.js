@@ -26,7 +26,6 @@ const createGameDAO = (game, playerId) => {
     informationCard: game.informationCard,
     turn: createTurnDAO(game.stage, game.currentPlayer)
   };
-
   return gameDAO;
 };
 

@@ -1,13 +1,21 @@
 class Corporation {
   #isSafe;
-  constructor(id, name) {
+  constructor({
+    id,
+    name,
+    active = false,
+    stocksLeft = 25,
+    tiles = [],
+    isSafe = false,
+    marketPrice = {}
+  }) {
     this.id = id;
     this.name = name;
-    this.active = false;
-    this.stocksLeft = 25;
-    this.tiles = [];
-    this.#isSafe = false;
-    this.marketPrice = 0;
+    this.active = active;
+    this.stocksLeft = stocksLeft;
+    this.tiles = tiles;
+    this.#isSafe = isSafe;
+    this.marketPrice = marketPrice;
   }
 
   areStocksAvailable(count) {
@@ -59,6 +67,17 @@ class Corporation {
 
   isSafe() {
     return this.#isSafe;
+  }
+
+  accept(visitor) {
+    visitor.visitCorporation(this);
+  }
+
+  getState() {
+    return {
+      ...this,
+      isSafe: this.#isSafe
+    };
   }
 }
 
