@@ -79,7 +79,6 @@ const placeTile = (tileId) => {
     .then(res => {
       gameState.placeTile(tileId);
       storeItem('tileId', tileId);
-
       gameState.updateCorporations(res.data.corporations);
       gameState.updateCurrentPlayerMoney(res.data.money);
       gameState.updateStage(res.data.case);

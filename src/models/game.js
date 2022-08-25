@@ -338,7 +338,9 @@ class Game {
     this.#distributeBonus(defunctShareHolders);
     this.updateDefunctLogs(stockHolders);
     this.updateBonusLogs(defunctShareHolders);
-    this.state = new MergeState(this, defunctCorp, acquiringCorp, tiles);
+    this.state = new MergeState(this, { defunctCorp, acquiringCorp }, tiles, this.currentPlayer);
+    this.state.addStockHolders();
+    this.state.changeTurn();
   }
 
   sellDefunctStocks(stockCount) {

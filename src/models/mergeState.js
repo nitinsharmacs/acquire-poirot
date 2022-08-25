@@ -1,20 +1,50 @@
+const { defunctStockHolder } = require('../utils/game');
+
 class MergeState {
-  constructor(game, defunctCorp, acquiringCorp, tiles) {
+  constructor(game,
+    { defunctCorp, acquiringCorp },
+    tiles,
+    mergeMaker) {
+
     this.game = game;
     this.defunctCorp = defunctCorp;
     this.acquiringCorp = acquiringCorp;
     this.tiles = tiles;
-    this.count = 1;
+    this.mergeMaker = mergeMaker;
+    this.count = 0;
+    this.stockHolders = [];
   }
 
-  changeTurn(stage) {
+  reorderPlayers() {
+    const gamePlayers = this.game.players;
+    const mergeMakerPosition = gamePlayers.findIndex(player => {
+      return this.mergeMaker.isSame(player.id);
+    });
+
+    const players = gamePlayers.slice(mergeMakerPosition);
+    return players.concat(gamePlayers.slice(0, mergeMakerPosition));
+  }
+
+  addStockHolders() {
+    const orderedPlayers = this.reorderPlayers();
+    this.stockHolders = defunctStockHolder(orderedPlayers, this.defunctCorp.id);
+  }
+
+  changeTurn() {
+    const stockHolderId = this.stockHolders[this.count].id;
+    const player = this.game.getPlayer(stockHolderId);
+    this.game.mergeState();
+    this.game.currentPlayer = player;
     this.count++;
-    this.game.changeTurn(stage);
   }
 
   isValidStockCount(stockCount) {
     const player = this.game.currentPlayer;
     return player.hasStocks(this.defunctCorp, stockCount);
+  }
+
+  canMergeMakerSell() {
+    return this.mergeMaker.hasStocks(this.defunctCorp, 1);
   }
 
   merge() {
@@ -23,18 +53,13 @@ class MergeState {
   }
 
   next() {
-    const totalPlayers = this.game.players.length;
-    if (this.count >= totalPlayers) {
+    if (this.count >= this.stockHolders.length) {
+      this.game.currentPlayer = this.mergeMaker;
       this.merge();
-      this.changeTurn('buy-stocks');
+      this.game.buyStocksState();
       return;
     }
-    this.changeTurn('merge');
-    const player = this.game.currentPlayer;
-
-    if (!player.hasStocks(this.defunctCorp)) {
-      this.changeTurn('merge');
-    }
+    this.changeTurn();
   }
 
   sellStocks(stockCount) {
