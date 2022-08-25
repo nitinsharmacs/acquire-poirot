@@ -102,6 +102,11 @@ const getCorporations = (tiles, corporations) => {
   });
 };
 
+const haveStocks = (corporations) => {
+  return corporations.some(corporation =>
+    corporation.areStocksAvailable(1));
+};
+
 const nextStep = (game, tileId) => {
   const tiles = game.board.tiles;
   const corporations = game.corporations;
@@ -109,7 +114,7 @@ const nextStep = (game, tileId) => {
   const placedTiles = findTilesChain(tileId, tiles);
 
   if (placedTiles.length === 1) {
-    if (game.isAnyCorporationActive()) {
+    if (game.canStocksBeBought()) {
       game.buyStocksState();
       return { step: 'noEffect' };
     }
@@ -124,12 +129,22 @@ const nextStep = (game, tileId) => {
       game.buildState();
       return { step: 'build' };
     }
-    game.buyStocksState();
+
+    if (game.canStocksBeBought()) {
+      game.buyStocksState();
+      return { step: 'build' };
+    }
+
+    game.drawTileState();
     return { step: 'build' };
   }
 
   if (activeCorporations.length === 1) {
-    game.buyStocksState();
+    if (game.canStocksBeBought()) {
+      game.buyStocksState();
+      return { step: 'grow', corporations: activeCorporations, tiles: placedTiles };
+    }
+    game.drawTileState();
     return { step: 'grow', corporations: activeCorporations, tiles: placedTiles };
   }
 
@@ -273,5 +288,6 @@ module.exports = {
   computeBonus,
   findMajorityMinority,
   areCorporationsSafe,
-  hasMoreThan40Tiles
+  hasMoreThan40Tiles,
+  haveStocks
 };
