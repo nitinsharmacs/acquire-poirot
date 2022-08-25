@@ -1,5 +1,5 @@
 const { createGameDAO } = require('../models/gameDAO.js');
-const { nextStep } = require('../utils/game.js');
+const { nextStep, haveStocks } = require('../utils/game.js');
 
 const loadGame = (req, res) => {
   const { game, session: { playerId } } = req;
@@ -133,7 +133,7 @@ const buildCorporation = (req, res) => {
   } = req;
 
   const corporation = game.buildCorporation(corporationId, id);
-  if (game.isAnyCorporationActive()) {
+  if (game.canStocksBeBought()) {
     game.buyStocksState();
   } else {
     game.drawTileState();
@@ -149,7 +149,7 @@ const skipBuildCorp = (req, res) => {
   const { game } = req;
 
   game.skipBuild();
-  if (game.isAnyCorporationActive()) {
+  if (game.canStocksBeBought()) {
     game.buyStocksState();
   } else {
     game.drawTileState();

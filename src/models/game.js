@@ -8,7 +8,8 @@ const {
   defunctStockHolder,
   computeBonus,
   areCorporationsSafe,
-  hasMoreThan40Tiles
+  hasMoreThan40Tiles,
+  haveStocks
 } = require('../utils/game.js');
 const informationCard = require('../../resources/informationCard.json');
 const { Logs } = require('./log.js');
@@ -285,6 +286,11 @@ class Game {
 
   isAnyCorporationInactive() {
     return this.corporations.some(corporation => !corporation.active);
+  }
+
+  canStocksBeBought() {
+    return this.isAnyCorporationActive() &&
+      haveStocks(this.getActiveCorporations());
   }
 
   getActiveCorporations() {
