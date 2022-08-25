@@ -10,7 +10,7 @@
     "setup": "bash bin/app_setup.sh",
     "lint": "eslint .",
     "rec-test": "mocha -w test --recursive",
-    "coverage": "nyc npm test"
+    "coverage": "nyc --reporter=html npm test && open coverage/index.html"
   },
   "repository": {
     "type": "git",

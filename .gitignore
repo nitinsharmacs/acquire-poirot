@@ -6,3 +6,4 @@ game_temp.js
 .nyc_output
 coverage
 refactoringPlan.md
+coverage/
