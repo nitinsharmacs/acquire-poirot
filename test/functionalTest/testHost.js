@@ -55,7 +55,7 @@ describe('GET /host', () => {
   it('should give host page is session present', (done) => {
     request(initApp(session))
       .get('/host')
-      .expect('content-type', /plain/)
+      .expect('content-type', /html/)
       .expect(200, done);
   });
 });
