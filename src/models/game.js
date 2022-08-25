@@ -134,6 +134,10 @@ class Game {
     return this.started;
   }
 
+  isHost(playerId) {
+    return this.host.id === playerId;
+  }
+
   giveTile(player) {
     const tileIndex = randomInt(this.cluster.length);
     const tile = this.cluster[tileIndex];
