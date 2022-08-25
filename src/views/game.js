@@ -14,6 +14,7 @@ const gamePage = () => `<html>
   <script src="/js/renderers/playersList.js"></script>
   <script src="/js/renderers/stockMarket.js"></script>
   <script src="/js/renderers/board.js"></script>
+  <script src="/js/renderers/endGamePopups.js"></script>
   <script src="/js/renderer.js"></script>
   <script src="/js/api.js"></script>
   <script src="/js/poller.js"></script>
