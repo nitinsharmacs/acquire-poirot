@@ -1,10 +1,7 @@
 const { newGame } = require('../models/game.js');
 const { Player } = require('../models/player.js');
+const { generateId } = require('../utils/game.js');
 const { hostPage } = require('../views/hostPage.js');
-
-const generateId = () => {
-  return new Date().getTime().toString(16);
-};
 
 const isPlayersCountValid = (noOfPlayers) =>
   noOfPlayers >= 3 && noOfPlayers <= 6;

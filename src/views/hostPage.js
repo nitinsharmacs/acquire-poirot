@@ -1,5 +1,5 @@
 const hostPage = (playerName, message) => `
-
+<html>
 <head>
   <title>Host</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Recursive:regular,bold,bolditalic">

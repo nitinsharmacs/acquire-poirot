@@ -326,7 +326,6 @@ class Game {
       this.logs.bonusDistribution(player.name, money, bonusType);
     });
   }
-
   merge(corporations, tiles) {
     const [defunctCorp, acquiringCorp] = sortCorporations(corporations);
     this.logs.merged(acquiringCorp.name, defunctCorp.name);
