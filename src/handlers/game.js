@@ -3,6 +3,7 @@ const { createGameLink } = require('../utils/game.js');
 const { lobbyPage } = require('../views/lobby.js');
 const { landingPage } = require('../views/index.js');
 const { gamePage } = require('../views/game.js');
+const { savePage, restorePage } = require('../views/saveGame.js');
 
 const serveLandingPage = (req, res) => {
   const { playerName } = req.session;
@@ -72,15 +73,34 @@ const serveLobby = (req, res) => {
 };
 
 // only for developers. DON'T POKE HOLES :)
+const serveSavePage = (req, res) => {
+  const { session: { playerName } } = req;
+
+  res.type('text/html');
+  res.end(savePage(playerName));
+};
+
+const serveRestorePage = (req, res) => {
+  const { session: { playerName },
+    app: { games },
+  } = req;
+
+  res.type('text/html');
+  res.end(restorePage(games.savedGamesEntries(), playerName));
+};
+
 const saveGame = (req, res) => {
-  const { session: { gameId }, app: { games } } = req;
-  games.save(gameId);
+  const { session: { gameId },
+    app: { games },
+    body: { title }
+  } = req;
+  games.save(gameId, title);
 
   res.send('saved game');
 };
 
 const restoreGame = (req, res) => {
-  const { params: { gameId }, app: { games } } = req;
+  const { body: { gameId }, app: { games } } = req;
 
   games.restore(gameId);
   req.session.gameId = gameId;
@@ -92,6 +112,8 @@ const restoreGame = (req, res) => {
 module.exports = {
   serveLandingPage,
   serveGamePage,
+  serveSavePage,
+  serveRestorePage,
   joinGame,
   serveLobby,
   saveGame,

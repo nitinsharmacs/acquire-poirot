@@ -17,7 +17,9 @@ const { serveGamePage,
   serveLobby,
   serveLandingPage,
   saveGame,
-  restoreGame
+  restoreGame,
+  serveSavePage,
+  serveRestorePage
 } = require('./handlers/game.js');
 
 const { createAuthRouter } = require('./routers/authRoutes.js');
@@ -41,7 +43,7 @@ const appConfig = {
   root: './public',
   sessionKey: SESSION_KEY,
   session,
-  games: new Games([], new GameStore(fs))
+  games: new Games([], new GameStore(fs).load())
 };
 
 const createApp = (config = appConfig, dataStore = new DataStore(resources)) => {
@@ -75,8 +77,10 @@ const createApp = (config = appConfig, dataStore = new DataStore(resources)) => 
   app.use('/api', restrict, injectGame, apiRoutes);
 
   // only for developers
-  app.get('/save', restrict, saveGame);
-  app.get('/restore/:gameId', restrict, restoreGame);
+  app.get('/save', restrict, serveSavePage);
+  app.post('/save', restrict, saveGame);
+  app.get('/restore', restrict, serveRestorePage);
+  app.post('/restore', restrict, restoreGame);
 
   app.get('/', restrict, serveLandingPage);
 

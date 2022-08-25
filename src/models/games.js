@@ -1,3 +1,4 @@
+const { generateId } = require('../utils/game.js');
 const { restoreGame } = require('./game.js');
 
 class DevVisitor {
@@ -28,8 +29,8 @@ class DevVisitor {
     this.game.logs = logs.getState();
   }
 
-  json() {
-    return JSON.stringify(this.game);
+  get gameData() {
+    return this.game;
   }
 }
 
@@ -53,19 +54,29 @@ class Games {
     return this.#games.find(game => game.isHost(hostId));
   }
 
-  save(gameId) {
+  save(gameId, title) {
     const game = this.find(gameId);
 
     const devVisitor = new DevVisitor();
     game.accept(devVisitor);
-    const gameJSON = devVisitor.json();
 
-    this.#gameStore.save(gameJSON);
+    const newGameId = generateId();
+
+    const gameData = devVisitor.gameData;
+    gameData.id = newGameId;
+
+    const gameEntry = { id: newGameId, title };
+
+    this.#gameStore.save(gameData, gameEntry);
   }
 
   restore(gameId) {
     const game = this.#gameStore.find(gameId);
     this.#games.push(restoreGame(game));
+  }
+
+  savedGamesEntries() {
+    return this.#gameStore.entries();
   }
 }
 

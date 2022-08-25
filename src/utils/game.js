@@ -12,6 +12,10 @@ const createGameLink = (host, gameId) => {
   return `http://${host}/join/${gameId}`;
 };
 
+const generateId = () => {
+  return new Date().getTime().toString(16);
+};
+
 const hasLeftTile = (tilePos, rowSize) => {
   return tilePos % rowSize !== 0;
 };
@@ -257,6 +261,7 @@ const hasMoreThan40Tiles = corporations => {
 module.exports = {
   getPlayer,
   createGameLink,
+  generateId,
   nextStep,
   findAdjancetTiles,
   findPlacedTiles,
