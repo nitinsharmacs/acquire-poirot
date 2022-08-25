@@ -36,11 +36,11 @@ const hostGame = (req, res) => {
   const gameHost = new Player(playerId, playerName);
   game.addPlayer(gameHost);
 
-  const games = req.app.games.games;
-  // todo : put game.isHost();
-  const existingGame = games.find(game => game.host.id === playerId);
+  const games = req.app.games;
+
+  const existingGame = games.findByHost(playerId);
   if (existingGame) {
-    return res.redirect('/lobby/' + existingGame.id);
+    return res.redirect('/join/' + existingGame.id);
   }
   req.app.games.add(game);
 
