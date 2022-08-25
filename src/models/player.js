@@ -56,9 +56,9 @@ class Player {
     return this.id === id;
   }
 
-  hasStocks({ id }) {
+  hasStocks({ id }, stockCount = 1) {
     const stocks = this.stocks.find(stock => stock.corporationId === id);
-    return stocks && stocks.count > 0;
+    return stocks && stocks.count >= stockCount;
   }
 }
 

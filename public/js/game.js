@@ -51,10 +51,18 @@ const buyStocks = (stocks) => {
 };
 
 const sellStocks = (stockCount) => {
+  let message = '';
   API.sellStock(stockCount)
     .then(res => {
       gameState.updateStage(res.data.case);
       handleView(gameState);
+      return res;
+    })
+    .catch(res => {
+      message = res.message;
+    })
+    .finally(() => {
+      handleView(gameState, message);
     });
 };
 
@@ -90,8 +98,8 @@ const handleView = (game, message = '') => {
   if (game.isInMergeState()) {
     renderBoard(game);
     renderPlayerResources(game);
-    renderStockMarket(game, message);
-    showDefunctStocksTransaction();
+    renderStockMarket(game);
+    showDefunctStocksTransaction(message);
   }
 
   if (game.isInBuildState()) {
@@ -102,9 +110,7 @@ const handleView = (game, message = '') => {
   }
 
   if (game.isInTransactionState()) {
-    // renderLogs(game);
-    // renderPlayerResources(game);
-    // renderStockMarket(game, message);
+    removeTransationPanel();
     poller.start();
   }
 

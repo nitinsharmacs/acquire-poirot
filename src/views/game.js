@@ -43,12 +43,10 @@ const gamePage = () => `<html>
 
       <section>
         <div class="player-activities">
-          <div class="players">
-            <h3 class="component-heading">Players</h3>
-            <div class="players-list" id="players-list">
-
-            </div>
-          </div>
+          <div class="activity-logs">
+          <h3 class="component-heading">Activity Logs</h3>
+          <div class="logs"></div>
+        </div>
           <div>
             <header>
               <button id="info-card-btn">Info Card</button>
@@ -57,10 +55,12 @@ const gamePage = () => `<html>
               </div>
               <button class="fa-solid fa-arrow-right-from-bracket"></button>
             </header>
-            <div class="activity-logs">
-              <h3 class="component-heading">Activity Logs</h3>
-              <div class="logs"></div>
+            <div class="players">
+            <h3 class="component-heading">Players</h3>
+            <div class="players-list" id="players-list">
+
             </div>
+          </div>
           </div>
         </div>
         <form class="stock-market" id="stock-market">
