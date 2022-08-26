@@ -586,6 +586,10 @@ td {
   visibility: visible;
 }
 
+.transaction-panel .stock-message {
+  height: 1.8em;
+}
+
 @keyframes come {
   0% {
     transform: translateX(1000px);

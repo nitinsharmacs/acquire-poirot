@@ -481,7 +481,7 @@ describe('POST /api/buy-stocks', () => {
     });
 });
 
-describe('POST /api/sell-stocks', () => {
+describe('POST /api/handle-defunct-stocks', () => {
   const games = new Games();
   const host = { name: 'sam', id: 'user' };
 
@@ -520,8 +520,8 @@ describe('POST /api/sell-stocks', () => {
 
   it('should sell stocks of defunct corporation', (done) => {
     request(app)
-      .post('/api/sell-stocks')
-      .send('stockCount=2')
+      .post('/api/handle-defunct-stocks')
+      .send('stockCount=2&tradeCount=0')
       .expect('content-type', /json/)
       .expect(200, done);
   });

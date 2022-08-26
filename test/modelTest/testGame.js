@@ -1,7 +1,6 @@
 const assert = require('assert');
 const { Player } = require('../../src/models/player');
 const { newGame } = require('../../src/models/game');
-const { Corporation } = require('../../src/models/corporation');
 
 describe('Game', () => {
   describe('addPlayer', () => {
@@ -27,9 +26,9 @@ describe('Game', () => {
       const host = new Player('213', 'sam');
 
       const player = new Player('32', 'harry');
+
       game.addPlayer(host);
       game.addPlayer(player);
-
       const zeta = game.findCorporation('zeta');
       zeta.activate();
       zeta.isSafe = () => true;

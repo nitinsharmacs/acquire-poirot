@@ -1,4 +1,6 @@
-const { defunctStockHolder } = require('../utils/game');
+const { defunctStockHolder } = require('../utils/game.js');
+
+const isOdd = (num) => num % 2 !== 0;
 
 class MergeState {
   constructor(game,
@@ -38,9 +40,20 @@ class MergeState {
     this.count++;
   }
 
-  isValidStockCount(stockCount) {
+  validateStocks(stockCount, tradeCount) {
+    if (isOdd(tradeCount)) {
+      return { message: 'You can only trade even number of stocks' };
+    }
+
+    if (!this.acquiringCorp.areStocksAvailable(tradeCount / 2)) {
+      return { message: 'Acquiring corporation has insufficient stocks' };
+    }
+
     const player = this.game.currentPlayer;
-    return player.hasStocks(this.defunctCorp, stockCount);
+    const valid = player.hasStocks(this.defunctCorp, stockCount + tradeCount);
+    if (!valid) {
+      return { message: 'Insufficient stocks' };
+    }
   }
 
   canMergeMakerSell() {
@@ -62,13 +75,27 @@ class MergeState {
     this.changeTurn();
   }
 
+  tradeStocks(tradeCount) {
+    const acquiringStocks = tradeCount / 2;
+
+    this.acquiringCorp.reduceStocks(acquiringStocks);
+    this.defunctCorp.addStocks(tradeCount);
+    this.game.currentPlayer.addStocks(this.acquiringCorp, acquiringStocks);
+    this.game.currentPlayer.reduceStocks(this.defunctCorp, tradeCount);
+  }
+
+  handleDefunctStocks({ stockCount, tradeCount }) {
+    this.sellStocks(stockCount);
+    this.tradeStocks(tradeCount);
+    this.next();
+  }
+
   sellStocks(stockCount) {
     const player = this.game.currentPlayer;
     player.reduceStocks(this.defunctCorp, stockCount);
-    this.defunctCorp.addStocks(+stockCount);
+    this.defunctCorp.addStocks(stockCount);
     const { stockPrice } = this.game.marketPrice(this.defunctCorp);
     player.addMoney(stockPrice * stockCount);
-    this.next();
   }
 }
 

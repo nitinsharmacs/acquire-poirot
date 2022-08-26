@@ -344,12 +344,12 @@ class Game {
     this.state.changeTurn();
   }
 
-  sellDefunctStocks(stockCount) {
-    this.state.sellStocks(stockCount);
+  sellDefunctStocks(stocks) {
+    this.state.handleDefunctStocks(stocks);
   }
 
-  isValidStockCount(stockCount) {
-    return this.state.isValidStockCount(stockCount);
+  validateStocks(stockCount, tradeCount) {
+    return this.state.validateStocks(stockCount, tradeCount);
   }
 
   addStocks({ id }, stockCount) {

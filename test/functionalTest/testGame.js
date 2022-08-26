@@ -35,7 +35,7 @@ describe('GET /game', () => {
 
     const game = newGame('123', host, 4);
     games.add(game);
-    game.addPlayer(new Player('user', 'sam'));
+    game.addPlayer(new Player({ id: { id: 'user', name: 'sam' } }));
 
     const app = initApp(session('123', 'user'), games);
     game.start();
@@ -52,7 +52,7 @@ describe('GET /game', () => {
 
     const game = newGame('123', host, 4);
     games.add(game);
-    game.addPlayer(new Player('user', 'sam'));
+    game.addPlayer(new Player({ id: 'user', name: 'sam' }));
 
     const app = initApp(session('123'), games);
     game.start();
@@ -69,7 +69,7 @@ describe('GET /game', () => {
 
     const game = newGame('123', host, 4);
     games.add(game);
-    game.addPlayer(new Player('user', 'sam'));
+    game.addPlayer(new Player({ id: 'user', name: 'sam' }));
 
     const app = initApp(session('1233', 'user'), games);
     game.start();
@@ -87,7 +87,7 @@ describe('GET /lobby', () => {
 
   const game = newGame('123', host, 4);
   games.add(game);
-  game.addPlayer(new Player('user', 'sam'));
+  game.addPlayer(new Player({ id: 'user', name: 'sam' }));
 
   const app = initApp(session('123', 'user'), games);
   it('should response with lobby page', (done) => {
@@ -104,7 +104,7 @@ describe('GET /join', () => {
 
   const game = newGame('123', host, 4);
   games.add(game);
-  game.addPlayer(new Player('user', 'sam'));
+  game.addPlayer(new Player({ id: 'user', name: 'sam' }));
 
   const app = initApp(session('123', 'user'), games);
 
@@ -146,8 +146,8 @@ describe('GET /join', () => {
 
     const game = newGame('123', host, 2);
     games.add(game);
-    game.addPlayer(new Player('user', 'sam'));
-    game.addPlayer(new Player('user-2', 'harry'));
+    game.addPlayer(new Player({ id: 'user', name: 'sam' }));
+    game.addPlayer(new Player({ id: 'user-2', name: 'harry' }));
     game.start();
     const app = initApp(session('123', 'user-3'), games);
 
