@@ -6,7 +6,6 @@ const { savePage, restorePage } = require('../views/saveGame.js');
 
 const serveLandingPage = (req, res) => {
   const { playerName } = req.session;
-
   res.type('html');
   res.render('index', { playerName });
 };
