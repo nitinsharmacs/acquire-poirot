@@ -1,7 +1,6 @@
 const { Player } = require('../models/player.js');
 const { createGameLink } = require('../utils/game.js');
 const { lobbyPage } = require('../views/lobby.js');
-const { landingPage } = require('../views/index.js');
 const { gamePage } = require('../views/game.js');
 const { savePage, restorePage } = require('../views/saveGame.js');
 
@@ -9,7 +8,7 @@ const serveLandingPage = (req, res) => {
   const { playerName } = req.session;
 
   res.type('html');
-  res.send(landingPage(playerName));
+  res.render('index', { playerName });
 };
 
 const serveGamePage = (req, res) => {
