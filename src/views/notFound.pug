@@ -12,7 +12,7 @@ html
     div(class="header")
       div(class="heading") Acquire
     div(class="container")
-      p Page not Found
+      p #{isNotFoundPage ? 'Page' : 'Game'} not found
       p Go to 
         a(href="/") home
       div(class="not-found")

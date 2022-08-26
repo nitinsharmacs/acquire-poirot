@@ -24,7 +24,7 @@ const joinGame = (req, res) => {
   const game = req.app.games.find(id);
 
   if (!game) {
-    return res.status(404).send('Game not found');
+    return res.status(404).render('notFound', { isNotFoundPage: false });
   }
 
   const playerExists = game.playerExists(playerId);
@@ -60,7 +60,7 @@ const serveLobby = (req, res) => {
 
   const game = req.app.games.find(id);
   if (!game) {
-    return res.status(404).send('Game not found');
+    return res.status(404).render('gameNotFound');
   }
 
   const { host } = req.headers;
