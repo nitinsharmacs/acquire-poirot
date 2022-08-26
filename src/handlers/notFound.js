@@ -1,9 +1,7 @@
-const { notFoundPage } = require('../views/notFound.js');
-
 const notFound = (req, res) => {
   res.status(404);
   res.type('text/html');
-  res.send(notFoundPage());
+  res.render('notFound', {});
 };
 
 module.exports = { notFound };
