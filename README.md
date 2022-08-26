@@ -72,7 +72,7 @@ __RUN__
 
 ##### __GAME__
 
-  #### __Execute npm start command to run the game__
+  #### __Execute npm start command to run the server__
 
  ```
  npm start
@@ -85,3 +85,17 @@ __RUN__
 ```
  npm test
 ```
+<br>
+
+__VISIT HOMEPAGE__
+
+---
+
+
+See the homepage on local machine : 
+    
+  step 1 : run the server 
+  
+  step 2 : visit http://localhost:8888/ 
+
+Or visit https://acquire-poirot.herokuapp.com/
