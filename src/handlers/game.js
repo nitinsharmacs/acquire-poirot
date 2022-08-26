@@ -1,7 +1,6 @@
 const { Player } = require('../models/player.js');
 const { createGameLink } = require('../utils/game.js');
 const { lobbyPage } = require('../views/lobby.js');
-const { gamePage } = require('../views/game.js');
 const { savePage, restorePage } = require('../views/saveGame.js');
 
 const serveLandingPage = (req, res) => {
@@ -12,7 +11,7 @@ const serveLandingPage = (req, res) => {
 
 const serveGamePage = (req, res) => {
   res.type('text/html');
-  res.end(gamePage());
+  res.render('gamePage');
 };
 
 const joinGame = (req, res) => {

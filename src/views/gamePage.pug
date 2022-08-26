@@ -1,0 +1,44 @@
+head
+  title Acquire
+  link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Recursive:regular,bold,bolditalic')
+  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css' integrity='sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==' crossorigin='anonymous' referrerpolicy='no-referrer')
+  link(rel='stylesheet' href='/css/index.css')
+  link(rel='stylesheet' href='/css/game.css')
+  script(src='/js/html.js')
+  script(src='/js/renderers/highlight.js')
+  script(src='/js/renderers/playerResources.js')
+  script(src='/js/renderers/playersList.js')
+  script(src='/js/renderers/stockMarket.js')
+  script(src='/js/renderers/board.js')
+  script(src='/js/renderers/endGamePopups.js')
+  script(src='/js/renderer.js')
+  script(src='/js/api.js')
+  script(src='/js/poller.js')
+  script(src='/js/state.js')
+  script(src='/js/store.js')
+  script(src='/js/game.js')
+body
+  div(class="page-wrapper")
+    div(class="game-page")
+      section
+        div(class="board")
+          div(class="branding left")
+            h2 ACQUIRE
+          div(class="board-tiles")
+          div(class="branding right")
+            h2 ACQUIRE
+        div(class="player-resources" id="player-resources")
+      section
+        div(class="player-activities")
+          div(class="activity-logs")
+            h3(class="component-heading") Activity Logs
+            div(class="logs")
+          div
+            header
+              button(id="info-card-btn") Info Card
+              div(class="info-card hide" id="info-card")
+              button(class="fa-solid fa-arrow-right-from-bracket")
+            div(class="players")
+              h3(class="component-heading") Players
+              div(class="players-list" id="players-list")
+        form(class="stock-market" id="stock-market")
