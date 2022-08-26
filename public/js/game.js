@@ -54,14 +54,12 @@ const sellStocks = (stockCount) => {
   let message = '';
   API.sellStock(stockCount)
     .then(res => {
-      gameState.updateStage(res.data.case);
-      handleView(gameState);
+      removeTransationPanel();
+      poller.start();
       return res;
     })
     .catch(res => {
       message = res.message;
-    })
-    .finally(() => {
       handleView(gameState, message);
     });
 };
@@ -79,6 +77,11 @@ const placeTile = (tileId) => {
     .then(res => {
       gameState.placeTile(tileId);
       storeItem('tileId', tileId);
+      if (!gameState.isCurrentPlayer(res.data.currentPlayer)) {
+        removeTransationPanel();
+        poller.start();
+        return;
+      }
       gameState.updateCorporations(res.data.corporations);
       gameState.updateCurrentPlayerMoney(res.data.money);
       gameState.updateStage(res.data.case);
@@ -94,7 +97,7 @@ const handleView = (game, message = '') => {
     highlightTilesOnBoard(game);
   }
 
-  if (game.isInMergeState()) {
+  if (game.isInTransactionState()) {
     renderBoard(game);
     renderPlayerResources(game);
     renderStockMarket(game);
@@ -106,11 +109,6 @@ const handleView = (game, message = '') => {
     renderPlayerResources(game);
     renderStockMarket(game, message);
     highlightStockMarketToBuild(getItem('tileId'));
-  }
-
-  if (game.isInTransactionState()) {
-    removeTransationPanel();
-    poller.start();
   }
 
   if (game.isInBuyState()) {

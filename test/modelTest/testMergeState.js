@@ -49,6 +49,6 @@ describe('MergeState', () => {
 
     const player = game.currentPlayer;
     game.state.sellStocks(2);
-    assert.deepStrictEqual(player.stocks, [{ corporationId: 'america', count: 0 }]);
+    assert.deepStrictEqual(player.stocks, []);
   });
 });

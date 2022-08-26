@@ -256,10 +256,6 @@ class Game {
     this.#stage = 'build';
   }
 
-  mergeState() {
-    this.#stage = 'merge';
-  }
-
   transactionState() {
     this.#stage = 'transaction';
   }
