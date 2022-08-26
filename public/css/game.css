@@ -429,10 +429,10 @@
 /* INFO CARD --------------------- */
 
 .info-card {
-  width: 350px;
-  height: 400px;
+  width: 450px;
+  height: 450px;
   position: absolute;
-  background-image: url('/images/infocard.jpeg');
+  background-image: url('/images/info-card.jpeg');
   background-size: contain;
   transform: translateX(0px);
   transition: 0.3s linear;
