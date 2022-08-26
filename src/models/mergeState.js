@@ -65,11 +65,19 @@ class MergeState {
     this.acquiringCorp.grow(this.tiles);
   }
 
+  nextState() {
+    if (this.game.canStocksBeBought()) {
+      this.game.buyStocksState();
+      return;
+    }
+    this.game.drawTileState();
+  }
+
   next() {
     if (this.count >= this.stockHolders.length) {
       this.game.currentPlayer = this.mergeMaker;
       this.merge();
-      this.game.buyStocksState();
+      this.nextState();
       return;
     }
     this.changeTurn();
