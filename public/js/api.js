@@ -70,7 +70,7 @@ const API = {
   })
     .then(res => res.json()),
 
-  sellStock: (stocks) => fetch('api/sell-stocks', {
+  handleDefunctStocks: (stocks) => fetch('/api/handle-defunct-stocks', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify(stocks)

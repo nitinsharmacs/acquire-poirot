@@ -8,7 +8,7 @@ const {
   buyStocks,
   skipBuildCorp,
   skipBuyStocks,
-  sellStocks,
+  handleDefunctStocks,
   authorizeRequest
 } = require('../handlers/gameApi.js');
 
@@ -24,6 +24,6 @@ router.post('/build-corporation', buildCorporation);
 router.post('/skip-build', skipBuildCorp);
 router.post('/buy-stocks', buyStocks);
 router.post('/skip-buy', skipBuyStocks);
-router.post('/sell-stocks', sellStocks);
+router.post('/handle-defunct-stocks', handleDefunctStocks);
 
 module.exports = router;

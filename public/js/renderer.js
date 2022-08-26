@@ -7,13 +7,13 @@ const renderLogs = ({ logs }) => {
   logElement.replaceChildren(...createElements(logsHTML));
 };
 
-const sellDefunctStocks = () => {
+const selectDefunctStocks = () => {
   const transactionFormElement = select('#transaction-form');
   const form = new FormData(transactionFormElement);
   const tradeCount = form.get('tradeCount');
   const stockCount = form.get('stockCount');
 
-  return sellStocks({ stockCount, tradeCount });
+  return handleDefunctStocks({ stockCount, tradeCount });
 };
 
 const removeTransationPanel = () => {
@@ -22,8 +22,9 @@ const removeTransationPanel = () => {
     return;
   }
 
-  const playerActiviets = select('.player-activities');
-  playerActiviets.removeChild(tradePanel);
+  const playerActivities = select('.player-activities');
+  playerActivities.removeChild(tradePanel);
+  removeHighLight();
 };
 
 const createTransactionPanel = (message) => {
@@ -39,7 +40,7 @@ const createTransactionPanel = (message) => {
         ['input', { type: 'number', name: 'tradeCount', id: 'tradeCount', class: 'stock-value', step: 2, min: 0, value: 0 }]
       ],
       ['p', { class: 'stock-message' }, {}, message],
-      ['input', { type: 'button', class: 'btn theme-btn', value: 'Confirm' }, { onclick: sellDefunctStocks }]
+      ['input', { type: 'button', class: 'btn theme-btn', value: 'Confirm' }, { onclick: selectDefunctStocks }]
     ]
   ];
 
@@ -49,10 +50,6 @@ const createTransactionPanel = (message) => {
 const showDefunctStocksTransaction = (message = '') => {
   removeTransationPanel();
   const playerActivities = select('.player-activities');
-  // const transactionHTML = [['div', { class: 'trade' }, {},
-  //   ['input', { class: 'sell-stocks' }, {}, ''], ['input', { type: 'button', value: 'confirm' }, { onclick: sellDefunctStocks }], ['p', {}, {}, message]]];
-
-  // playerActivities.appendChild(...createElements(transactionHTML));
   const panel = createTransactionPanel(message);
   playerActivities.appendChild(panel);
   highlight(panel);

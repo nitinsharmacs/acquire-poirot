@@ -174,18 +174,23 @@ const skipBuyStocks = (req, res) => {
   });
 };
 
-const sellStocks = (req, res) => {
-  const { game,
-    body: { stockCount, tradeCount }
-  } = req;
-  if (!game.isValidStockCount(stockCount)) {
+const handleDefunctStocks = (req, res) => {
+  const { game, body } = req;
+  const stockCount = parseInt(body.stockCount);
+  const tradeCount = parseInt(body.tradeCount);
+
+  const validationResult = game.validateStocks(stockCount, tradeCount);
+
+  if (validationResult) {
     res.status(422).json({
-      message: 'Insufficient stocks',
+      message: validationResult.message,
       data: { case: 'transaction' }
     });
     return;
   }
-  game.sellDefunctStocks(stockCount);
+
+  game.sellDefunctStocks({ stockCount, tradeCount });
+
   res.json({
     message: 'sold stocks',
     data: { case: 'polling' }
@@ -213,6 +218,6 @@ module.exports = {
   areStocksAvailable,
   skipBuildCorp,
   skipBuyStocks,
-  sellStocks,
+  handleDefunctStocks,
   authorizeRequest
 };

@@ -22,7 +22,6 @@ const serveSignupPage = (req, res) => {
   const { ref } = req.query;
   const queryString = refQueryString(ref);
 
-  console.log('query string', queryString);
   res.type('text/html');
   res.render('auth', { forSignup: true, ref: queryString });
 };
