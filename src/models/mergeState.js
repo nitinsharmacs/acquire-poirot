@@ -60,9 +60,16 @@ class MergeState {
     return this.mergeMaker.hasStocks(this.defunctCorp, 1);
   }
 
+  updateCorporationPrices() {
+    const acquiringCorpMarketPrice = this.game.marketPrice(this.acquiringCorp);
+    this.defunctCorp.updateMarketPrice({});
+    this.acquiringCorp.updateMarketPrice(acquiringCorpMarketPrice);
+  }
+
   merge() {
     this.defunctCorp.defunct();
     this.acquiringCorp.grow(this.tiles);
+    this.updateCorporationPrices();
   }
 
   nextState() {
