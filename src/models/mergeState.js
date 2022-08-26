@@ -33,7 +33,7 @@ class MergeState {
   changeTurn() {
     const stockHolderId = this.stockHolders[this.count].id;
     const player = this.game.getPlayer(stockHolderId);
-    this.game.mergeState();
+    this.game.transactionState();
     this.game.currentPlayer = player;
     this.count++;
   }

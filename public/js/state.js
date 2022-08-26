@@ -26,6 +26,10 @@ class GameState {
     return this.player.id === this.turn.playerId;
   }
 
+  isCurrentPlayer(player) {
+    return player.id === this.player.id;
+  }
+
   getInactiveCorporation() {
     return this.corporations.find(corporation => !corporation.active);
   }
@@ -92,6 +96,10 @@ class GameState {
     });
   }
 
+  updateLogs(logs) {
+    this.logs = logs;
+  }
+
   isInPlaceTileState() {
     return this.turn.stage === 'place-tile';
   }
@@ -100,8 +108,8 @@ class GameState {
     return this.turn.stage === 'build';
   }
 
-  isInMergeState() {
-    return this.turn.stage === 'merge';
+  isInPollingState() {
+    return this.turn.stage === 'polling';
   }
 
   isInTransactionState() {

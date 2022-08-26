@@ -53,7 +53,7 @@ const placeTile = (req, res) => {
   }
   if (step === 'merge') {
     game.merge(corporations, tiles);
-    game.mergeState();
+    game.transactionState();
     corporations.forEach(corporation => game.determineSafe(corporation));
   }
 
@@ -61,6 +61,7 @@ const placeTile = (req, res) => {
     data: {
       tile, case: game.stage,
       corporations: game.corporations,
+      currentPlayer: game.currentPlayer,
       money: player.money
     }, message: 'placed tile'
   });
@@ -181,14 +182,14 @@ const sellStocks = (req, res) => {
   if (!game.isValidStockCount(stockCount)) {
     res.status(422).json({
       message: 'Insufficient stocks',
-      data: { case: 'merge' }
+      data: { case: 'transaction' }
     });
     return;
   }
   game.sellDefunctStocks(stockCount);
   res.json({
     message: 'sold stocks',
-    data: { case: 'transaction' }
+    data: { case: 'polling' }
   });
 };
 

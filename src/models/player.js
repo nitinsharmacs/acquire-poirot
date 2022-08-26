@@ -40,10 +40,14 @@ class Player {
   }
 
   reduceStocks({ id }, noOfStocks = 0) {
-    const stocks = this.stocks.find(stock => stock.corporationId === id);
+    const stock = this.stocks.find(stock => stock.corporationId === id);
 
-    if (stocks) {
-      stocks.count -= noOfStocks;
+    if (stock) {
+      stock.count -= noOfStocks;
+    }
+    if (stock && stock.count === 0) {
+      const stockPosition = this.stocks.indexOf(stock);
+      this.stocks.splice(stockPosition, 1);
     }
   }
 
@@ -63,9 +67,10 @@ class Player {
     return this.id === id;
   }
 
-  hasStocks({ id }, stockCount = 1) {
+  hasStocks({ id }, stockCount = 0) {
     const stocks = this.stocks.find(stock => stock.corporationId === id);
-    return stocks && stocks.count > 0;
+    const count = stocks ? stocks.count : 0;
+    return count >= stockCount;
   }
 
   accept(visitor) {
