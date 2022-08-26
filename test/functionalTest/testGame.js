@@ -63,7 +63,7 @@ describe('GET /game', () => {
       .expect(302, done);
   });
 
-  it('should respond with game not found for invalid game', (done) => {
+  it('should serve game not found page for invalid game', (done) => {
     const games = new Games();
     const host = { name: 'sam', id: 'user' };
 
@@ -76,7 +76,7 @@ describe('GET /game', () => {
 
     request(app)
       .get('/game')
-      .expect('Game not found')
+      .expect('content-type', /html/)
       .expect(404, done);
   });
 });
@@ -115,7 +115,7 @@ describe('GET /join', () => {
       .expect('location', /lobby/, done);
   });
 
-  it('should response with 404 if game not found', (done) => {
+  it('should serve game not found page', (done) => {
     request(app)
       .get('/join/125')
       .expect(404, done);
