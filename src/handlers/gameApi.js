@@ -176,9 +176,8 @@ const skipBuyStocks = (req, res) => {
 
 const sellStocks = (req, res) => {
   const { game,
-    body: { stockCount }
+    body: { stockCount, tradeCount }
   } = req;
-
   if (!game.isValidStockCount(stockCount)) {
     res.status(422).json({
       message: 'Insufficient stocks',

@@ -70,10 +70,10 @@ const API = {
   })
     .then(res => res.json()),
 
-  sellStock: (stockCount) => fetch('api/sell-stocks', {
+  sellStock: (stocks) => fetch('api/sell-stocks', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ stockCount })
+    body: JSON.stringify(stocks)
   })
     .then(res => {
       return res.json().then(data => {

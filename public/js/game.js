@@ -50,9 +50,9 @@ const buyStocks = (stocks) => {
     });
 };
 
-const sellStocks = (stockCount) => {
+const sellStocks = (stocks) => {
   let message = '';
-  API.sellStock(stockCount)
+  API.sellStock(stocks)
     .then(res => {
       removeTransationPanel();
       poller.start();
