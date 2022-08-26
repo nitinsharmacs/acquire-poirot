@@ -1,0 +1,22 @@
+html 
+  head
+    title Acquire - #{forSignup ? 'SignUp' : 'Login'}
+    link(rel="stylesheet" href="/css/index.css")
+    link(rel="stylesheet" href="https://fonts.googleapis.com/css?family=Recursive:regular,bold,bolditalic")
+  body 
+    div(class="page")
+      header(class="header")
+        h1 Acquire
+      div(class="container")
+        form(class="form" action=forSignup ? '/sign-up' : '/login' ref method="post")
+          h2 #{forSignup ? 'Sign Up' : 'Login'}
+          input(type="text" name="username" id="username" placeholder="Username")
+          input(type="password" name="password" id="password" placeholder="Password")
+          input(type="submit" value=forSignup ? 'Sign Up' : 'Login' class="btn theme-btn")
+          
+          - var pageMsg = forSignup ? 'Already have an account?' : 'Need an account?' 
+          - var pageName = forSignup ? '/login' : '/sign-up'
+          div(class="form-footer") #{pageMsg} &nbsp;
+            a(href=pageName ref) #{forSignup ? 'login' : 'sign-up'}
+          if error
+            div(class="message") #{error}
