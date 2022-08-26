@@ -192,6 +192,15 @@ const sellStocks = (req, res) => {
   });
 };
 
+const authorizeRequest = (req, res, next) => {
+  const { game, session: { playerId } } = req;
+  if (game.isPlayerIdle(playerId)) {
+    res.status(403).json({ message: 'Invalid request' });
+    return;
+  }
+  next();
+};
+
 module.exports = {
   loadGame,
   startGame,
@@ -204,5 +213,6 @@ module.exports = {
   areStocksAvailable,
   skipBuildCorp,
   skipBuyStocks,
-  sellStocks
+  sellStocks,
+  authorizeRequest
 };
