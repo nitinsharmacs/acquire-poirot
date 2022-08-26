@@ -74,19 +74,6 @@ describe('POST /api/start-game', () => {
       .expect('content-type', /json/)
       .expect(200, done);
   });
-
-  it('should remove tile from player\'s tiles and place it on board',
-    (done) => {
-      const game = app.games.find('123');
-      const player = game.currentPlayer;
-      const tileId = player.tiles[0].id;
-
-      request(app)
-        .post('/api/place-tile')
-        .send(`id=${tileId}`)
-        .expect('content-type', /json/)
-        .expect(200, done);
-    });
 });
 
 describe('POST /api/place-tile', () => {
@@ -112,8 +99,8 @@ describe('POST /api/place-tile', () => {
 
   it('should remove tile from player\'s tiles and place it on board',
     (done) => {
-      const player = game.currentPlayer;
-      const tileId = player.tiles[0].id;
+      game.currentPlayer = game.getPlayer('user');
+      const tileId = game.currentPlayer.tiles[0].id;
 
       request(app)
         .post('/api/place-tile')
@@ -146,6 +133,7 @@ describe('Post /api/place-tile', () => {
 
   it('should grow corporation',
     (done) => {
+      game.currentPlayer = game.getPlayer('user');
       const tile = game.board.tiles.find(tile => tile.id === '3a');
       game.currentPlayer.addTile(tile);
 
@@ -188,6 +176,7 @@ describe('Post /api/place-tile', () => {
 
   it('Should determine a corporation is safe',
     (done) => {
+      game.currentPlayer = game.getPlayer('user');
       const tile = game.board.tiles.find(tile => tile.id === '4b');
       game.currentPlayer.addTile(tile);
       const corporation = game.findCorporation('america');
@@ -210,6 +199,7 @@ describe('Post /api/place-tile', () => {
 
   it('should merge two corporations',
     (done) => {
+      game.currentPlayer = game.getPlayer('user');
       const tile = game.board.tiles.find(tile => tile.id === '3a');
       game.currentPlayer.addTile(tile);
       game.currentPlayer.stocks = [{ corporationId: 'america', count: 2 }];
@@ -274,7 +264,7 @@ describe('POST /api/draw-tile', () => {
     request(app)
       .post('/api/draw-tile')
       .expect('content-type', /json/)
-      .expect(400, done);
+      .expect(403, done);
   });
 });
 
@@ -284,7 +274,7 @@ describe('POST /api/build-corporation', () => {
 
   const game = newGame('123', host, 1);
   games.add(game);
-  game.addPlayer(new Player('user', 'sam'));
+  game.addPlayer(new Player({ id: 'user', name: 'sam' }));
   const app = initApp(session('123', 'user'), games);
 
   before((done) => {
@@ -296,10 +286,11 @@ describe('POST /api/build-corporation', () => {
 
   it('should build a corporation',
     (done) => {
+      game.currentPlayer = game.getPlayer('user');
       placeTiles(game, ['1a', '2a']);
       request(app)
         .post('/api/build-corporation')
-        .send('id=1a&&corporationId=america')
+        .send('id=1a&corporationId=america')
         .expect('content-type', /json/)
         .expect(200, done);
     });
@@ -311,7 +302,7 @@ describe('POST /api/skip-build', () => {
 
   const game = newGame('123', host, 1);
   games.add(game);
-  game.addPlayer(new Player('user', 'sam'));
+  game.addPlayer(new Player({ id: 'user', name: 'sam' }));
   const app = initApp(session('123', 'user'), games);
 
   before((done) => {
@@ -323,6 +314,7 @@ describe('POST /api/skip-build', () => {
 
   it('should skip building a corporation',
     (done) => {
+      game.currentPlayer = game.getPlayer('user');
       placeTiles(game, ['1a', '2a']);
       game.buyStocksState();
 
