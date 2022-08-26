@@ -5,8 +5,7 @@ const loadGame = (req, res) => {
   const { game, session: { playerId } } = req;
 
   if (!game) {
-    // return res.status(404).render('notFound', { isNotFoundPage: false });
-    return res.status(404).send('game not found');
+    return res.status(404).render('notFound', { isNotFoundPage: false });
   }
 
   res.json({ game: createGameDAO(game, playerId) });
