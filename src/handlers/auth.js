@@ -1,5 +1,4 @@
 const { refQueryString } = require('../utils/auth.js');
-const { authPage } = require('../views/auth.js');
 
 const errorMessage = (errCode) => {
   const customErrors = {
@@ -16,7 +15,7 @@ const serveLoginPage = (req, res) => {
   const queryString = refQueryString(ref);
 
   res.type('text/html');
-  res.send(authPage({ ref: queryString }));
+  res.render('auth', { forSignup: false, ref: queryString });
 };
 
 const serveSignupPage = (req, res) => {
@@ -24,10 +23,7 @@ const serveSignupPage = (req, res) => {
   const queryString = refQueryString(ref);
 
   res.type('text/html');
-  res.send(authPage({
-    forSignup: true,
-    ref: queryString
-  }));
+  res.render('auth', { forSignup: true, ref: queryString });
 };
 
 const invalidCredentials = (users, username, password) => {
@@ -45,17 +41,17 @@ const login = users => (req, res) => {
   const queryString = refQueryString(ref);
 
   if (haveNoValue(username, password)) {
-    return res.status(400).send(authPage({
+    return res.status(400).render('auth', {
       ref: queryString,
       error: errorMessage('NOEMPTY')
-    }));
+    });
   }
 
   if (invalidCredentials(users, username, password)) {
-    return res.status(401).send(authPage({
+    return res.status(401).render('auth', {
       ref: queryString,
       error: errorMessage('INVALID_CRED')
-    }));
+    });
   }
 
   req.session.playerName = username;
@@ -72,19 +68,19 @@ const register = (users, dataStore) => (req, res) => {
   const queryString = refQueryString(ref);
 
   if (haveNoValue(username, password)) {
-    return res.status(400).send(authPage({
+    return res.status(400).render('auth', {
       ref: queryString,
       error: errorMessage('NOEMPTY'),
       forSignup: true
-    }));
+    });
   }
 
   if (users[username]) {
-    return res.status(400).send(authPage({
+    return res.status(400).render('auth', {
       ref: queryString,
       error: errorMessage('USERPRESENT'),
       forSignup: true
-    }));
+    });
   }
 
   const id = new Date().getTime().toString();
