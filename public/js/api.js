@@ -15,7 +15,7 @@ const API = {
     })
     .then((res) => {
       if (res.status !== 200) {
-        throw new Error('Tile cant be placed');
+        throw new Error('Tile can\'t be placed');
       }
       return res.json();
     }),

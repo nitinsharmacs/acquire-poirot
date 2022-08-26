@@ -4,29 +4,33 @@ const { MergeState } = require('../../src/models/mergeState');
 const { Player } = require('../../src/models/player');
 
 describe('MergeState', () => {
-  const game = newGame('123', { id: '213', name: 'sam' }, 3);
+  let game;
   const host = new Player('213', 'sam');
 
   const player1 = new Player({ id: '32', name: 'harry' });
   const player2 = new Player({ id: '22', name: 'sonu' });
-  game.addPlayer(host);
-  game.addPlayer(player1);
-  game.addPlayer(player2);
-  game.start();
 
-  const defunctCorp = game.findCorporation('america');
-  defunctCorp.addTiles([{ id: '1a' }, { id: '1b' }]);
+  beforeEach(() => {
+    game = newGame('123', { id: '213', name: 'sam' }, 3);
+    game.addPlayer(host);
+    game.addPlayer(player1);
+    game.addPlayer(player2);
+    game.start();
 
-  const acquiringCorp = game.findCorporation('zeta');
-  acquiringCorp.addTiles([{ id: '1e' }, { id: '1d' }]);
+    const defunctCorp = game.findCorporation('america');
+    defunctCorp.addTiles([{ id: '1a' }, { id: '1b' }]);
 
-  const tiles = [{ id: '1a' }, { id: '1b' }, { id: '1c' }, { id: '1d' }, { id: '1e' }];
+    const acquiringCorp = game.findCorporation('zeta');
+    acquiringCorp.addTiles([{ id: '1e' }, { id: '1d' }]);
 
-  player1.stocks = [{ corporationId: 'america', count: 1 }];
-  player2.stocks = [{ corporationId: 'america', count: 2 }];
+    const tiles = [{ id: '1a' }, { id: '1b' }, { id: '1c' }, { id: '1d' }, { id: '1e' }];
 
-  game.state = new MergeState(game, { defunctCorp, acquiringCorp }, tiles, game.currentPlayer);
-  game.state.addStockHolders();
+    player1.stocks = [{ corporationId: 'america', count: 1 }];
+    player2.stocks = [{ corporationId: 'america', count: 2 }];
+
+    game.state = new MergeState(game, { defunctCorp, acquiringCorp }, tiles, game.currentPlayer);
+    game.state.addStockHolders();
+  });
 
   it('should change turn to next player', () => {
     const prevPlayerId = game.currentPlayer.id;
@@ -50,5 +54,35 @@ describe('MergeState', () => {
     const player = game.currentPlayer;
     game.state.sellStocks(2);
     assert.deepStrictEqual(player.stocks, []);
+  });
+
+  it('should change game state to buystocks after merge', () => {
+    game.buildCorporation('america', '1a');
+    game.buildCorporation('zeta', '1e');
+    host.stocks = [{ corporationId: 'america', count: 2 }];
+    player1.stocks = [{ corporationId: 'america', count: 2 }];
+    player2.stocks = [{ corporationId: 'america', count: 2 }];
+
+    game.state.addStockHolders();
+    game.state.count = 3;
+    game.state.sellStocks(2);
+    game.state.next();
+    assert.deepStrictEqual(game.stage, 'buy-stocks');
+  });
+
+  it('should change game state to drawTile if no stocks are avaliable after merge', () => {
+    game.buildCorporation('america', '1a');
+    game.buildCorporation('zeta', '1e');
+    host.stocks = [{ corporationId: 'america', count: 2 }];
+    player1.stocks = [{ corporationId: 'america', count: 2 }];
+    player2.stocks = [{ corporationId: 'america', count: 2 }];
+
+    const zeta = game.findCorporation('zeta');
+    zeta.stocksLeft = 0;
+    game.state.addStockHolders();
+    game.state.count = 3;
+    game.state.sellStocks(2);
+    game.state.next();
+    assert.deepStrictEqual(game.stage, 'draw-tile');
   });
 });

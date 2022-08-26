@@ -31,7 +31,7 @@ class Logs {
 
   boughtStocks(name, stocks) {
     const stockLogs = stocks.map(({ corporation, numOfStocks }) => {
-      return `${numOfStocks} of ${corporation}`;
+      return `${numOfStocks} stocks of ${corporation}`;
     }).join(', ');
     this.#addPlayerLog(name, `bought ${stockLogs}`);
   }
