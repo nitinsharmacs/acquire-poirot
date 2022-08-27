@@ -10,7 +10,7 @@ describe('Board', () => {
     assert.deepStrictEqual(actual, expected);
   });
 
-  it('should build a tile on tile', () => {
+  it('should build a corporation on tile', () => {
     const board = createBoard();
     const corporation = { id: 'america', name: 'America' };
 
