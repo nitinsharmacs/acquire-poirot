@@ -36,9 +36,9 @@ const savePage = (playerName) => `
 `;
 
 const savedGamesOptions = (entries) => {
-return entries.map(entry => {
-return `<option value="${entry.id}">${entry.title}</option>`;
-}).join('');
+  return entries.map(entry => {
+    return `<option value="${entry.id}">${entry.title}</option>`;
+  }).join('');
 };
 
 const restorePage = (entries, playerName) => `

@@ -6,6 +6,10 @@ const serveLandingPage = (req, res) => {
   const { playerName } = req.session;
   res.render('index', { playerName });
 };
+const serveInstructionPage = (req, res) => {
+  const { playerName } = req.session;
+  res.render('howToPlay', { playerName });
+};
 
 const serveGamePage = (req, res) => {
   res.render('gamePage');
@@ -110,5 +114,6 @@ module.exports = {
   joinGame,
   serveLobby,
   saveGame,
-  restoreGame
+  restoreGame,
+  serveInstructionPage
 };

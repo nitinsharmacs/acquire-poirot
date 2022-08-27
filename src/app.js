@@ -17,7 +17,8 @@ const { serveGamePage,
   saveGame,
   restoreGame,
   serveSavePage,
-  serveRestorePage
+  serveRestorePage,
+  serveInstructionPage
 } = require('./handlers/game.js');
 
 const { createAuthRouter } = require('./routers/authRoutes.js');
@@ -67,6 +68,7 @@ const createApp = (
 
   app.get('/game', restrict, injectGame, serveGamePage);
   app.use('/api', restrict, injectGame, apiRoutes);
+  app.get('/how-to-play', restrict, serveInstructionPage);
 
   // only for developers
   app.get('/save', restrict, serveSavePage);

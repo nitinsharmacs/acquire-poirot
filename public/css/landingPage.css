@@ -35,3 +35,17 @@
   color: black;
   width: 160px;
 }
+
+/* ----------------instruction page------------------ */
+.instruction-heading{
+  text-align: center;
+}
+
+.instruction-holder{
+    width: 900px;
+    height: 500px;
+    overflow: scroll;
+    margin: 0 auto;
+    border: 1px solid;
+    padding: 1.5em;
+}

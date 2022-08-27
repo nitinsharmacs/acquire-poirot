@@ -1,0 +1,34 @@
+head
+  title Host
+  link(rel="stylesheet" href="https://fonts.googleapis.com/css?family=Recursive:regular,bold,bolditalic") 
+  link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"
+    integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer") 
+  link(rel="stylesheet", href="/css/landingPage.css")
+div(class="page")
+  header(class="header")
+    h1 Acquire
+    div(class="navigation") 
+      p Hii, #{playerName}!
+      a(class="fa-solid.fa-house-chimney" href="/")
+    h2(class="instruction-heading") HOW TO PLAY
+  main(class="instruction-holder")
+    img(src="/images/instructions.jpeg")
+    h2 COMPONENTS OF GAME
+    ul
+      each val in ['Land (board)', 'Corporations', 'Tiles', 'Stock market', 'Stocks', 'Money', 'Information card']
+        li= val
+    h2 RULES  
+    ul
+      li At the beginning of the game, each player receives $6,000.
+      li To determine who plays first, each player draws one tile and places it in its matching square on the board.
+      li The player who has drawn the lowest number-letter combination starts play and players will play in ascending order.
+      li Each player draws six tiles.
+      li Each player’s turn consists of:
+        ul 
+          li Play a tile onto the gameboard by putting it on its matching space.
+            ul 
+              li Depending upon where a tile is played, it may form a corporation or it may merge two or more corporations.
+          li Buy stocks of any active corporations. There is a limit of three total per turn.
+          li Draw a new tile from the facedown cluster.
+      li Ending the game When all active corporations are safe or one corporation has 41 or more tiles on the board.
