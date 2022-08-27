@@ -1,38 +1,6 @@
 const { generateId } = require('../utils/game.js');
 const { restoreGame } = require('./game.js');
-
-class DevVisitor {
-  constructor() {
-    this.game = {
-      corporations: [],
-      players: [],
-    };
-  }
-
-  visit(game) {
-    this.game = { ...this.game, ...game.getState() };
-  }
-
-  visitCorporation(corporation) {
-    this.game.corporations.push(corporation.getState());
-  }
-
-  visitPlayer(player) {
-    this.game.players.push(player.getState());
-  }
-
-  visitBoard(board) {
-    this.game.board = board.getState();
-  }
-
-  visitLogs(logs) {
-    this.game.logs = logs.getState();
-  }
-
-  get gameData() {
-    return this.game;
-  }
-}
+const { StoreVisitor } = require('./visitors.js');
 
 class Games {
   #games;
@@ -57,17 +25,17 @@ class Games {
   save(gameId, title) {
     const game = this.find(gameId);
 
-    const devVisitor = new DevVisitor();
-    game.accept(devVisitor);
+    const visitor = new StoreVisitor();
+    game.accept(visitor);
 
     const newGameId = generateId();
 
-    const gameData = devVisitor.gameData;
+    const gameData = visitor.gameData;
     gameData.id = newGameId;
 
     const gameEntry = { id: newGameId, title };
 
-    this.#gameStore.save(gameData, gameEntry);
+    return this.#gameStore.save(gameData, gameEntry);
   }
 
   restore(gameId) {

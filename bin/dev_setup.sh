@@ -30,4 +30,8 @@ do
   fi
 done
 
+echo "Installing redis"
+echo "Press ^C if you already have"
+brew install redis
+
 echo -e "\nDone"

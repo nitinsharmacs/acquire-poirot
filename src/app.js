@@ -1,14 +1,12 @@
-const fs = require('fs');
 const express = require('express');
 const morgan = require('morgan');
-const session = require('express-session');
 
 // routes
 const apiRoutes = require('./routers/apiRoutes.js');
 
 // middlewares
 const { restrict } = require('./middlewares/auth.js');
-const { injectGame } = require('./middlewares/game');
+const { injectGame } = require('./middlewares/game.js');
 
 // handlers
 const { notFound } = require('./handlers/notFound.js');
@@ -23,30 +21,23 @@ const { serveGamePage,
 } = require('./handlers/game.js');
 
 const { createAuthRouter } = require('./routers/authRoutes.js');
-const { createHostRouter } = require('./routers/hostRouter');
+const { createHostRouter } = require('./routers/hostRouter.js');
 
 // models
 const DataStore = require('./dataStore.js');
-const { Games } = require('./models/games.js');
-const { GameStore } = require('./models/gameStore.js');
 
 const {
   USERS_DB_PATH,
-  SESSION_KEY
 } = process.env;
 
 const resources = {
   USERS_DB_PATH,
 };
 
-const appConfig = {
-  root: './public',
-  sessionKey: SESSION_KEY,
-  session,
-  games: new Games([], new GameStore(fs).load())
-};
-
-const createApp = (config = appConfig, dataStore = new DataStore(resources)) => {
+const createApp = (
+  config,
+  dataStore = new DataStore(resources)
+) => {
   const { root, sessionKey, session, games } = config;
   const app = express();
   app.use(morgan('tiny'));

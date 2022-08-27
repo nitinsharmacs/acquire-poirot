@@ -1,31 +1,27 @@
-const parse = (arg) => JSON.parse(arg);
-const stringify = (arg) => JSON.stringify(arg);
-
 class GameStore {
-  #fs;
-  #gameFile;
-  #gameEntriesFile;
   #games;
   #entries;
-  constructor(fs) {
-    this.#fs = fs;
-    this.#gameFile = './data/game.json';
-    this.#gameEntriesFile = './data/gameEntries.json';
+  #store;
+  constructor(store) {
+    this.#store = store;
   }
 
   load() {
-    this.#games = parse(this.#fs.readFileSync(this.#gameFile, 'utf8'));
-    this.#entries = parse(this.#fs.readFileSync(this.#gameEntriesFile), 'utf8');
-
-    return this;
+    return this.#store.getAll('games')
+      .then(games => {
+        this.#games = games;
+        return this.#store.getAll('entries');
+      }).then(entries => {
+        this.#entries = entries;
+        return this;
+      });
   }
 
   save(game, entry) {
-    this.#games.push(game);
-    this.#entries.push(entry);
-
-    this.#fs.writeFileSync(this.#gameFile, stringify(this.#games), 'utf8');
-    this.#fs.writeFileSync(this.#gameEntriesFile, stringify(this.#entries), 'utf8');
+    return this.#store.set('games', game.id, game)
+      .then(() => {
+        this.#store.set('entries', entry.id, entry);
+      });
   }
 
   find(gameId) {
