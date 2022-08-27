@@ -28,8 +28,12 @@ class Player {
     return tile;
   }
 
+  findStocks(corporationId) {
+    return this.stocks.find(stock => stock.corporationId === corporationId);
+  }
+
   addStocks({ id, name }, noOfStocks = 0) {
-    const stocks = this.stocks.find(stock => stock.corporationId === id);
+    const stocks = this.findStocks(id);
 
     if (stocks) {
       stocks.count += noOfStocks;
@@ -40,7 +44,7 @@ class Player {
   }
 
   reduceStocks({ id }, noOfStocks = 0) {
-    const stock = this.stocks.find(stock => stock.corporationId === id);
+    const stocks = this.findStocks(id);
 
     if (stock) {
       stock.count -= noOfStocks;

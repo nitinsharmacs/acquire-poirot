@@ -504,56 +504,115 @@ input[type=number]::-webkit-outer-spin-button {
   margin: 0.5em 0;
 }
 
+.trade {
+  position: absolute;
+  right: 0px;
+  top: 30px;
+  background: white;
+  border: 2px solid black;
+  height: 93%;
+  width: 38%;
+  border-radius: 2%;
+}
+
 /* ----------------------game over popup----------- */
 .popup {
   padding: 2em 4em;
+  width: 50%;
   background-color: rgba(23, 23, 23, 0.95);
   color: #D89216;
   border-radius: 5px;
-  width: 40%;
   position: absolute;
-  top: 300;
-  left: 600;
+  left: 500;
   display: flex;
   flex-direction: column;
+  gap: 20px;
   justify-content: center;
   box-shadow: 5px 10px 18px rgb(69, 69, 69);
 }
 
 .sample {
-  animation: animatezoom 0.5s
+  animation: animateSliding 30s
 }
 
-@keyframes animatezoom {
+@keyframes animateSliding {
   from {
-    transform: scale(0)
+    top: 900px;
   }
 
   to {
-    transform: scale(1)
+    top: -500px;
   }
 }
 
-.resources-details {
-  border-collapse: collapse;
-  color: white;
-  font-size: larger;
-  text-align: center;
+.final-sample {
+  top: 300px;
+  left: 500px;
+  animation: animateZoom 5s
 }
 
-.resources-details tr {
+@keyframes animateZoom {
+  from {
+    transform: scale(0);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+.popup table {
+  margin: auto;
+  border-collapse: collapse;
+  color: white;
+  text-align: center;
+  width: 100%;
+  background-image: linear-gradient(rgb(28, 27, 27), rgb(57, 57, 57));
+}
+
+.popup tr {
   border-bottom: 1px solid gray;
 }
 
-.resources-details thead {
+.popup thead {
   background-color: grey;
   color: black;
   font-weight: bold;
 }
 
-.resources-details th,
+.popup th,
 td {
   padding: 10px;
+}
+
+.stats-holder {
+  display: flex;
+  background-color: rgba(0, 0, 0, 0.4);
+  justify-content: center;
+  align-items: center;
+  box-shadow: 1px 1px 5px 1px rgb(44, 43, 43);
+}
+
+.corporation-bigger-image {
+  margin: 1.5em;
+  width: 150px;
+  height: 150px;
+}
+
+.distributed-bonus {
+  width: 65%;
+  color: #D89216;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.stock-holders {
+  padding: 20px;
+}
+
+.stock-holders table {
+  width: 80%;
 }
 
 /* TRANSACTION PANEL */

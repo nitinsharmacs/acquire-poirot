@@ -124,6 +124,10 @@ class GameState {
     return this.turn.stage === 'draw-tile';
   }
 
+  isInEndGameStage() {
+    return this.turn.stage === 'end-game';
+  }
+
   getActiveCorporations() {
     return this.corporations.filter(corporation => corporation.active);
   }

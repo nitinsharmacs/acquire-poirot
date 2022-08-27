@@ -289,5 +289,6 @@ module.exports = {
   findMajorityMinority,
   areCorporationsSafe,
   hasMoreThan40Tiles,
-  haveStocks
+  haveStocks,
+  sortStockHolders
 };

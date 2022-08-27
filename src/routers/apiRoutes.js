@@ -10,6 +10,7 @@ const {
   skipBuyStocks,
   handleDefunctStocks,
   authorizeRequest
+  endGame
 } = require('../handlers/gameApi.js');
 
 const router = require('express').Router();
@@ -25,5 +26,6 @@ router.post('/skip-build', skipBuildCorp);
 router.post('/buy-stocks', buyStocks);
 router.post('/skip-buy', skipBuyStocks);
 router.post('/handle-defunct-stocks', handleDefunctStocks);
+router.post('/end-game', endGame);
 
 module.exports = router;

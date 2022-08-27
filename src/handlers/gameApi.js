@@ -1,5 +1,5 @@
 const { createGameDAO } = require('../models/gameDAO.js');
-const { nextStep, haveStocks } = require('../utils/game.js');
+const { nextStep } = require('../utils/game.js');
 
 const loadGame = (req, res) => {
   const { game, session: { playerId } } = req;
@@ -188,12 +188,25 @@ const handleDefunctStocks = (req, res) => {
     });
     return;
   }
-
   game.sellDefunctStocks({ stockCount, tradeCount });
-
   res.json({
     message: 'sold stocks',
     data: { case: 'polling' }
+  });
+};
+
+const endGame = (req, res) => {
+  const { game } = req;
+  const endGameStats = game.endGame();
+
+  const players = game.players.map(({ id }) => {
+    const player = game.getPlayer(id);
+    return { ...player, name: player.name };
+  });
+
+  res.json({
+    message: 'game ended',
+    data: { endGameStats, players }
   });
 };
 
@@ -219,5 +232,6 @@ module.exports = {
   skipBuildCorp,
   skipBuyStocks,
   handleDefunctStocks,
-  authorizeRequest
+  authorizeRequest,
+  endGame
 };

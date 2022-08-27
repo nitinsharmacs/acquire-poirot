@@ -8,6 +8,21 @@ const drawTile = () => {
     .catch(err => console.log(err));
 };
 
+const endGame = () => {
+  API.endGame()
+    .then((res) => {
+      const { endGameStats, players } = res.data;
+      poller.stop();
+      renderPopups(endGameStats, players);
+    });
+};
+
+const handleEndGame = (game) => {
+  if (game.isInEndGameStage()) {
+    endGame();
+  }
+};
+
 const changePlayerTurn = () => {
   API.changeTurn()
     .then(() => poller.start());
@@ -132,6 +147,8 @@ const refresh = (game) => {
   gameState = createState(game);
 
   renderScreen(gameState);
+  handleEndGame(gameState);
+
   if (gameState.isMyTurn()) {
     poller.stop();
     handleView(gameState);

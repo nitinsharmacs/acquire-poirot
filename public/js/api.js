@@ -83,4 +83,9 @@ const API = {
         return data;
       });
     }),
+
+  endGame: () => fetch('api/end-game', {
+    method: 'POST',
+  })
+    .then(res => res.json()),
 };

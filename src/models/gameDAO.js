@@ -3,9 +3,6 @@ const createPlayerDAO = (player = {}) => {
 };
 
 const createPlayersDAO = (game) => {
-  if (game.isInEndGameStage()) {
-    return game.players;
-  }
   return game.players.map(createPlayerDAO);
 };
 

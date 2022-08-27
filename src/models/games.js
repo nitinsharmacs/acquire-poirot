@@ -80,4 +80,4 @@ class Games {
   }
 }
 
-module.exports = { Games };
+module.exports = { Games, DevVisitor };

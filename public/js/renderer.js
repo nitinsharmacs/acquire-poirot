@@ -61,5 +61,4 @@ const renderScreen = (game) => {
   renderPlayerResources(game);
   renderStockMarket(game);
   renderLogs(game);
-  renderPopups(game);
 };

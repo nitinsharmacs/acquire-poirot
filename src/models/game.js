@@ -5,11 +5,11 @@ const { createBoard } = require('./board.js');
 const {
   findTilesChain,
   sortCorporations, createTiles, randomInt,
-  defunctStockHolder,
   computeBonus,
   areCorporationsSafe,
   hasMoreThan40Tiles,
-  haveStocks
+  haveStocks,
+  sortStockHolders
 } = require('../utils/game.js');
 const informationCard = require('../../resources/informationCard.json');
 const { Logs } = require('./log.js');
@@ -114,6 +114,17 @@ class Game {
     const activeCorporations = this.getActiveCorporations();
     return areCorporationsSafe(activeCorporations) ||
       hasMoreThan40Tiles(activeCorporations);
+  }
+
+  endGame() {
+    const sortedCorporations = sortCorporations(this.getActiveCorporations());
+    const bonusStats = sortedCorporations.map(corporation => {
+      return {
+        corporationId: corporation.id,
+        distributedBonus: this.distributeMejorityMinority(corporation)
+      };
+    });
+    return bonusStats;
   }
 
   changeTurn(stage = 'place-tile') {
@@ -315,6 +326,18 @@ class Game {
     });
   }
 
+  stockHolders(corporationId) {
+    const stockHoldersData = this.players.reduce((playerData, player) => {
+      const stock = player.findStocks(corporationId);
+      if (stock) {
+        playerData.push({ id: player.id, stock });
+      }
+      return playerData;
+    }, []);
+
+    return sortStockHolders(stockHoldersData);
+  }
+
   updateDefunctLogs(stockHolders) {
     stockHolders.forEach(({ id, stock }) => {
       const player = this.getPlayer(id);
@@ -328,17 +351,24 @@ class Game {
       this.logs.bonusDistribution(player.name, money, bonusType);
     });
   }
+
+  distributeMejorityMinority(corporation) {
+    const stockHolders = this.stockHolders(corporation.id);
+    const bonus = this.marketPrice(corporation);
+    const bonusHolders = computeBonus(stockHolders, bonus);
+    this.#distributeBonus(bonusHolders);
+    return { stockHolders, bonusHolders };
+  }
+
   merge(corporations, tiles) {
     const [defunctCorp, acquiringCorp] = sortCorporations(corporations);
     this.logs.merged(acquiringCorp.name, defunctCorp.name);
 
-    const stockHolders = defunctStockHolder(this.#players, defunctCorp.id);
-    const bonus = this.marketPrice(defunctCorp);
-    const defunctShareHolders = computeBonus(stockHolders, bonus);
+    const { stockHolders, bonusHolders } =
+      this.distributeMejorityMinority(defunctCorp);
 
-    this.#distributeBonus(defunctShareHolders);
     this.updateDefunctLogs(stockHolders);
-    this.updateBonusLogs(defunctShareHolders);
+    this.updateBonusLogs(bonusHolders);
     this.state = new MergeState(this, { defunctCorp, acquiringCorp }, tiles, this.currentPlayer);
     this.state.addStockHolders();
     this.state.changeTurn();
