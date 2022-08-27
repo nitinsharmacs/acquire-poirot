@@ -1,0 +1,32 @@
+html 
+  head 
+    title Lobby 
+    link(rel="stylesheet" href="https://fonts.googleapis.com/css?family=Recursive:regular,bold,bolditalic")
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"
+    integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" )
+    link(rel="stylesheet" href="/css/index.css")
+    link(rel="stylesheet" href="/css/lobby.css")
+    script(src="/js/html.js")
+    script(src="/js/lobby.js")
+  body 
+    div(class="page")
+      header(class="header")
+        h1 Acquire 
+        div(class="navigation")
+          p Hii, #{playerName} !
+          a(href="/" class="fa-solid fa-arrow-right-from-bracket")
+      main(class="main")
+        section(class="game-link-holder")
+          div(class="player-name option") Host Name : #{game.host.name}
+          div(class="total-player option") Total Player: #{game.gameSize}
+          div(class="line")
+          div(class="link-box")
+            h2(class="share-header") Share with your friends
+            div(class="game-link")
+              input(type="text" disabled value=gameLink id="game-link")
+              button(class="fa-solid fa-clipboard" id="copy-btn")
+        div(class="players-lobby")
+          div(class="processing-header")
+            h3 Waiting for other players...
+          div(class="players")

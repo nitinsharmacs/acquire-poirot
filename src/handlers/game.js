@@ -1,16 +1,13 @@
 const { Player } = require('../models/player.js');
 const { createGameLink } = require('../utils/game.js');
-const { lobbyPage } = require('../views/lobby.js');
 const { savePage, restorePage } = require('../views/saveGame.js');
 
 const serveLandingPage = (req, res) => {
   const { playerName } = req.session;
-  res.type('html');
   res.render('index', { playerName });
 };
 
 const serveGamePage = (req, res) => {
-  res.type('text/html');
   res.render('gamePage');
 };
 
@@ -65,8 +62,7 @@ const serveLobby = (req, res) => {
   const { host } = req.headers;
   const gameLink = createGameLink(host, game.id);
 
-  res.type('text/html');
-  res.send(lobbyPage(game, gameLink, playerName));
+  res.render('lobby', { game, gameLink, playerName });
 };
 
 // only for developers. DON'T POKE HOLES :)

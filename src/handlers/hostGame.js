@@ -1,7 +1,6 @@
 const { newGame } = require('../models/game.js');
 const { Player } = require('../models/player.js');
 const { generateId } = require('../utils/game.js');
-const { hostPage } = require('../views/hostPage.js');
 
 const isPlayersCountValid = (noOfPlayers) =>
   noOfPlayers >= 3 && noOfPlayers <= 6;
@@ -17,10 +16,7 @@ const hostGame = (req, res) => {
 
   if (!isPlayersCountValid(noOfPlayers)) {
     const message = 'Please enter valid number of players';
-    const hostPageTemplate = hostPage(playerName, message);
-    res.type('text/html');
-    res.end(hostPageTemplate);
-    return;
+    return res.render('hostPage', { message });
   }
 
   const game = newGame(generateId(),

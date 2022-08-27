@@ -14,7 +14,6 @@ const serveLoginPage = (req, res) => {
   const { ref } = req.query;
   const queryString = refQueryString(ref);
 
-  res.type('text/html');
   res.render('auth', { forSignup: false, ref: queryString });
 };
 
@@ -22,7 +21,6 @@ const serveSignupPage = (req, res) => {
   const { ref } = req.query;
   const queryString = refQueryString(ref);
 
-  res.type('text/html');
   res.render('auth', { forSignup: true, ref: queryString });
 };
 
