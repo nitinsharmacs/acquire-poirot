@@ -48,4 +48,4 @@ class Games {
   }
 }
 
-module.exports = { Games, DevVisitor };
+module.exports = { Games };
