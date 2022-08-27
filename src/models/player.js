@@ -44,7 +44,7 @@ class Player {
   }
 
   reduceStocks({ id }, noOfStocks = 0) {
-    const stocks = this.findStocks(id);
+    const stock = this.findStocks(id);
 
     if (stock) {
       stock.count -= noOfStocks;

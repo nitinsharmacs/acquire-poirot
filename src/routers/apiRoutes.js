@@ -9,7 +9,7 @@ const {
   skipBuildCorp,
   skipBuyStocks,
   handleDefunctStocks,
-  authorizeRequest
+  authorizeRequest,
   endGame
 } = require('../handlers/gameApi.js');
 
