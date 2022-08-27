@@ -119,9 +119,11 @@ class Game {
   endGame() {
     const sortedCorporations = sortCorporations(this.getActiveCorporations());
     const bonusStats = sortedCorporations.map(corporation => {
+      const distributedBonus = this.distributeMejorityMinority(corporation);
+      this.updateBonusLogs(distributedBonus.bonusHolders);
       return {
         corporationId: corporation.id,
-        distributedBonus: this.distributeMejorityMinority(corporation)
+        distributedBonus
       };
     });
     return bonusStats;

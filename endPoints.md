@@ -36,3 +36,10 @@ API
     }
   }
 ```
+8. /api/end-game : responses on game end
+
+```
+@response: {
+    message: 'game ended',
+    data: { endGameStats, players }
+  }
