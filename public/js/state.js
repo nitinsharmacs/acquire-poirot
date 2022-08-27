@@ -136,6 +136,14 @@ class GameState {
     return this.getActiveCorporations().filter(
       ({ stocksLeft }) => stocksLeft > 0);
   }
+
+  storeMerginCorporations(mergingCorporations) {
+    this.turn.mergingCorporations = mergingCorporations;
+  }
+
+  getMergingCorporations() {
+    return this.turn.mergingCorporations;
+  }
 }
 
 class Board {

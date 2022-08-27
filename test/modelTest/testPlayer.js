@@ -61,22 +61,6 @@ describe('Player', () => {
       assert.deepStrictEqual(player.stocks, expected);
     });
 
-    it('should add default value of stock into existing stock if value is not provided', () => {
-
-      const player = new Player('32', 'harry');
-      player.addStocks({ id: 'america', name: 'America' }, 2);
-      player.addStocks({ id: 'america', name: 'America' });
-
-      const expected = [
-        {
-          corporationId: 'america',
-          corporationName: 'America',
-          count: 2
-        }
-      ];
-      assert.deepStrictEqual(player.stocks, expected);
-    });
-
     it('should add stocks to existing stocks', () => {
       const player = new Player('32', 'harry');
       player.addStocks({ id: 'america', name: 'America' }, 2);

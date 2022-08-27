@@ -79,6 +79,7 @@ class MergeState {
   nextState() {
     if (this.game.canStocksBeBought()) {
       this.game.buyStocksState();
+      this.game.endMerge();
       return;
     }
     this.game.drawTileState();
@@ -115,6 +116,13 @@ class MergeState {
     this.defunctCorp.addStocks(stockCount);
     const { stockPrice } = this.game.marketPrice(this.defunctCorp);
     player.addMoney(stockPrice * stockCount);
+  }
+
+  getMergingCorporations() {
+    return {
+      defunctCorporation: this.defunctCorp,
+      acquiringCorporation: this.acquiringCorp
+    };
   }
 }
 

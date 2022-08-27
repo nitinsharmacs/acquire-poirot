@@ -6,8 +6,8 @@ const createPlayersDAO = (game) => {
   return game.players.map(createPlayerDAO);
 };
 
-const createTurnDAO = (stage, player = {},) => {
-  return { stage, playerId: player.id };
+const createTurnDAO = (stage, player = {}, mergingCorporations = {}) => {
+  return { stage, playerId: player.id, mergingCorporations };
 };
 
 const createGameDAO = (game, playerId) => {
@@ -21,7 +21,7 @@ const createGameDAO = (game, playerId) => {
     gameSize: game.gameSize,
     started: game.started,
     informationCard: game.informationCard,
-    turn: createTurnDAO(game.stage, game.currentPlayer)
+    turn: createTurnDAO(game.stage, game.currentPlayer, game.getMergingCorporations()),
   };
   return gameDAO;
 };

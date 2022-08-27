@@ -67,7 +67,7 @@ const buyStocks = (stocks) => {
 
 const handleDefunctStocks = (stocks) => {
   let message = '';
-  API.handleDefunctStocks(stocks)
+  return API.handleDefunctStocks(stocks)
     .then(res => {
       removeTransationPanel();
       poller.start();
@@ -100,7 +100,10 @@ const placeTile = (tileId) => {
       gameState.updateCorporations(res.data.corporations);
       gameState.updateCurrentPlayerMoney(res.data.money);
       gameState.updateStage(res.data.case);
-      return handleView(gameState);
+
+      // in merging state, res has merging corporations
+      gameState.storeMerginCorporations(res.data.mergingCorporations);
+      return handleView(gameState, '');
     });
 };
 
@@ -116,7 +119,7 @@ const handleView = (game, message = '') => {
     renderBoard(game);
     renderPlayerResources(game);
     renderStockMarket(game);
-    showDefunctStocksTransaction(message);
+    showDefunctStocksTransaction(game.getMergingCorporations(), message);
   }
 
   if (game.isInBuildState()) {

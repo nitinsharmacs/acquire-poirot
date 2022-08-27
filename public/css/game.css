@@ -614,7 +614,6 @@ td {
   top: 40px;
   right: 5px;
   width: 300px;
-  height: 300px;
   padding: 1em;
   background-color: white;
   box-shadow: 1px 1px 1px 1px black;
@@ -627,6 +626,7 @@ td {
   justify-content: center;
   align-items: center;
   row-gap: 0.5em;
+  margin: 1em 0;
 }
 
 .panel-section>label {

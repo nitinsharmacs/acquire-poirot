@@ -32,7 +32,11 @@ class Player {
     return this.stocks.find(stock => stock.corporationId === corporationId);
   }
 
-  addStocks({ id, name }, noOfStocks = 0) {
+  addStocks({ id, name }, noOfStocks) {
+    if (noOfStocks <= 0) {
+      return;
+    }
+
     const stocks = this.findStocks(id);
 
     if (stocks) {

@@ -27,10 +27,13 @@ const removeTransationPanel = () => {
   removeHighLight();
 };
 
-const createTransactionPanel = (message) => {
+const transactionTitle = ({ acquiringCorporation, defunctCorporation }) =>
+  `${acquiringCorporation.name} acquired ${defunctCorporation.name}`;
+
+const createTransactionPanel = (mergingCorporations, message) => {
   const panel = ['div', { class: 'transaction-panel' }, {},
+    ['h3', { class: 'component-heading' }, {}, transactionTitle(mergingCorporations)],
     ['form', { id: 'transaction-form', }, {},
-      ['h3', { class: 'component-heading' }, {}, 'Make Transaction'],
       ['div', { class: 'panel-section' }, {},
         ['label', { for: 'stockCount' }, {}, 'Sell'],
         ['input', { type: 'number', name: 'stockCount', id: 'stockCount', class: 'stock-value', min: 0, value: 0 }]
@@ -47,10 +50,10 @@ const createTransactionPanel = (message) => {
   return createDOMTree(panel);
 };
 
-const showDefunctStocksTransaction = (message = '') => {
+const showDefunctStocksTransaction = (mergingCorporations, message = '') => {
   removeTransationPanel();
   const playerActivities = select('.player-activities');
-  const panel = createTransactionPanel(message);
+  const panel = createTransactionPanel(mergingCorporations, message);
   playerActivities.appendChild(panel);
   highlight(panel);
 };

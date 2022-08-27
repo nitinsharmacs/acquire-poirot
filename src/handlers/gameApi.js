@@ -49,7 +49,7 @@ const placeTile = (req, res) => {
   if (step === 'grow') {
     const [corporation] = corporations;
     game.expandCorporation(corporation.id, tiles);
-    game.determineSafe(corporations[0]);
+    game.determineSafe(corporation);
   }
   if (step === 'merge') {
     game.merge(corporations, tiles);
@@ -62,7 +62,8 @@ const placeTile = (req, res) => {
       tile, case: game.stage,
       corporations: game.corporations,
       currentPlayer: game.currentPlayer,
-      money: player.money
+      money: player.money,
+      mergingCorprations: game.getMergingCorporations()
     }, message: 'placed tile'
   });
 };

@@ -376,6 +376,16 @@ class Game {
     this.state.changeTurn();
   }
 
+  endMerge() {
+    delete this.state;
+  }
+
+  getMergingCorporations() {
+    if (this.state) {
+      return this.state.getMergingCorporations();
+    }
+  }
+
   sellDefunctStocks(stocks) {
     this.state.handleDefunctStocks(stocks);
   }
