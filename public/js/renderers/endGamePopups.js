@@ -15,7 +15,7 @@ const createTableRows = (players) => {
 };
 
 const createEndGamePopup = (players) => {
-  return ['div', { class: 'popup final-sample' }, {},
+  return ['div', { class: 'popup animate-zoom popup-mid-position' }, {},
     ['div', { class: 'final-result' }, {},
       ['h1', { class: 'heading component-heading' }, {}, 'Game Over'],
       ['table', { class: 'resources-details' }, {},
@@ -80,17 +80,19 @@ const showStockStatus = (endGameStats, players) => {
   const bonus = endGameStats.map(distributedBonus => {
     return createEndGameStats(distributedBonus, players);
   });
-  const popup = createDOMTree(['div', { class: 'popup sample' }, {}, ...bonus]);
+  const popup = createDOMTree(['div', { class: 'popup animate-zoom list-popup' }, {}, ...bonus]);
   const finalDicision = createDOMTree(createEndGamePopup(players));
 
   const bodyElement = select('.page-wrapper');
   bodyElement.appendChild(popup);
+
   setTimeout(() => {
+    const oldPopup = select('.popup');
     const gif = () => ['div', { class: 'overlay' }, {}];
     document.body.appendChild(...createElements([gif()]));
-    bodyElement.appendChild(finalDicision);
+    oldPopup.replaceWith(finalDicision);
     highlight(finalDicision);
-  }, 30000);
+  }, 20000);
   highlight(popup);
 };
 

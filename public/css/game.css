@@ -524,6 +524,7 @@ input[type=number]::-webkit-outer-spin-button {
   border-radius: 5px;
   position: absolute;
   left: 500;
+  top: 0px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -531,24 +532,12 @@ input[type=number]::-webkit-outer-spin-button {
   box-shadow: 5px 10px 18px rgb(69, 69, 69);
 }
 
-.sample {
-  animation: animateSliding 30s
+.animate-zoom {
+  animation: animateZoom 0.8s
 }
 
-@keyframes animateSliding {
-  from {
-    top: 900px;
-  }
-
-  to {
-    top: -500px;
-  }
-}
-
-.final-sample {
+.popup-mid-position {
   top: 300px;
-  left: 500px;
-  animation: animateZoom 5s
 }
 
 @keyframes animateZoom {
@@ -613,6 +602,10 @@ td {
 
 .stock-holders table {
   width: 80%;
+}
+
+.list-popup {
+  height: 100%;
 }
 
 /* TRANSACTION PANEL */
