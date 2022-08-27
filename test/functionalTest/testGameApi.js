@@ -527,3 +527,44 @@ describe('POST /api/handle-defunct-stocks', () => {
   });
 
 });
+
+describe('POST /api/end-game', () => {
+  const games = new Games();
+  const host = { name: 'sam', id: 'user' };
+
+  const game = newGame('123', host, 1);
+  games.add(game);
+  game.addPlayer(new Player({ id: 'user', name: 'sam' }));
+  const app = initApp(session('123', 'user'), games);
+
+  before((done) => {
+    request(app)
+      .post('/api/start-game')
+      .expect('content-type', /json/)
+      .expect(200, done);
+  });
+
+  beforeEach((done) => {
+    const tile = game.board.tiles.find(tile => tile.id === '3a');
+    game.currentPlayer.addTile(tile);
+    game.currentPlayer.stocks = [{ corporationId: 'america', count: 2 }];
+
+    const corporation1 = game.findCorporation('america');
+    placeTiles(game, ['1a', '2a', '4a', '5a', '6a', '7a', '8a', '9a', '10a', '11a']);
+    game.buildCorporation(corporation1.id, '1a', 'user');
+
+    const tileId = '3a';
+    request(app)
+      .post('/api/place-tile')
+      .send(`id=${tileId}`)
+      .expect('content-type', /json/)
+      .expect(200, done);
+  });
+
+  it('should end the game', (done) => {
+    request(app)
+      .post('/api/end-game')
+      .expect('content-type', /json/)
+      .expect(200, done);
+  });
+});
