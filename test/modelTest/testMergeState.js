@@ -85,4 +85,13 @@ describe('MergeState', () => {
     game.state.next();
     assert.deepStrictEqual(game.stage, 'draw-tile');
   });
+  it('Should order and filter stockholders from game players', () => {
+    game.buildCorporation('america', '1a');
+    game.buildCorporation('zeta', '1e');
+    game.currentPlayer = host;
+    host.stocks = [{ corporationId: 'america', count: 3 }];
+    player1.stocks = [];
+    player2.stocks = [{ corporationId: 'america', count: 2 }];
+    assert.deepStrictEqual(game.state.findStockHolders([host, player1, player2]), [host, player2]);
+  });
 });

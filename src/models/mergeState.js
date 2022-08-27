@@ -27,9 +27,13 @@ class MergeState {
     return players.concat(gamePlayers.slice(0, mergeMakerPosition));
   }
 
+  findStockHolders(players) {
+    return players.filter(player => player.findStocks(this.defunctCorp.id));
+  }
+
   addStockHolders() {
     const orderedPlayers = this.reorderPlayers();
-    this.stockHolders = defunctStockHolder(orderedPlayers, this.defunctCorp.id);
+    this.stockHolders = this.findStockHolders(orderedPlayers);
   }
 
   changeTurn() {
