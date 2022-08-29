@@ -137,7 +137,7 @@ class GameState {
       ({ stocksLeft }) => stocksLeft > 0);
   }
 
-  storeMerginCorporations(mergingCorporations) {
+  storeMergingCorporations(mergingCorporations) {
     this.turn.mergingCorporations = mergingCorporations;
   }
 

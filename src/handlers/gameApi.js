@@ -63,7 +63,7 @@ const placeTile = (req, res) => {
       corporations: game.corporations,
       currentPlayer: game.currentPlayer,
       money: player.money,
-      mergingCorprations: game.getMergingCorporations()
+      mergingCorporations: game.getMergingCorporations()
     }, message: 'placed tile'
   });
 };

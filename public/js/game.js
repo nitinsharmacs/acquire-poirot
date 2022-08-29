@@ -1,3 +1,5 @@
+let response;
+
 const drawTile = () => {
   API.drawTile()
     .then((res) => {
@@ -90,6 +92,7 @@ const skipBuy = () => {
 const placeTile = (tileId) => {
   API.placeTile(tileId)
     .then(res => {
+      response = res;
       gameState.placeTile(tileId);
       storeItem('tileId', tileId);
       if (!gameState.isCurrentPlayer(res.data.currentPlayer)) {
@@ -102,7 +105,7 @@ const placeTile = (tileId) => {
       gameState.updateStage(res.data.case);
 
       // in merging state, res has merging corporations
-      gameState.storeMerginCorporations(res.data.mergingCorporations);
+      gameState.storeMergingCorporations(res.data.mergingCorporations);
       return handleView(gameState, '');
     });
 };

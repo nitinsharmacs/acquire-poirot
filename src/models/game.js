@@ -121,7 +121,7 @@ class Game {
   endGame() {
     const sortedCorporations = sortCorporations(this.getActiveCorporations());
     const bonusStats = sortedCorporations.map(corporation => {
-      const distributedBonus = this.distributeMejorityMinority(corporation);
+      const distributedBonus = this.distributeMajorityMinority(corporation);
       this.updateBonusLogs(distributedBonus.bonusHolders);
       return {
         corporationId: corporation.id,
@@ -358,7 +358,7 @@ class Game {
     });
   }
 
-  distributeMejorityMinority(corporation) {
+  distributeMajorityMinority(corporation) {
     const stockHolders = this.stockHolders(corporation.id);
     const bonus = this.marketPrice(corporation);
     const bonusHolders = computeBonus(stockHolders, bonus);
@@ -372,7 +372,7 @@ class Game {
     this.logs.merged(acquiringCorp.name, defunctCorp.name);
 
     const { stockHolders, bonusHolders } =
-      this.distributeMejorityMinority(defunctCorp);
+      this.distributeMajorityMinority(defunctCorp);
 
     this.updateDefunctLogs(stockHolders);
     this.updateBonusLogs(bonusHolders);
