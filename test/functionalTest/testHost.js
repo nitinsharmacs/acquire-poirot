@@ -1,10 +1,8 @@
 const request = require('supertest');
 const { createApp } = require('../../src/app.js');
 
-const Sinon = require('sinon');
 const { Games } = require('../../src/models/games.js');
 const { newGame } = require('../../src/models/game.js');
-const { Player } = require('../../src/models/player.js');
 
 const session = () => (req, res, next) => {
   req.session = {};
@@ -24,11 +22,7 @@ const initApp = (session) => {
   games.add(game);
 
   const config = { session, root: './public', games };
-  const dataStore = {
-    load: Sinon.stub(),
-    loadJSON: Sinon.stub()
-  };
-  return createApp(config, dataStore);
+  return createApp(config);
 };
 
 describe('GET /host', () => {

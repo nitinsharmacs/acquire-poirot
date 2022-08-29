@@ -14,12 +14,7 @@ const session = () => (req, res, next) => {
 };
 const initApp = (session) => {
   const config = { session, root: './public' };
-  const dataStore = {
-    load: Sinon.stub(),
-    loadJSON: Sinon.stub()
-  };
-
-  return createApp(config, dataStore);
+  return createApp(config);
 };
 
 describe('GET /', () => {

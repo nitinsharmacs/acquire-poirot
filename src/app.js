@@ -1,4 +1,5 @@
 const express = require('express');
+const compression = require('compression');
 const morgan = require('morgan');
 
 // routes
@@ -24,23 +25,13 @@ const { serveGamePage,
 const { createAuthRouter } = require('./routers/authRoutes.js');
 const { createHostRouter } = require('./routers/hostRouter.js');
 
-// models
-const DataStore = require('./dataStore.js');
-
-const {
-  USERS_DB_PATH,
-} = process.env;
-
-const resources = {
-  USERS_DB_PATH,
-};
-
 const createApp = (config) => {
   const { root, sessionKey, session, games, users } = config;
   const app = express();
   app.use(morgan('tiny'));
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
+  app.use(compression());
   app.set('views', './src/views');
   app.set('view engine', 'pug');
   app.use(session(

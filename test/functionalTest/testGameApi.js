@@ -27,12 +27,7 @@ const session = (gameId, playerId) => () => (req, res, next) => {
 
 const initApp = (session, games) => {
   const config = { session, root: './public', games };
-  const dataStore = {
-    load: Sinon.stub(),
-    loadJSON: Sinon.stub()
-  };
-
-  return createApp(config, dataStore);
+  return createApp(config);
 };
 
 describe('GET /api/loadgame', () => {
