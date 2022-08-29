@@ -506,12 +506,13 @@
 
 @keyframes blink {
   0% {
-    background-color: #292929;
-  }
-
-  100% {
+    background-color: #666666;
     color: black;
+  }
+  
+  100% {
     background-color: var(--animation-color);
+    color: black;
   }
 }
 
