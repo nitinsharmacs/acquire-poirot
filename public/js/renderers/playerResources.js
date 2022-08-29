@@ -36,7 +36,7 @@ const renderPlayerResources = ({ player }) => {
   const resourcesElements = [
     ['section', { class: 'player-money' }, {},
       ['h3', { class: 'component-heading' }, {}, 'Money'],
-      ['p', {}, {}, `${player.money} `]
+      ['p', {}, {}, `$${player.money} `]
     ],
     ['section', { class: 'player-tiles' }, {},
       ['h3', { class: 'component-heading' }, {}, 'Tiles'],

@@ -92,6 +92,16 @@ describe('POST /api/place-tile', () => {
       .expect(200, done);
   });
 
+  it('Should not place a tile which is not in player\'s cluster', (done) => {
+    game.currentPlayer = game.getPlayer('user');
+    game.currentPlayer.removeTile('1a');
+    request(app)
+      .post('/api/place-tile')
+      .send('id=1a')
+      .expect('content-type', /json/)
+      .expect(422, done);
+  });
+
   it('should remove tile from player\'s tiles and place it on board',
     (done) => {
       game.currentPlayer = game.getPlayer('user');

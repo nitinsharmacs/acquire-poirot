@@ -43,6 +43,17 @@ const placeTile = (req, res) => {
     session: { playerId }
   } = req;
   const player = game.getPlayer(playerId);
+  if (!player.findTile(id)) {
+    return res.status(422).json({
+      data: {
+        message: 'tile doesn\'t belongs to you',
+        case: game.stage,
+        corporations: game.corporations,
+        currentPlayer: game.currentPlayer,
+        money: player.money
+      }
+    });
+  }
   const tile = game.placeTile({ id });
   const { step, tiles, corporations } = nextStep(game, id);
 
