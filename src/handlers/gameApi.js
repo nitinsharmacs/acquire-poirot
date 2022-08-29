@@ -146,6 +146,14 @@ const buildCorporation = (req, res) => {
     body: { id, corporationId }
   } = req;
 
+  if (game.isBuilt(corporationId)) {
+    res.status(422).json({
+      message: 'Corporation is already built',
+      data: { case: game.stage }
+    });
+    return;
+  }
+
   const corporation = game.buildCorporation(corporationId, id);
   if (game.canStocksBeBought()) {
     game.buyStocksState();

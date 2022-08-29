@@ -285,6 +285,11 @@ class Game {
     return this.getPlayer(playerId) ? true : false;
   }
 
+  isBuilt(corporationId) {
+    const corporation = this.findCorporation(corporationId);
+    return corporation.isActive();
+  }
+
   buildCorporation(corporationId, tileId) {
     const corporation = this.findCorporation(corporationId);
 
