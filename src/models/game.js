@@ -153,6 +153,7 @@ class Game {
       this.updateBonusLogs(distributedBonus.bonusHolders);
       return {
         corporationId: corporation.id,
+        corporationName: corporation.name,
         distributedBonus
       };
     });
@@ -168,7 +169,9 @@ class Game {
   }
 
   getWinner() {
-    return this.winner;
+    if (this.winner) {
+      return this.winner.getState();
+    }
   }
 
   changeTurn(stage = 'place-tile') {

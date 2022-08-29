@@ -1,92 +1,38 @@
-const createEndGameStats = ({ corporationId, distributedBonus }, players) => {
-  const { bonusHolders, stockHolders } = distributedBonus;
-  return ['div', { class: 'stats-holder' }, {},
-    ['div', {}, {},
-      ['img', { class: 'corporation-bigger-image', src: `/images/corps/${corporationId}.png` }]
-    ],
-    ['div', { class: 'distributed-bonus' }, {},
-      ['div', { class: 'bonus-holders' }, {},
-        ...majorityAndMinority(bonusHolders, players)],
-      ['div', { class: 'stock-holders' }, {}, stockTable(stockHolders, players)],
-    ]
-  ];
-};
-
-const showStockStatus = (endGameStats, players) => {
-  const bonus = endGameStats.map(distributedBonus => {
-    return createEndGameStats(distributedBonus, players);
-  });
-  const popup = createDOMTree(['div', { class: 'popup animate-zoom list-popup' }, {}, ...bonus]);
-  const finalDicision = createDOMTree(createEndGamePopup(players));
-
-  const bodyElement = select('.page-wrapper');
-  bodyElement.appendChild(popup);
-
-  setTimeout(() => {
-    const oldPopup = select('.popup');
-    const gif = () => ['div', { class: 'overlay' }, {}];
-    document.body.appendChild(...createElements([gif()]));
-    oldPopup.replaceWith(finalDicision);
-    highlight(finalDicision);
-  }, 20000);
-  highlight(popup);
-};
-
-const createStocks = (stocks) => {
-  return stocks.map(stock => {
-    return ['p', {}, {}, `${stock.corporationName}: ${stock.count}`];
+const sortPlayers = (players) => {
+  return players.sort((player1, player2) => {
+    if (player1.money > player2.money) {
+      return -1;
+    }
+    return 0;
   });
 };
 
-const createTableRows = (players) => {
-  return players.map(({ name, stocks, money }) => {
-    return ['tr', {}, {},
-      ['td', {}, {}, name],
-      ['td', {}, {}, ...createStocks(stocks)],
-      ['td', {}, {}, money.toString()],
-    ];
+const highlightPlayer = (playerId) => {
+  const elements = selectAll(`tr[data-player-id="${playerId}"]`);
+  elements.forEach(element => {
+    addClass(element, 'highlight-player');
   });
 };
 
-const createEndGamePopup = (players) => {
-  return ['div', { class: 'popup animate-zoom popup-mid-position' }, {},
-    ['div', { class: 'final-result' }, {},
-      ['h1', { class: 'heading component-heading' }, {}, 'Game Over'],
-      ['table', { class: 'resources-details' }, {},
-        ['thead', {}, {},
-          ['tr', {}, {},
-            ['td', {}, {}, 'Name'],
-            ['td', {}, {}, 'Stocks'],
-            ['td', {}, {}, 'Money']
-          ]
-        ],
-        ['tbody', {}, {}, ...createTableRows(players)]
-      ]
-    ]
-  ];
-};
-
-const majorityAndMinority = (bonusHolders, players) => {
-  return bonusHolders.map(({ id, money, bonusType }) => {
-    const { name } = players.find(player => player.id === id);
-    return ['p', {}, {}, `${bonusType}($${money}): ${name}`];
+const removeHighlightPlayer = () => {
+  const elements = selectAll('tr[data-player-id]');
+  elements.forEach(element => {
+    removeClass(element, 'highlight-player');
   });
-};
-
-const createStocksCount = (stockHolders) => {
-  return stockHolders.map(({ stock }) =>
-    ['td', {}, {}, stock.count.toString()]);
 };
 
 const createPlayersName = (players) => {
-  return players.map(({ name }) => {
-    return ['td', {}, {}, name];
+  return players.map(({ name, id }) => {
+    return ['td', {}, {
+      onmouseover: () => highlightPlayer(id),
+      onmouseleave: () => removeHighlightPlayer()
+    }, name];
   });
 };
 
 const createPlayersMoney = (players) => {
   return players.map(({ money }) => {
-    return ['td', {}, {}, `$ ${money}`];
+    return ['td', {}, {}, `$${money}`];
   });
 };
 
@@ -105,7 +51,7 @@ const gameOverPanel = (winner) => {
   const panel = ['div', { class: 'game-over-panel' }, {},
     ['div', {}, {},
       ['h1', {}, {}, 'Game Over'],
-      ['h2', {}, {}, `${winner.name || 'Tanmay'} Won!`]
+      ['h2', {}, {}, `${winner.name} Won!`]
     ]
   ];
 
@@ -126,23 +72,32 @@ const gameOverPanel = (winner) => {
   };
 };
 
+const majorityMinorityStyle = (bonusType) => {
+  switch (bonusType) {
+    case 'majority': return 'lightgreen';
+    case 'minority': return 'yellow';
+    case 'majority and minority': return 'lightgreen';
+    default: return '';
+  }
+};
+
 const createBonuses = (cardDetails) => {
-  return cardDetails.map(({ name, stock, bonusType, bonus }) =>
+  return cardDetails.map(({ name, stock, bonusType, bonus, playerId }) =>
     [
-      'tr', {}, {},
+      'tr', { 'data-player-id': playerId }, {},
       ['td', {}, {}, name],
       ['td', {}, {}, `${stock}`],
       ['td', {}, {}, bonusType || '-'],
-      ['td', {}, {}, `${bonus ? `$${bonus}` : '-'}`],
+      ['td', { style: `color: ${majorityMinorityStyle(bonusType)}` }, {}, `${bonus ? `$${bonus}` : '-'}`],
     ]);
 };
 
-const corporationCard = ({ corporationId }, cardDetails) => {
+const corporationCard = ({ corporationId, corporationName }, cardDetails) => {
   return ['div', { class: `corporation-card ${corporationId}-stock` }, {},
     ['div', { class: 'corporation-card-img' }, {},
       ['img', { src: `/images/corps/${corporationId}.png` }, {}]
     ],
-    ['h2', {}, {}, corporationId || '-'],
+    ['h2', {}, {}, corporationName || '-'],
     ['table', { class: 'bonuses' }, {},
       ['thead', {}, {},
         ['th', {}, {}, 'Players'],
@@ -151,7 +106,7 @@ const corporationCard = ({ corporationId }, cardDetails) => {
         ['th', {}, {}, 'Bonus']
       ],
       ['tbody', {}, {},
-        ...createBonuses(cardDetails)
+        ...createBonuses(cardDetails),
       ]
     ]
   ];
@@ -182,7 +137,8 @@ const createCorporationCard = (players, activeCorporation) => {
       name: player.name,
       stock,
       bonusType,
-      bonus
+      bonus,
+      playerId: player.id
     };
   });
   return corporationCard(activeCorporation, cardDetails);
@@ -195,10 +151,10 @@ const createCorporationCards = (players, activeCorporations) => {
 
 const createGameStats = (players, activeCorporations, winner) => {
   const gameStats = ['div', { class: 'end-game-stats' }, {},
-    ['h2', {}, {}, `${winner.name || 'Tanmay'} Won!`],
-    createMoneyTable(players),
+    ['h2', {}, {}, `${winner.name} Won!`],
+    createMoneyTable(sortPlayers([...players])),
     ['div', { class: 'corporation-cards' }, {},
-      ...createCorporationCards(players, activeCorporations)
+      ...createCorporationCards(players, activeCorporations),
     ]
   ];
 
@@ -215,9 +171,6 @@ const createGameStats = (players, activeCorporations, winner) => {
 };
 
 const showEndGamePopup = (endGameStats, players, winner) => {
-  if (select('.popup')) {
-    return;
-  }
   const panel = gameOverPanel(winner);
   const gameStats = createGameStats(players, endGameStats, winner);
   panel.come();
@@ -225,7 +178,7 @@ const showEndGamePopup = (endGameStats, players, winner) => {
   setTimeout(() => {
     panel.hide();
     gameStats.come();
-  }, 1000);
+  }, 3000);
 };
 
 const renderPopups = (endGameStats, players, winner) => {

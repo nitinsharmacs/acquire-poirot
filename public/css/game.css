@@ -630,7 +630,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .game-over-panel * {
-  color: #D89216;
+  color: var(--theme-color);
 }
 
 .game-over-panel h1 {
@@ -664,10 +664,9 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .end-game-stats {
-  width: 95vw;
-  height: 95vh;
+  height: 90vh;
   background-color: rgba(23, 23, 23, 0.95);
-  padding: 1em;
+  padding: 1em 2em;
   position: absolute;
   top: 5%;
   left: 50%;
@@ -682,27 +681,32 @@ input[type=number]::-webkit-outer-spin-button {
   color: white;
 }
 
+.end-game-stats>h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  color: var(--theme-color);
+}
+
 .stats-enter {
   transform: scale(1) translate(-50%, -50%);
 }
 
 .player-money-table {
-  margin: auto;
   border-collapse: collapse;
   color: white;
   text-align: center;
-  width: 100%;
+  width: 1254px;
   background-image: linear-gradient(rgb(28, 27, 27), rgb(57, 57, 57));
+  margin: 2em auto;
+  border: 2px solid whitesmoke;
 }
 
 .player-money-table tr {
   border-bottom: 1px solid gray;
 }
 
-.player-money-table thead {
-  background-color: grey;
-  color: black;
-  font-weight: bold;
+.player-money-table tr:first-child td {
+  cursor: pointer;
 }
 
 .player-money-table th,
@@ -718,7 +722,7 @@ td {
   justify-items: center;
   gap: 1em;
   margin: 1em auto;
-  width: 1200px;
+  width: 1254px;
 }
 
 .corporation-card {
@@ -734,9 +738,13 @@ td {
   font-size: 0.8rem;
 }
 
+.corporation-card h2 {
+  font-size: 1.2rem;
+}
+
 .corporation-card-img {
-  width: 120px;
-  height: 120px;
+  width: 150px;
+  height: 150px;
 }
 
 .corporation-card-img img {
@@ -756,13 +764,18 @@ td {
   border-bottom: 1px solid gray;
 }
 
-.bonuses thead {
+.bonuses thead,
+.player-money-table th {
   background-color: grey;
-  color: black;
   font-weight: bold;
+  border-bottom: 1px solid black;
 }
 
 .bonuses th,
 td {
   padding: 0.5em;
+}
+
+.highlight-player {
+  background-color: #1c7ed6;
 }
