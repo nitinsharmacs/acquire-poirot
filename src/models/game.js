@@ -179,6 +179,7 @@ class Game {
 
   drawTile() {
     this.removeDeadTiles();
+    this.exchangeDeadTiles();
     this.logs.drewTile(this.currentPlayer.name);
     return this.giveTile(this.currentPlayer);
   }
@@ -415,6 +416,16 @@ class Game {
 
   removeDeadTiles() {
     this.cluster = this.cluster.filter(tile => !this.isDeadTile(tile));
+  }
+
+  exchangeDeadTiles() {
+    const player = this.currentPlayer;
+    player.tiles.forEach(tile => {
+      if (this.isDeadTile(tile)) {
+        player.removeTile(tile.id);
+        this.giveTile(player);
+      }
+    });
   }
 
   accept(visitor) {

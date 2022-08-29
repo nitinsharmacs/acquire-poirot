@@ -1,5 +1,6 @@
 class Player {
   #name;
+  #tiles;
   constructor({
     id,
     name,
@@ -9,22 +10,26 @@ class Player {
   }) {
     this.id = id;
     this.#name = name;
-    this.tiles = tiles;
+    this.#tiles = tiles;
     this.money = money;
     this.stocks = stocks;
   }
 
+  findTile(id) {
+    return this.#tiles.find(tile => tile.id === id);
+  }
+
   removeTile(id) {
-    this.tiles = this.tiles.filter(tile => tile.id !== id);
+    this.#tiles = this.#tiles.filter(tile => tile.id !== id);
   }
 
   addTile(tile) {
-    this.tiles.push(tile);
+    this.#tiles.push(tile);
   }
 
   placeFirstTile() {
-    const [tile] = this.tiles;
-    this.tiles.splice(0, 1);
+    const [tile] = this.#tiles;
+    this.#tiles.splice(0, 1);
     return tile;
   }
 
@@ -95,6 +100,10 @@ class Player {
   //getters
   get name() {
     return this.#name;
+  }
+
+  get tiles() {
+    return this.#tiles;
   }
 }
 

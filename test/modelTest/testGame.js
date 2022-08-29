@@ -133,6 +133,7 @@ describe('Game', () => {
       assert.strictEqual(removableTile, undefined);
     });
   });
+
   describe('isDeadTile', () => {
     let game;
     before(() => {
@@ -162,6 +163,40 @@ describe('Game', () => {
 
     it('Should invalidate when given tile is playable', () => {
       assert.strictEqual(game.isDeadTile({ id: '2b' }), false);
+    });
+  });
+
+  describe('exchangeDeadTiles', () => {
+    let game;
+    let host;
+    before(() => {
+      game = newGame('123', { id: '213', name: 'sam' }, 1);
+      host = new Player({ id: '123', name: 'sam' });
+      game.addPlayer(host);
+      game.start();
+
+      host.addTile({ id: '1b' });
+
+      const corporation1 = game.findCorporation('america');
+      const corporation1Tiles = ['1a', '2a', '3a', '4a', '5a', '6a', '7a', '8a', '9a', '10a', '11a'];
+      addTiles(corporation1Tiles, corporation1);
+      corporation1.activate();
+      corporation1.determineIfSafe();
+
+      const corporation2 = game.findCorporation('zeta');
+      const corporation2Tiles = ['1c', '1d', '1e', '1f', '1g', '1h', '1i', '2d', '2e', '2f', '2g'];
+      addTiles(corporation2Tiles, corporation2);
+      corporation2.activate();
+      corporation2.determineIfSafe();
+
+      placeTiles(game, [...corporation1Tiles, ...corporation2Tiles]);
+    });
+
+    it('Should exchange player\'s dead tiles', () => {
+      const numOfTiles = host.tiles.length;
+      game.exchangeDeadTiles();
+      assert.strictEqual(host.findTile('1b'), undefined);
+      assert.strictEqual(host.tiles.length, numOfTiles);
     });
   });
 });
