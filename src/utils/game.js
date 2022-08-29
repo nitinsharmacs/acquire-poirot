@@ -273,6 +273,16 @@ const hasMoreThan40Tiles = corporations => {
   return corporations.some(corporation => corporation.getSize() > 40);
 };
 
+const safeCorporations = corporations =>
+  corporations.filter(corporation => corporation.isSafe());
+
+const areMultipleCorporationsStable = corporations => {
+  if (safeCorporations(corporations).length <= 1) {
+    return false;
+  }
+  return true;
+};
+
 module.exports = {
   getPlayer,
   createGameLink,
@@ -290,5 +300,7 @@ module.exports = {
   areCorporationsSafe,
   hasMoreThan40Tiles,
   haveStocks,
-  sortStockHolders
+  sortStockHolders,
+  getCorporations,
+  areMultipleCorporationsStable
 };

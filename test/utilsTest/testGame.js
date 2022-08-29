@@ -9,7 +9,8 @@ const { findAdjancetTiles,
   findMajorityMinority,
   getPlayer,
   areCorporationsSafe,
-  hasMoreThan40Tiles
+  hasMoreThan40Tiles,
+  areMultipleCorporationsStable
 } = require('../../src/utils/game.js');
 
 const placeTile = (tiles, tilePositions) => {
@@ -450,5 +451,48 @@ describe('hasMoreThan40Tiles', () => {
       }
     ];
     assert.strictEqual(hasMoreThan40Tiles(corporations), false);
+  });
+});
+
+describe('areMultipleCorporationsStable', () => {
+  it('Should invalidate when only one corporation are present', () => {
+    const corporations = [
+      {
+        isSafe: () => true,
+      }
+    ];
+    assert.strictEqual(areMultipleCorporationsStable(corporations), false);
+  });
+
+  it('Should validate when minimum two corporations are safe', () => {
+    const corporations = [
+      {
+        isSafe: () => true,
+      },
+      {
+        isSafe: () => false,
+      },
+      {
+        isSafe: () => true,
+      }
+    ];
+    assert.ok(areMultipleCorporationsStable(corporations));
+  });
+
+  it('Should invalidate when less than two corporations are safe', () => {
+    const corporations = [
+      {
+        isSafe: () => false,
+      },
+      {
+        isSafe: () => true,
+      }
+    ];
+    assert.strictEqual(areMultipleCorporationsStable(corporations), false);
+  });
+
+  it('Should invalidate when no corporations are given', () => {
+    const corporations = [];
+    assert.strictEqual(areMultipleCorporationsStable(corporations), false);
   });
 });

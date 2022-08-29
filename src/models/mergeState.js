@@ -1,5 +1,3 @@
-const { defunctStockHolder } = require('../utils/game.js');
-
 const isOdd = (num) => num % 2 !== 0;
 
 class MergeState {

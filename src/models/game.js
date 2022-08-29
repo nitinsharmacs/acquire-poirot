@@ -4,12 +4,14 @@ const { MergeState } = require('./mergeState.js');
 const { createBoard } = require('./board.js');
 const {
   findTilesChain,
+  getCorporations,
   sortCorporations, createTiles, randomInt,
   computeBonus,
   areCorporationsSafe,
   hasMoreThan40Tiles,
   haveStocks,
-  sortStockHolders
+  sortStockHolders,
+  areMultipleCorporationsStable
 } = require('../utils/game.js');
 const informationCard = require('../../resources/informationCard.json');
 const { Logs } = require('./log.js');
@@ -176,6 +178,7 @@ class Game {
   }
 
   drawTile() {
+    this.removeDeadTiles();
     this.logs.drewTile(this.currentPlayer.name);
     return this.giveTile(this.currentPlayer);
   }
@@ -397,6 +400,21 @@ class Game {
   addStocks({ id }, stockCount) {
     const corporation = this.findCorporation(id);
     corporation.addStocks(stockCount);
+  }
+
+  // Remove or exchange dead tiles
+
+  isDeadTile(tile) {
+    const tilesChain = findTilesChain(tile.id, this.board.tiles);
+    if (tilesChain.length === 1) {
+      return false;
+    }
+    const activeCorporations = getCorporations(tilesChain, this.corporations);
+    return areMultipleCorporationsStable(activeCorporations);
+  }
+
+  removeDeadTiles() {
+    this.cluster = this.cluster.filter(tile => !this.isDeadTile(tile));
   }
 
   accept(visitor) {
