@@ -37,15 +37,30 @@
 }
 
 /* ----------------instruction page------------------ */
-.instruction-heading{
-  text-align: center;
+.guide-page {
+  color: whitesmoke;
 }
 
-.instruction-holder{
-    width: 900px;
-    height: 500px;
-    overflow: scroll;
-    margin: 0 auto;
-    border: 1px solid;
-    padding: 1.5em;
+.instruction-heading {
+  text-align: center;
+  padding: 0em 0em 1em 0em;
+}
+
+.instruction-holder {
+  margin: 0 auto;
+  padding: 2em 5em;
+  width: 70%;
+  height: 750px;
+  gap: 20px;
+  background-color: rgb(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  border-radius: 5px;
+  box-shadow: 1px 1px 8px 1px rgb(196, 194, 194);
+  line-height: 32px;
+}
+
+.instruction-holder h2 {
+  border-bottom: 2px solid whitesmoke;
 }

@@ -5,15 +5,15 @@ head
     integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A=="
     crossorigin="anonymous" referrerpolicy="no-referrer") 
   link(rel="stylesheet", href="/css/landingPage.css")
-div(class="page")
+  link(rel="stylesheet", href="/css/index.css")
+div(class="page guide-page")
   header(class="header")
     h1 Acquire
     div(class="navigation") 
-      p Hii, #{playerName}!
+      p Hi, #{playerName}!
       a(class="fa-solid.fa-house-chimney" href="/")
-    h2(class="instruction-heading") HOW TO PLAY
+  h1(class="instruction-heading") HOW TO PLAY
   main(class="instruction-holder")
-    img(src="/images/instructions.jpeg")
     h2 COMPONENTS OF GAME
     ul
       each val in ['Land (board)', 'Corporations', 'Tiles', 'Stock market', 'Stocks', 'Money', 'Information card']

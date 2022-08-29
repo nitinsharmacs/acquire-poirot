@@ -53,7 +53,7 @@ const determineTotalPrice = (stocks, corporations) => {
 const showTotalPrice = (stockPrice) => {
   const stockMessage = select('.stock-message');
 
-  stockMessage.style.color = 'black';
+  stockMessage.style.color = 'whitesmoke';
   stockMessage.replaceChildren(`Total Price : $${stockPrice}`);
 };
 

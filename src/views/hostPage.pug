@@ -9,13 +9,12 @@ div(class="page")
   header(class="header")
     h1 Acquire
     div(class="navigation") 
-      p Hii, #{playerName}!
+      p Hi, #{playerName}!
       a(class="fa-solid.fa-house-chimney" href="/") 
   main(class="container") 
     form(class="form" action="/host", method="post") 
       h2 Host Game
       select(name="noOfPlayers" id="players-no")
-        option(value="3") Number of players
         option(value="3") 3
         option(value="4") 4
         option(value="5") 5

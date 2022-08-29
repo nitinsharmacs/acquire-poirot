@@ -10,7 +10,7 @@ body {
 }
 
 .page {
-  background-image: linear-gradient(rgba(16, 16, 16, 0.5), rgba(0, 0, 0, 0.5)),
+  background-image: linear-gradient(rgba(16, 16, 16, 0.3), rgba(0, 0, 0, 0.4)),
     url("/images/acquire-bg.jpeg");
   background-size: cover;
   background-repeat: no-repeat;
@@ -114,4 +114,26 @@ body {
 .theme-btn:disabled {
   cursor: not-allowed;
   background-color: #abb1b6;
+}
+
+/* not-found-page ------------------ */
+.not-found-page {
+  background-image: linear-gradient(rgba(16, 16, 16, 0.3), rgba(0, 0, 0, 0.4)),
+    url("/images/acquire2.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+  width: 100vw;
+  color: white;
+}
+
+.not-found-page a {
+  text-decoration: none;
+  color: #4e83b9;
+  font-weight: bolder;
+}
+
+.not-found img {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.3);
 }
