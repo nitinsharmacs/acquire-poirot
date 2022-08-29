@@ -367,7 +367,8 @@ class Game {
   }
 
   merge(corporations, tiles) {
-    const [defunctCorp, acquiringCorp, ...rest] = sortCorporations(corporations);
+    const [...sortedCorporations] = sortCorporations(corporations);
+    const [acquiringCorp, defunctCorp, ...rest] = sortedCorporations.reverse();
     this.logs.merged(acquiringCorp.name, defunctCorp.name);
 
     const { stockHolders, bonusHolders } =

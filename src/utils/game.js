@@ -156,10 +156,9 @@ const nextStep = (game, tileId) => {
 };
 
 const sortCorporations = (corporations) => {
-  const sortedCorporations = lodash.sortBy(corporations, ({ tiles }) => {
+  return lodash.sortBy(corporations, ({ tiles }) => {
     return tiles.length;
   });
-  return sortedCorporations;
 };
 
 const tileLabel = (col, row) => `${col}${row}`;
