@@ -468,9 +468,12 @@
 /* INFO CARD --------------------- */
 
 .info-card {
-  width: 400px;
-  height: 400px;
+  width: fit-content;
+  height: fit-content;
   position: absolute;
+  background-color: rgb(44, 44, 44);
+  box-shadow: var(--component-shadow);
+  z-index: 3;
   background-size: contain;
   transform: translateX(0px);
   transition: 0.3s linear;
@@ -479,15 +482,24 @@
 }
 
 .info-card table {
-  border: 2px solid black;
+  color: white;
+  border: 3px solid white;
   border-collapse: collapse;
   border-radius: 10% !important;
+}
+
+.info-card tbody {
+  font-size: 1.3em;
+}
+
+.corporation-group {
+  color: #000;
 }
 
 .info-card td,
 .info-card th {
   text-align: center;
-  border: 1px solid black;
+  border: 1px solid white;
   padding: var(--component-padding);
 }
 
