@@ -424,6 +424,7 @@ class Game {
       if (this.isDeadTile(tile)) {
         player.removeTile(tile.id);
         this.giveTile(player);
+        this.logs.exchangedDeadTiles(player.name, tile.id);
       }
     });
   }

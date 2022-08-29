@@ -54,6 +54,11 @@ class Logs {
     this.#addPlayerLog(name, message);
   }
 
+  exchangedDeadTiles(name, tileId) {
+    const message = `exchanged dead tile (${tileId})`;
+    this.#addPlayerLog(name, message);
+  }
+
   resetLogs() {
     this.#logs = [];
   }
