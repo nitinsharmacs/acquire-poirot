@@ -1,3 +1,4 @@
+const lodash = require('lodash');
 class Corporation {
   #isSafe;
   constructor({
@@ -48,7 +49,7 @@ class Corporation {
   }
 
   grow(tiles) {
-    this.tiles = tiles;
+    this.tiles = lodash.uniq([...this.tiles, ...tiles]);
     this.determineIfSafe();
   }
 

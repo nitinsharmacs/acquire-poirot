@@ -367,7 +367,7 @@ class Game {
   }
 
   merge(corporations, tiles) {
-    const [defunctCorp, acquiringCorp] = sortCorporations(corporations);
+    const [defunctCorp, acquiringCorp, ...rest] = sortCorporations(corporations);
     this.logs.merged(acquiringCorp.name, defunctCorp.name);
 
     const { stockHolders, bonusHolders } =
@@ -375,7 +375,7 @@ class Game {
 
     this.updateDefunctLogs(stockHolders);
     this.updateBonusLogs(bonusHolders);
-    this.state = new MergeState(this, { defunctCorp, acquiringCorp }, tiles, this.currentPlayer);
+    this.state = new MergeState(this, { defunctCorp, acquiringCorp, rest }, tiles, this.currentPlayer);
     this.state.addStockHolders();
     this.state.changeTurn();
   }

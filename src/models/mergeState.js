@@ -2,13 +2,14 @@ const isOdd = (num) => num % 2 !== 0;
 
 class MergeState {
   constructor(game,
-    { defunctCorp, acquiringCorp },
+    { defunctCorp, acquiringCorp, rest },
     tiles,
     mergeMaker) {
 
     this.game = game;
     this.defunctCorp = defunctCorp;
     this.acquiringCorp = acquiringCorp;
+    this.rest = rest;
     this.tiles = tiles;
     this.mergeMaker = mergeMaker;
     this.count = 0;
@@ -62,32 +63,45 @@ class MergeState {
     return this.mergeMaker.hasStocks(this.defunctCorp, 1);
   }
 
-  updateCorporationPrices() {
+  #updateCorporationPrices() {
     const acquiringCorpMarketPrice = this.game.marketPrice(this.acquiringCorp);
     this.defunctCorp.updateMarketPrice({});
     this.acquiringCorp.updateMarketPrice(acquiringCorpMarketPrice);
   }
 
-  merge() {
+  #merge() {
+    this.acquiringCorp.grow(this.defunctCorp.tiles);
     this.defunctCorp.defunct();
-    this.acquiringCorp.grow(this.tiles);
-    this.updateCorporationPrices();
+    this.#updateCorporationPrices();
   }
 
-  nextState() {
-    if (this.game.canStocksBeBought()) {
-      this.game.buyStocksState();
-      this.game.endMerge();
+  #anyOtherMerge() {
+    return this.rest.length;
+  }
+
+  #nextState() {
+    if (this.#anyOtherMerge()) {
+      const corporations = [this.acquiringCorp, ...this.rest];
+      this.game.merge(corporations, this.tiles);
       return;
     }
+    this.#continueGame();
+  }
+
+  #continueGame() {
     this.game.drawTileState();
+    if (this.game.canStocksBeBought()) {
+      this.game.buyStocksState();
+    }
+    this.acquiringCorp.grow(this.tiles);
+    this.game.endMerge();
   }
 
   next() {
     if (this.count >= this.stockHolders.length) {
       this.game.currentPlayer = this.mergeMaker;
-      this.merge();
-      this.nextState();
+      this.#merge();
+      this.#nextState();
       return;
     }
     this.changeTurn();
