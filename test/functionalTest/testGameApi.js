@@ -556,7 +556,7 @@ describe('POST /api/end-game', () => {
       .expect(200, done);
   });
 
-  it('should end the game', (done) => {
+  it('should end the game and complete end game transactions', (done) => {
     request(app)
       .post('/api/end-game')
       .expect('content-type', /json/)

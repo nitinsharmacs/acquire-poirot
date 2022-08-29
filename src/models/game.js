@@ -11,6 +11,7 @@ const {
   hasMoreThan40Tiles,
   haveStocks,
   sortStockHolders,
+  copyObject,
   areMultipleCorporationsStable
 } = require('../utils/game.js');
 const informationCard = require('../../resources/informationCard.json');
@@ -118,6 +119,33 @@ class Game {
       hasMoreThan40Tiles(activeCorporations);
   }
 
+  #sellPlayersStocks() {
+    // sell all stocks of each player
+    // add money of each stock and restore stock to market
+    this.#players.forEach(player => {
+      player.stocks.forEach(stock => {
+        const corporation = this.findCorporation(stock.corporationId);
+        if (!corporation.isActive()) {
+          return;
+        }
+
+        const { stockPrice } = this.marketPrice(corporation);
+        player.addMoney(stockPrice * stock.count);
+        player.reduceStocks(corporation, stock.count);
+        corporation.addStocks(stock.count);
+      });
+    });
+  }
+
+  #determineWinner() {
+    return this.#players.reduce((winner, player) => {
+      if (winner.money < player.money) {
+        return player;
+      }
+      return winner;
+    });
+  }
+
   endGame() {
     const sortedCorporations = sortCorporations(this.getActiveCorporations());
     const bonusStats = sortedCorporations.map(corporation => {
@@ -128,13 +156,25 @@ class Game {
         distributedBonus
       };
     });
-    return bonusStats;
+
+    this.endGameStats = copyObject(bonusStats);
+    this.#sellPlayersStocks();
+    this.winner = this.#determineWinner();
+    this.currentPlayer = undefined;
+  }
+
+  getEndGameStats() {
+    return this.endGameStats;
+  }
+
+  getWinner() {
+    return this.winner;
   }
 
   changeTurn(stage = 'place-tile') {
     if (this.isGameOver()) {
       this.endGameState();
-      this.currentPlayer = undefined;
+      this.endGame();
       return;
     }
 

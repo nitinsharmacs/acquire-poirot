@@ -70,6 +70,10 @@ class Corporation {
     return this.#isSafe;
   }
 
+  isActive() {
+    return this.active;
+  }
+
   accept(visitor) {
     visitor.visitCorporation(this);
   }

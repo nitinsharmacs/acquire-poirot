@@ -13,9 +13,9 @@ const drawTile = () => {
 const endGame = () => {
   API.endGame()
     .then((res) => {
-      const { endGameStats, players } = res.data;
+      const { endGameStats, players, winner } = res.data;
       poller.stop();
-      renderPopups(endGameStats, players);
+      renderPopups(endGameStats, players, winner);
     });
 };
 

@@ -7,6 +7,7 @@
 body {
   font-family: 'Recursive', 'Arial';
   font-size: 18px;
+  overflow: hidden;
 }
 
 .page {

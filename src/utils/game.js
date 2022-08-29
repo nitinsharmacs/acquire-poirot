@@ -1,5 +1,7 @@
 const lodash = require('lodash');
 
+const copyObject = (obj) => JSON.parse(JSON.stringify(obj));
+
 const randomInt = (limit) => {
   return Math.floor(Math.random() * limit);
 };
@@ -286,6 +288,7 @@ module.exports = {
   getPlayer,
   createGameLink,
   generateId,
+  copyObject,
   nextStep,
   findAdjancetTiles,
   findPlacedTiles,

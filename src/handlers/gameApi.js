@@ -198,7 +198,8 @@ const handleDefunctStocks = (req, res) => {
 
 const endGame = (req, res) => {
   const { game } = req;
-  const endGameStats = game.endGame();
+  const endGameStats = game.getEndGameStats();
+  const winner = game.getWinner();
 
   const players = game.players.map(({ id }) => {
     const player = game.getPlayer(id);
@@ -207,7 +208,7 @@ const endGame = (req, res) => {
 
   res.json({
     message: 'game ended',
-    data: { endGameStats, players }
+    data: { endGameStats, players, winner }
   });
 };
 
