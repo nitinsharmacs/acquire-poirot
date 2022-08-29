@@ -455,6 +455,16 @@ class Game {
     return areMultipleCorporationsStable(activeCorporations);
   }
 
+  determineDeadTiles() {
+    this.#players.forEach(player => {
+      player.tiles.forEach(tile => {
+        if (this.isDeadTile(tile)) {
+          tile.isDead = true;
+        }
+      });
+    });
+  }
+
   removeDeadTiles() {
     this.cluster = this.cluster.filter(tile => !this.isDeadTile(tile));
   }

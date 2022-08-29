@@ -32,6 +32,7 @@ const drawTile = (req, res) => {
     return res.status(400).json({ message: 'Can\'t draw a tile' });
   }
 
+  game.determineDeadTiles();
   const tile = game.drawTile();
   res.json({ data: tile, message: 'Drawn a tile' });
 };

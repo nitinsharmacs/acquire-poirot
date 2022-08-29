@@ -23,6 +23,11 @@ const highlightTilesOnBoard = ({ player }) => {
   const playerTiles = player.tiles;
 
   playerTiles.forEach((tile) => {
+    if (tile.isDead) {
+      const tileElement = select(`#tile-${tile.id}`);
+      tileElement.classList.add('dead-tile');
+      return;
+    }
     const tileElement = select(`#tile-${tile.id}`);
     tileElement.classList.add('focus-tile');
     tileElement.onclick = () => placeTile(tile.id);

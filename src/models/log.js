@@ -41,7 +41,7 @@ class Logs {
   }
 
   declaredSafe(corporation) {
-    this.#logs.push(`${corporation} is now a stable corporation`);
+    this.#logs.push(`${corporation} is a stable corporation`);
   }
 
   defunctCorporation(name, { count, corporationName }) {

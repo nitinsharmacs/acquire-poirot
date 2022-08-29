@@ -500,6 +500,12 @@
   cursor: pointer;
 }
 
+.dead-tile {
+  background: repeating-linear-gradient(-45deg, #666666, #666666 10%, rgb(31, 31, 31) 15% 25%);
+  box-shadow: inset 0px 0px 7px 3px #999999;
+  ;
+}
+
 .selected-tile {
   --animation-color: hsl(0deg 0% 35%);
 }
@@ -509,7 +515,7 @@
     background-color: #666666;
     color: black;
   }
-  
+
   100% {
     background-color: var(--animation-color);
     color: black;
