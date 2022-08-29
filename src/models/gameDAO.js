@@ -10,9 +10,13 @@ const createTurnDAO = (stage, player = {}, mergingCorporations = {}) => {
   return { stage, playerId: player.id, mergingCorporations };
 };
 
+const createCurrentPlayerDAO = (player) => {
+  return { ...player, tiles: player.tiles };
+};
+
 const createGameDAO = (game, playerId) => {
   const gameDAO = {
-    player: game.getPlayer(playerId),
+    player: createCurrentPlayerDAO(game.getPlayer(playerId)),
     players: createPlayersDAO(game),
     board: game.board,
     cluster: game.cluster,

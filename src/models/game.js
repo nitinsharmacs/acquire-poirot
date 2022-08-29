@@ -179,7 +179,7 @@ class Game {
 
   drawTile() {
     this.removeDeadTiles();
-    this.exchangeDeadTiles();
+    // this.exchangeDeadTiles();
     this.logs.drewTile(this.currentPlayer.name);
     return this.giveTile(this.currentPlayer);
   }

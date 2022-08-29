@@ -28,7 +28,7 @@ const { createHostRouter } = require('./routers/hostRouter.js');
 const createApp = (config) => {
   const { root, sessionKey, session, games, users } = config;
   const app = express();
-  app.use(morgan('tiny'));
+  // app.use(morgan('tiny'));
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
   app.use(compression());

@@ -93,7 +93,8 @@ class Player {
   getState() {
     return {
       ...this,
-      name: this.#name
+      name: this.#name,
+      tiles: this.#tiles
     };
   }
 
