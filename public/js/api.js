@@ -49,7 +49,14 @@ const API = {
   skipBuild: () => fetch('/api/skip-build', {
     method: 'POST',
   })
-    .then(res => res.json()),
+    .then(res => {
+      return res.json().then(data => {
+        if (res.status !== 200) {
+          throw new Error(data.message);
+        }
+        return data;
+      });
+    }),
 
   buyStocks: (stocks) => fetch('/api/buy-stocks', {
     method: 'POST',
@@ -68,7 +75,14 @@ const API = {
   skipBuy: () => fetch('/api/skip-buy', {
     method: 'POST',
   })
-    .then(res => res.json()),
+    .then(res => {
+      return res.json().then(data => {
+        if (res.status !== 200) {
+          throw new Error(data.message);
+        }
+        return data;
+      });
+    }),
 
   handleDefunctStocks: (stocks) => fetch('/api/handle-defunct-stocks', {
     method: 'POST',
