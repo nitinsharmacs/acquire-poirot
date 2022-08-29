@@ -4,9 +4,7 @@ const savePage = (playerName) => `
 <head>
   <title>Save Game</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Recursive:regular,bold,bolditalic">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"
-    integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="/css/index.css">
 </head>
 
@@ -47,9 +45,7 @@ const restorePage = (entries, playerName) => `
 <head>
   <title>Restore Game</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Recursive:regular,bold,bolditalic">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"
-    integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="/css/index.css">
 </head>
 
@@ -67,7 +63,8 @@ const restorePage = (entries, playerName) => `
     <main class="container">
       <form action="/restore" method="post" class="form">
         <h2>Restore Game</h2>
-        <select name="gameId">
+        <select name="gameId" id="gameId">
+          <option value="">Choose scenerio</option>
           ${savedGamesOptions(entries)}
         </select>
         <input type="submit" class="btn theme-btn" value="Restore">
@@ -76,6 +73,28 @@ const restorePage = (entries, playerName) => `
   </div>
 
 </body>
+<script>
+  const copyToClipboard = (text) => {
+    const textarea = document.createElement('textarea');
+    textarea.style.display = 'hidden';
+    document.body.appendChild(textarea);
+
+    textarea.innerText = text;
+    textarea.focus();
+    textarea.select();
+    document.execCommand('copy');
+    textarea.remove();
+  };
+
+  window.onload = () => {
+    const gameSelectEle = document.getElementById('gameId');
+
+    gameSelectEle.oninput = (event) => {
+      copyToClipboard(window.location.host + '/join/' + event.target.value);
+    };
+  };
+
+</script>
 
 </html>
 `;

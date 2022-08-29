@@ -35,11 +35,8 @@ const resources = {
   USERS_DB_PATH,
 };
 
-const createApp = (
-  config,
-  dataStore = new DataStore(resources)
-) => {
-  const { root, sessionKey, session, games } = config;
+const createApp = (config) => {
+  const { root, sessionKey, session, games, users } = config;
   const app = express();
   app.use(morgan('tiny'));
   app.use(express.urlencoded({ extended: true }));
@@ -57,7 +54,7 @@ const createApp = (
   // injecting games to app
   app.games = games;
 
-  const authRouter = createAuthRouter(dataStore);
+  const authRouter = createAuthRouter(users);
   app.use(authRouter);
 
   const hostRouter = createHostRouter();

@@ -39,8 +39,9 @@ class Games {
   }
 
   restore(gameId) {
-    const game = this.#gameStore.find(gameId);
-    this.#games.push(restoreGame(game));
+    return this.#gameStore.find(gameId).then(game => {
+      this.#games.push(restoreGame(game));
+    });
   }
 
   savedGamesEntries() {

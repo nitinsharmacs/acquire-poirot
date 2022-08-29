@@ -6,6 +6,8 @@ require('dotenv').config();
 const { createApp } = require('./src/app.js');
 const { createClient } = require('./src/utils/redis.js');
 const { RedisStore } = require('./src/models/redisStore.js');
+const { Users } = require('./src/models/users.js');
+const { UserStore } = require('./src/models/userStore.js');
 
 const {
   NODE_ENV,
@@ -22,16 +24,20 @@ if (NODE_ENV === 'production') {
 
 createClient(url)
   .then((client) => {
-    return new GameStore(new RedisStore(client)).load();
+    const redisStore = new RedisStore(client);
+    return {
+      gameStore: new GameStore(redisStore),
+      userStore: new UserStore(redisStore)
+    };
   })
-  .then(gameStore => {
-    const appConfig = {
+  .then(({ gameStore, userStore }) => {
+    return {
       root: './public',
       sessionKey: process.env.SESSION_KEY,
       session,
+      games: new Games([], gameStore),
+      users: new Users(userStore)
     };
-
-    return Object.assign(appConfig, { games: new Games([], gameStore) });
   })
   .then(appConfig => {
     const app = createApp(appConfig);

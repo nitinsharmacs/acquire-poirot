@@ -31,7 +31,7 @@ do
 done
 
 echo "Installing redis"
-echo "Press ^C if you already have"
 brew install redis
+brew services start redis
 
 echo -e "\nDone"

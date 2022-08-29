@@ -77,29 +77,32 @@ const serveSavePage = (req, res) => {
   res.end(savePage(playerName));
 };
 
-const serveRestorePage = (req, res) => {
+const serveRestorePage = async (req, res) => {
   const { session: { playerName },
     app: { games },
   } = req;
 
+  const entries = await games.savedGamesEntries();
+
   res.type('text/html');
-  res.end(restorePage(games.savedGamesEntries(), playerName));
+  res.end(restorePage(entries, playerName));
 };
 
-const saveGame = (req, res) => {
+const saveGame = async (req, res) => {
   const { session: { gameId },
     app: { games },
     body: { title }
   } = req;
-  games.save(gameId, title);
 
+  await games.save(gameId, title);
   res.send('saved game');
 };
 
-const restoreGame = (req, res) => {
+const restoreGame = async (req, res) => {
   const { body: { gameId }, app: { games } } = req;
 
-  games.restore(gameId);
+  await games.restore(gameId);
+
   req.session.gameId = gameId;
   req.session.save(() => {
     res.redirect('/game');
