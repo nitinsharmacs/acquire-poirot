@@ -7,7 +7,7 @@ const apiRoutes = require('./routers/apiRoutes.js');
 
 // middlewares
 const { restrict } = require('./middlewares/auth.js');
-const { injectGame } = require('./middlewares/game.js');
+const { injectGame, gameStartRestriction } = require('./middlewares/game.js');
 
 // handlers
 const { notFound } = require('./handlers/notFound.js');
@@ -54,7 +54,7 @@ const createApp = (config) => {
   app.get('/join/:id', restrict, joinGame);
   app.get('/lobby/:id', restrict, serveLobby);
 
-  app.get('/game', restrict, injectGame, serveGamePage);
+  app.get('/game', restrict, injectGame, gameStartRestriction, serveGamePage);
   app.use('/api', restrict, injectGame, apiRoutes);
   app.get('/how-to-play', restrict, serveInstructionPage);
 

@@ -10,4 +10,12 @@ const injectGame = (req, res, next) => {
   next();
 };
 
-module.exports = { injectGame };
+const gameStartRestriction = (req, res, next) => {
+  const { game } = req;
+  if (!game.hasStarted()) {
+    return res.redirect(`/lobby/${game.id}`);
+  }
+  next();
+};
+
+module.exports = { injectGame, gameStartRestriction };

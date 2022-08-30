@@ -8,3 +8,4 @@ coverage
 refactoringPlan.md
 coverage/
 dump.rdb
+linesOfCode.sh
