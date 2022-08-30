@@ -119,10 +119,7 @@ const handleView = (game, message = '') => {
   }
 
   if (game.isInTransactionState()) {
-    renderBoard(game);
-    renderPlayerResources(game);
-    renderStockMarket(game);
-    showDefunctStocksTransaction(game.getMergingCorporations(), message);
+    renderTransactionState(game, message);
   }
 
   if (game.isInBuildState()) {

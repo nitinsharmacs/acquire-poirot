@@ -55,7 +55,7 @@ class MergeState {
     const player = this.game.currentPlayer;
     const valid = player.hasStocks(this.defunctCorp, stockCount + tradeCount);
     if (!valid) {
-      return { message: 'Insufficient stocks' };
+      return { message: `You don't have enough stocks of ${this.defunctCorp.name}` };
     }
   }
 

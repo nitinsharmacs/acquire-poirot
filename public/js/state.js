@@ -144,6 +144,11 @@ class GameState {
   getMergingCorporations() {
     return this.turn.mergingCorporations;
   }
+
+  getDefunctStocks() {
+    const { defunctCorporation } = this.turn.mergingCorporations;
+    return this.player.stocks.find(({ corporationId }) => corporationId === defunctCorporation.id);
+  }
 }
 
 class Board {

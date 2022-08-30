@@ -30,17 +30,30 @@ const removeTransationPanel = () => {
 const transactionTitle = ({ acquiringCorporation, defunctCorporation }) =>
   `${acquiringCorporation.name} acquired ${defunctCorporation.name}`;
 
-const createTransactionPanel = (mergingCorporations, message) => {
+const info = {
+  sell: 'Sell stocks of defunct corporation and get money as per current corporation size.',
+  trade: 'Trade stocks of defunct corporation in 2:1 ratio with stocks of surviving corporation',
+};
+
+const createTransactionPanel = (corporations, playerStocks, message) => {
+  const defunctName = corporations.defunctCorporation.name;
+  const { count } = playerStocks;
+
   const panel = ['div', { class: 'transaction-panel' }, {},
-    ['h3', { class: 'component-heading' }, {}, transactionTitle(mergingCorporations)],
+    ['h3', { class: 'component-heading' }, {}, transactionTitle(corporations)],
+    ['p', {}, {}, `You have ${count} stocks of ${defunctName}`],
     ['form', { id: 'transaction-form', }, {},
       ['div', { class: 'panel-section' }, {},
         ['label', { for: 'stockCount' }, {}, 'Sell'],
-        ['input', { type: 'number', name: 'stockCount', id: 'stockCount', class: 'stock-value', min: 0, value: 0 }]
+        ['input', { type: 'number', name: 'stockCount', id: 'stockCount', class: 'stock-value', min: 0, max: count, value: 0 }],
+        ['span', { class: 'icon fa-solid fa-circle-question', id: 'sell-info-icon' }],
+        ['div', { class: 'info-box', id: 'sell-info' }, {}, info.sell]
       ],
       ['div', { class: 'panel-section' }, {},
-        ['label', { for: 'tradeCount' }, {}, 'Trade'],
-        ['input', { type: 'number', name: 'tradeCount', id: 'tradeCount', class: 'stock-value', step: 2, min: 0, value: 0 }]
+        ['label', { for: 'tradeCount' }, {}, 'Trade (2:1)'],
+        ['input', { type: 'number', name: 'tradeCount', id: 'tradeCount', class: 'stock-value', step: 2, min: 0, max: count, value: 0 }],
+        ['span', { class: 'icon fa-solid fa-circle-question', id: 'trade-info-icon' }],
+        ['div', { class: 'info-box', id: 'trade-info' }, {}, info.trade]
       ],
       ['p', { class: 'stock-message' }, {}, message],
       ['input', { type: 'button', class: 'btn theme-btn', value: 'Confirm' }, { onclick: selectDefunctStocks }]
@@ -50,12 +63,23 @@ const createTransactionPanel = (mergingCorporations, message) => {
   return createDOMTree(panel);
 };
 
-const showDefunctStocksTransaction = (mergingCorporations, message = '') => {
+const showDefunctStocksTransaction = (mergingCorporations, playerStocks, message = '') => {
   removeTransationPanel();
   const playerActivities = select('.player-activities');
-  const panel = createTransactionPanel(mergingCorporations, message);
+  const panel = createTransactionPanel(mergingCorporations, playerStocks, message);
   playerActivities.appendChild(panel);
   highlight(panel);
+};
+
+const renderTransactionState = (game, message) => {
+  renderBoard(game);
+  renderPlayerResources(game);
+  renderStockMarket(game);
+  showDefunctStocksTransaction(
+    game.getMergingCorporations(),
+    game.getDefunctStocks(),
+    message
+  );
 };
 
 const renderScreen = (game) => {

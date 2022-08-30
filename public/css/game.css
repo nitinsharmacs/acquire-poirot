@@ -375,7 +375,17 @@
   margin: 0.5em 0;
   padding: 0.5em 0;
   height: 90%;
-  overflow-y: scroll;
+  overflow-y: auto;
+}
+
+.logs::-webkit-scrollbar {
+  background: gray;
+  width: 5px;
+}
+
+.logs::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
 }
 
 .logs div {
@@ -576,21 +586,9 @@ input[type=number]::-webkit-outer-spin-button {
 
 .stock-message {
   text-align: center;
-  color: red;
   height: 1em;
   margin: 0.5em 0;
   color: whitesmoke;
-}
-
-.trade {
-  position: absolute;
-  right: 0px;
-  top: 30px;
-  background: white;
-  border: 2px solid black;
-  height: 93%;
-  width: 38%;
-  border-radius: 2%;
 }
 
 /* TRANSACTION PANEL */
@@ -598,11 +596,17 @@ input[type=number]::-webkit-outer-spin-button {
   position: absolute;
   top: 40px;
   right: 5px;
-  width: 300px;
+  width: 350px;
   padding: 1em;
   background-color: #292929;
   box-shadow: 1px 1px 5px 1px white;
-  animation: come 0.3s linear;
+  border-radius: var(--component-border-radius);
+  /* animation: come 0.3s linear; */
+}
+
+.transaction-panel>p {
+  text-align: center;
+  margin: 1.5em 0;
 }
 
 .transaction-panel>form {
@@ -615,16 +619,44 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .panel-section>label {
-  width: 60px;
   display: inline-block;
+  text-align: right;
+  width: 100px;
+}
+
+.panel-section {
+  position: relative;
 }
 
 .panel-section>input {
   visibility: visible;
+  margin: 0 0.5em;
 }
 
 .transaction-panel .stock-message {
   height: 1.8em;
+}
+
+.info-box {
+  position: absolute;
+  background-color: rgba(23, 23, 23, 0.95);
+  border: 1px solid white;
+  padding: 1em;
+  border-radius: 5px;
+  top: -80px;
+  right: 10px;
+  font-size: 0.8rem;
+  width: 180px;
+  display: none;
+}
+
+.icon {
+  cursor: pointer;
+}
+
+#sell-info-icon:hover+#sell-info,
+#trade-info-icon:hover+#trade-info {
+  display: block;
 }
 
 @keyframes come {
@@ -810,4 +842,25 @@ td {
 
 .highlight-player {
   background-color: #1c7ed6;
+}
+
+/* Notifier ------------------------------ */
+.notification-panel {
+  width: 800px;
+  background: radial-gradient(ellipse at top, rgba(0, 0, 0, 0.5), transparent), radial-gradient(ellipse at bottom, #D89216, transparent);
+  padding: 1.5rem;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 1px 1px 5px 1px black;
+}
+
+.notification-panel * {
+  color: white;
+}
+
+.notification-panel>h1 {
+  font-weight: 400;
+  text-align: center;
 }
