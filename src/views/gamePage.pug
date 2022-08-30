@@ -35,8 +35,11 @@ body
             h3(class="component-heading") Activity Logs
             div(class="logs")
           div
-            header
-              button(id="info-card-btn") Info Card
+            div(class="players")
+              h3(class="component-heading") Players
+              div(class="players-list" id="players-list")
+        div(class="stock-market-component")
+          div(id="info-card-btn" class="info-card-btn fa-solid fa-circle-info")
               div(class="info-card hide" id="info-card")
                 table
                   thead
@@ -136,8 +139,4 @@ body
                       td(class="money") 6000
                     tr
                       td(colspan='6') A CORPORATION OF 11 OR MORE TILES IS SAFE.
-              button(class="fa-solid fa-arrow-right-from-bracket")
-            div(class="players")
-              h3(class="component-heading") Players
-              div(class="players-list" id="players-list")
-        form(class="stock-market" id="stock-market")
+          form(class="stock-market" id="stock-market")

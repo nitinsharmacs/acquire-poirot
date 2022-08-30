@@ -130,6 +130,7 @@
 .component-heading {
   text-align: center;
   margin-bottom: 0.5em;
+  padding: 0.1em;
   background-image: linear-gradient(to top, rgb(61, 61, 61), rgb(79, 78, 78));
   color: var(--heading-color);
 }
@@ -398,8 +399,9 @@
 }
 
 /* STOCK MARKET ------------------------- */
-.stock-market {
+.stock-market-component {
   border: 2px solid black;
+  position: relative;
   border-radius: var(--component-border-radius);
   padding: var(--component-padding);
   flex: 1;
@@ -481,14 +483,23 @@
   width: fit-content;
   height: fit-content;
   position: absolute;
-  background-color: rgb(44, 44, 44);
+  background-color: rgb(27, 27, 27);
   box-shadow: var(--component-shadow);
   z-index: 3;
   background-size: contain;
-  transform: translateX(0px);
+  transform: translateX(-16.5em);
   transition: 0.3s linear;
   top: 30px;
   background-repeat: no-repeat;
+  font-family: RECURSIVE;
+}
+
+.info-card-btn {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  color: var(--heading-color);
+  font-size: 1.6em;
 }
 
 .info-card table {
@@ -499,7 +510,7 @@
 }
 
 .info-card tbody {
-  font-size: 1.3em;
+  font-size: 1em;
 }
 
 .corporation-group {

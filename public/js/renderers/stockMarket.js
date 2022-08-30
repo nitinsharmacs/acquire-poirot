@@ -178,6 +178,7 @@ const highlightStockMarketToBuild = (tileId) => {
 // main
 const renderStockMarket = ({ corporations }, message = '') => {
   const stockMarket = select('#stock-market');
+  console.log(stockMarket);
 
   const elements = [
     ['h3', { class: 'component-heading' }, {}, 'Stock Market'],
