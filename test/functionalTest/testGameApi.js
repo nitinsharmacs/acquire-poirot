@@ -85,7 +85,7 @@ describe('POST /api/place-tile', () => {
   addPlayers(game, players);
   const app = initApp(session('123', 'user'), games);
 
-  beforeEach((done) => {
+  before((done) => {
     request(app)
       .post('/api/start-game')
       .expect('content-type', /json/)
@@ -105,6 +105,7 @@ describe('POST /api/place-tile', () => {
   it('Should not place a tile which is not in player\'s cluster', (done) => {
     game.currentPlayer = game.getPlayer('user');
     game.currentPlayer.removeTile('1a');
+    game.placeTileStage();
     request(app)
       .post('/api/place-tile')
       .send('id=1a')
@@ -182,7 +183,7 @@ describe('Post /api/place-tile', () => {
   addPlayers(game, players);
   const app = initApp(session('123', 'user'), games);
 
-  beforeEach((done) => {
+  before((done) => {
     request(app)
       .post('/api/start-game')
       .expect('content-type', /json/)
@@ -227,6 +228,7 @@ describe('Post /api/place-tile', () => {
       placeTiles(game, ['4a', '5a', '6a']);
       game.buildCorporation(corporation2.id, '4a', 'user');
 
+      game.placeTileStage();
       const tileId = '3a';
       request(app)
         .post('/api/place-tile')
@@ -379,7 +381,7 @@ describe('POST /api/buy-stocks', () => {
   game.addPlayer(new Player({ id: 'user', name: 'sam' }));
   const app = initApp(session('123', 'user'), games);
 
-  beforeEach((done) => {
+  before((done) => {
 
     request(app)
       .post('/api/start-game')

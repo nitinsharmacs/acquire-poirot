@@ -14,6 +14,10 @@ const loadGame = (req, res) => {
 const startGame = (req, res) => {
   const { game } = req;
 
+  if (game.hasStarted()) {
+    return res.status(400).json({ message: 'game has already started' });
+  }
+
   if (!game.isHost(req.session.playerId)) {
     return res.status(400).json({ message: 'Only host can start game' });
   }
