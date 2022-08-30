@@ -5,22 +5,21 @@
   --hydra-border: #ff9433;
   --hydra-bg: #fae2cc;
   --sackson-border: #ff5661;
-  --sackson-bg: #f9e5e6;
+  --sackson-bg: #f8d7d9;
   --quantum-border: #58e0f8;
-  --quantum-bg: #d0e8ec;
+  --quantum-bg: #c3e9f0;
   --america-border: #1c7ed6;
-  --america-bg: #d2e4f4;
+  --america-bg: #b8d8f5;
   --fusion-border: #36b24d;
   --fusion-bg: #bcedc5;
   --phoenix-border: #7746f1;
-  --phoenix-bg: #e2daf8;
+  --phoenix-bg: #d7ccf7;
   --zeta-border: #ffc936;
-  --zeta-bg: #fbf1d7;
+  --zeta-bg: #f6eaca;
   --tile-size: 65px;
   --theme-color: #D89216;
   --component-body: rgba(0, 0, 0, 0.5);
   --component-shadow: 0.2px 0.2px 5px 0.2px rgb(196, 194, 194);
-  --heading-color: #d5921e;
 }
 
 .game-page {
@@ -132,7 +131,8 @@
   margin-bottom: 0.5em;
   padding: 0.1em;
   background-image: linear-gradient(to top, rgb(61, 61, 61), rgb(79, 78, 78));
-  color: var(--heading-color);
+  color: var(--theme-color);
+  padding: 0.3em 1em;
 }
 
 .overlay {
@@ -141,7 +141,6 @@
   position: fixed;
   top: 0;
   left: 0;
-  /* background-color: rgba(0, 0, 0, 0.3); */
 
   background-color: rgba(255, 255, 255, 0.2);
 }
@@ -194,9 +193,14 @@
   box-shadow: var(--component-shadow);
 }
 
+.player-resources>section {
+  padding: 0 var(--component-padding);
+}
+
 .player-money {
   width: 15%;
   text-align: center;
+  padding-left: 0 !important;
 }
 
 .player-money p {
@@ -205,10 +209,9 @@
 }
 
 .player-tiles {
-  border-right: 2px solid black;
-  border-left: 2px solid black;
-  padding-left: 2em;
-  padding-right: 2em;
+  border-right: 2px solid gray;
+  border-left: 2px solid gray;
+  flex: 0.5;
 }
 
 .component-tiles {
@@ -217,6 +220,7 @@
   grid-template-rows: repeat(2, var(--tile-size));
   gap: 0.8em;
   margin: 0 auto;
+  width: fit-content;
 }
 
 .player-tiles .tile-item {
@@ -226,8 +230,8 @@
 }
 
 .player-stocks {
-  flex: 0.8;
-  margin: 0 auto;
+  flex: 1;
+  padding-right: 0 !important;
 }
 
 .player-stocks>div {
@@ -334,6 +338,7 @@
   display: flex;
   align-items: center;
   column-gap: var(--component-gap);
+  padding: 0.5em;
 }
 
 .player-item p {
@@ -357,7 +362,6 @@
 .player-item.active {
   font-weight: bold;
   background-image: linear-gradient(to bottom, rgb(64, 63, 63), rgb(103, 102, 102));
-  /* box-shadow: 0.1px 0.1px 4px 0.1px rgb(182, 181, 181); */
 }
 
 .activity-logs {
@@ -420,10 +424,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.corporation-col:first-child {
-  border-right: 2px solid black;
 }
 
 .corporation {
@@ -495,8 +495,8 @@
 
 .info-card-btn {
   position: absolute;
-  right: 10px;
-  top: 10px;
+  right: 15px;
+  top: 15px;
   color: var(--heading-color);
   font-size: 1.6em;
 }
@@ -611,7 +611,6 @@ input[type=number]::-webkit-outer-spin-button {
   background-color: #292929;
   box-shadow: 1px 1px 5px 1px white;
   border-radius: var(--component-border-radius);
-  /* animation: come 0.3s linear; */
 }
 
 .transaction-panel>p {
@@ -667,16 +666,6 @@ input[type=number]::-webkit-outer-spin-button {
 #sell-info-icon:hover+#sell-info,
 #trade-info-icon:hover+#trade-info {
   display: block;
-}
-
-@keyframes come {
-  0% {
-    transform: translateX(1000px);
-  }
-
-  100% {
-    transform: translateX(-0px);
-  }
 }
 
 .game-over-panel {
