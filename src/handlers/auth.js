@@ -103,9 +103,16 @@ const register = (users) => async (req, res) => {
   });
 };
 
+const logout = (req, res) => {
+  req.session.destroy();
+  res.redirect('/');
+  res.end();
+};
+
 module.exports = {
   serveLoginPage,
   validateUser: login,
   serveSignupPage,
-  register
+  register,
+  logout
 };
