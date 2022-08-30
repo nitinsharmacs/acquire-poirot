@@ -194,6 +194,7 @@ describe('Game', () => {
 
     it('Should exchange player\'s dead tiles', () => {
       const numOfTiles = host.tiles.length;
+      game.removeDeadTiles();
       game.exchangeDeadTiles();
       assert.strictEqual(host.findTile('1b'), undefined);
       assert.strictEqual(host.tiles.length, numOfTiles);
