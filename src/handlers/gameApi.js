@@ -154,6 +154,13 @@ const buildCorporation = (req, res) => {
     body: { id, corporationId }
   } = req;
 
+  if (!game.isInBuildStage()) {
+    res.status(422).json({
+      message: 'Corporation can not be built',
+      data: { case: game.stage }
+    });
+    return;
+  }
   if (game.isBuilt(corporationId)) {
     res.status(422).json({
       message: 'Corporation is already built',

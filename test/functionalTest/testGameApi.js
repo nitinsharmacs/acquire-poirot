@@ -291,6 +291,7 @@ describe('POST /api/build-corporation', () => {
 
   it('should build a corporation',
     (done) => {
+      game.buildState();
       game.currentPlayer = game.getPlayer('user');
       placeTiles(game, ['1a', '2a']);
       request(app)
@@ -298,6 +299,31 @@ describe('POST /api/build-corporation', () => {
         .send('id=1a&corporationId=america')
         .expect('content-type', /json/)
         .expect(200, done);
+    });
+
+  it('should not build active corporation ',
+    (done) => {
+      game.buildState();
+      game.currentPlayer = game.getPlayer('user');
+      placeTiles(game, ['1a', '2a']);
+      const america = game.findCorporation('america');
+      america.activate();
+      request(app)
+        .post('/api/build-corporation')
+        .send('id=1a&corporationId=america')
+        .expect('content-type', /json/)
+        .expect(422, done);
+    });
+
+  it('should not build a corporation when game is in another stage',
+    (done) => {
+      game.currentPlayer = game.getPlayer('user');
+      placeTiles(game, ['1a', '2a']);
+      request(app)
+        .post('/api/build-corporation')
+        .send('id=1a&corporationId=america')
+        .expect('content-type', /json/)
+        .expect(422, done);
     });
 });
 
@@ -351,23 +377,38 @@ describe('POST /api/buy-stocks', () => {
       .expect(200, done);
   });
 
-  it('should buy stocks',
-    (done) => {
-      game.buyStocksState();
-      const corporation = game.findCorporation('america');
-      corporation.active = true;
-      corporation.tiles.push('1a', '1b');
-      request(app)
-        .post('/api/buy-stocks')
-        .set('content-type', 'application/json')
-        .send(JSON.stringify({
-          stocks: [{
-            corporationId: 'america',
-            numOfStocks: 2
-          }]
-        }))
-        .expect(200, done);
-    });
+  it('should buy stocks', (done) => {
+    game.buyStocksState();
+    const corporation = game.findCorporation('america');
+    corporation.active = true;
+    corporation.tiles.push('1a', '1b');
+    request(app)
+      .post('/api/buy-stocks')
+      .set('content-type', 'application/json')
+      .send(JSON.stringify({
+        stocks: [{
+          corporationId: 'america',
+          numOfStocks: 2
+        }]
+      }))
+      .expect(200, done);
+  });
+
+  it('should not buy stocks when game is not in buy stage', (done) => {
+    const corporation = game.findCorporation('america');
+    corporation.active = true;
+    corporation.tiles.push('1a', '1b');
+    request(app)
+      .post('/api/buy-stocks')
+      .set('content-type', 'application/json')
+      .send(JSON.stringify({
+        stocks: [{
+          corporationId: 'america',
+          numOfStocks: 2
+        }]
+      }))
+      .expect(422, done);
+  });
 
   it('should buy stocks for multiple corporations',
     (done) => {
