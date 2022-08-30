@@ -72,6 +72,13 @@ const updateControls = (corporations) => {
   enable(buyButtonElement);
 };
 
+const disableButtons = (...btnIds) => {
+  btnIds.forEach(btnId => {
+    const btn = select(`#${btnId}`);
+    btn.setAttribute('disabled', true);
+  });
+};
+
 const createBtnHolder = ({ action, skip, label }) => {
   const btnHolderContainer = select('.button-holder');
 
@@ -79,12 +86,14 @@ const createBtnHolder = ({ action, skip, label }) => {
     ['button', { class: 'btn theme-btn', type: 'submit', id: 'confirm-btn', disabled: true }, {
       onclick: (event) => {
         event.preventDefault();
+        disableButtons('confirm-btn', 'skip-btn');
         action();
       }
     }, label],
-    ['button', { class: 'btn theme-btn' }, {
+    ['button', { class: 'btn theme-btn', id: 'skip-btn' }, {
       onclick: (event) => {
         event.preventDefault();
+        disableButtons('confirm-btn', 'skip-btn');
         skip();
       }
     }, 'Skip']

@@ -301,24 +301,6 @@
   box-shadow: var(--component-shadow);
 }
 
-.player-activities header {
-  display: flex;
-  justify-content: end;
-  column-gap: var(--component-gap);
-  padding: var(--component-padding);
-  padding-top: 0;
-  padding-right: 0;
-}
-
-.player-activities header button {
-  padding: 0.5em 1em;
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-  color: whitesmoke;
-  font-weight: bolder;
-}
-
 .players {
   border: 2px solid black;
   padding: var(--component-padding);
