@@ -61,6 +61,16 @@ class Logs {
     this.#addPlayerLog(name, message);
   }
 
+  handledDefunctStocks(name, { stockCount, tradeCount },
+    { defunctCorporation }) {
+    let message = '';
+    if (tradeCount === 0 && stockCount === 0) {
+      message = 'chose to hold all stocks';
+    }
+    message = `sold ${stockCount} and traded ${tradeCount} stocks`;
+    this.#addPlayerLog(name, `${message} of ${defunctCorporation.name}`);
+  }
+
   resetLogs() {
     this.#logs = [];
   }

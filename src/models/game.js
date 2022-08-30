@@ -452,6 +452,9 @@ class Game {
   }
 
   sellDefunctStocks(stocks) {
+    this.logs.handledDefunctStocks(
+      this.currentPlayer.name, stocks, this.state.getMergingCorporations()
+    );
     this.state.handleDefunctStocks(stocks);
   }
 
