@@ -6,6 +6,8 @@ const randomInt = (limit) => {
   return Math.floor(Math.random() * limit);
 };
 
+const round = (num) => Math.round(num);
+
 const getPlayer = (players, playerId) => {
   return players.find(player => player.id === playerId);
 };
@@ -289,6 +291,7 @@ module.exports = {
   createGameLink,
   generateId,
   copyObject,
+  round,
   nextStep,
   findAdjancetTiles,
   findPlacedTiles,

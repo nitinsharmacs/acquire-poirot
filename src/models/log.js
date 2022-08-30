@@ -1,3 +1,5 @@
+const { round } = require('../utils/game');
+
 class Logs {
   #logs;
 
@@ -50,7 +52,7 @@ class Logs {
   }
 
   bonusDistribution(name, bonus, bonusType) {
-    const message = `received ${bonusType} bonus of $${bonus}`;
+    const message = `received ${bonusType} bonus of $${round(bonus)}`;
     this.#addPlayerLog(name, message);
   }
 

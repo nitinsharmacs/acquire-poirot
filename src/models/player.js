@@ -1,3 +1,5 @@
+const { round } = require('../utils/game');
+
 class Player {
   #name;
   #tiles;
@@ -65,11 +67,11 @@ class Player {
   }
 
   deductMoney(toBeDeducted) {
-    this.money -= toBeDeducted;
+    this.money = round(this.money - toBeDeducted);
   }
 
   addMoney(toBeAdded) {
-    this.money += toBeAdded;
+    this.money = round(toBeAdded + this.money);
   }
 
   getMoney() {
