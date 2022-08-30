@@ -387,7 +387,7 @@ class Game {
     stockHolders.forEach(({ id, money }) => {
       const player = this.getPlayer(id);
       if (player) {
-        player.money += money;
+        player.addMoney(money);
       }
     });
   }
