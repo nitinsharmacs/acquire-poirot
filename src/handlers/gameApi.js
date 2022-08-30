@@ -43,15 +43,22 @@ const placeTile = (req, res) => {
     body: { id },
     session: { playerId }
   } = req;
+
+  if (!game.isInPlaceTileStage()) {
+    return res.status(422).json({
+      data: {
+        message: 'tile can not be placed',
+        case: game.stage
+      }
+    });
+  }
+
   const player = game.getPlayer(playerId);
   if (!player.findTile(id)) {
     return res.status(422).json({
       data: {
         message: 'tile doesn\'t belongs to you',
         case: game.stage,
-        corporations: game.corporations,
-        currentPlayer: game.currentPlayer,
-        money: player.money
       }
     });
   }

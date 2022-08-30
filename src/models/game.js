@@ -349,6 +349,10 @@ class Game {
     return this.#stage === 'build';
   }
 
+  isInPlaceTileStage() {
+    return this.#stage === 'place-tile';
+  }
+
   isAnyCorporationActive() {
     return this.corporations.some(corporation => corporation.active);
   }
