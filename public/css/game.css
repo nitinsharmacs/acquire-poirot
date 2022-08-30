@@ -485,12 +485,10 @@
   background-color: rgb(27, 27, 27);
   box-shadow: var(--component-shadow);
   z-index: 3;
-  background-size: contain;
   transform: translateX(-16.8em);
   transition: 0.3s linear;
   top: 30px;
-  background-repeat: no-repeat;
-  font-family: RECURSIVE;
+  font-family: 'Recursive';
 }
 
 .info-card-btn {
@@ -541,6 +539,7 @@
   justify-content: center;
   align-items: center;
   gap: 20px;
+  height: 45px;
 }
 
 .focus-tile {
@@ -599,6 +598,10 @@ input[type=number]::-webkit-outer-spin-button {
   height: 1em;
   margin: 0.5em 0;
   color: whitesmoke;
+}
+
+.stock-message.error {
+  color: rgb(243, 75, 75);
 }
 
 /* TRANSACTION PANEL */

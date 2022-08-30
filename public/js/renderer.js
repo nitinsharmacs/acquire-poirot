@@ -55,7 +55,7 @@ const createTransactionPanel = (corporations, playerStocks, message) => {
         ['span', { class: 'icon fa-solid fa-circle-question', id: 'trade-info-icon' }],
         ['div', { class: 'info-box', id: 'trade-info' }, {}, info.trade]
       ],
-      ['p', { class: 'stock-message' }, {}, message],
+      ['p', { class: 'stock-message error' }, {}, message],
       ['input', { type: 'button', class: 'btn theme-btn', value: 'Confirm' }, { onclick: selectDefunctStocks }]
     ]
   ];

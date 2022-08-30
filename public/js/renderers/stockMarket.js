@@ -73,7 +73,9 @@ const updateControls = (corporations) => {
 };
 
 const createBtnHolder = ({ action, skip, label }) => {
-  const btnHolder = ['div', { class: 'button-holder' }, {},
+  const btnHolderContainer = select('.button-holder');
+
+  const btnHolder = [
     ['button', { class: 'btn theme-btn', type: 'submit', id: 'confirm-btn', disabled: true }, {
       onclick: (event) => {
         event.preventDefault();
@@ -88,7 +90,7 @@ const createBtnHolder = ({ action, skip, label }) => {
     }, 'Skip']
   ];
 
-  return createDOMTree(btnHolder);
+  btnHolderContainer.replaceChildren(...createElements(btnHolder));
 };
 
 const showControls = (corporations) => {
@@ -109,7 +111,7 @@ const highlightStockMarket = (btnHolder) => {
   const highlightComponent = select('.stock-market-component');
   highlight(highlightComponent);
 
-  stockMarketElement.appendChild(btnHolder);
+  // stockMarketElement.appendChild(btnHolder);
 };
 
 const attachStockSelectEvent = (corporations) => {
@@ -127,7 +129,7 @@ const highlightStockMarketToBuy = (game) => {
     skip: skipBuy,
     label: 'Buy'
   });
-  highlightStockMarket(btnHolderElement);
+  // highlightStockMarket(btnHolderElement);
 
   const canBeBoughtOf = game.availableToBuy();
   attachStockSelectEvent(game.corporations);
@@ -183,7 +185,8 @@ const renderStockMarket = ({ corporations }, message = '') => {
   const elements = [
     ['h3', { class: 'component-heading' }, {}, 'Stock Market'],
     createCorporationsHTML(corporations),
-    ['p', { class: 'stock-message' }, {}, message]
+    ['p', { class: 'stock-message error' }, {}, message],
+    ['div', { class: 'button-holder' }, {}]
   ];
 
   stockMarket.replaceChildren(...createElements(elements));
