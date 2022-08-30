@@ -394,7 +394,6 @@
 }
 
 .highlight-element {
-  background-color: whitesmoke;
   z-index: 10;
 }
 
@@ -487,7 +486,7 @@
   box-shadow: var(--component-shadow);
   z-index: 3;
   background-size: contain;
-  transform: translateX(-16.5em);
+  transform: translateX(-16.8em);
   transition: 0.3s linear;
   top: 30px;
   background-repeat: no-repeat;

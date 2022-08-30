@@ -106,7 +106,8 @@ const buySelectedStocks = () => {
 
 const highlightStockMarket = (btnHolder) => {
   const stockMarketElement = select('#stock-market');
-  highlight(stockMarketElement);
+  const highlightComponent = select('.stock-market-component');
+  highlight(highlightComponent);
 
   stockMarketElement.appendChild(btnHolder);
 };
@@ -178,7 +179,6 @@ const highlightStockMarketToBuild = (tileId) => {
 // main
 const renderStockMarket = ({ corporations }, message = '') => {
   const stockMarket = select('#stock-market');
-  console.log(stockMarket);
 
   const elements = [
     ['h3', { class: 'component-heading' }, {}, 'Stock Market'],
