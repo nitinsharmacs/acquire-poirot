@@ -6,14 +6,12 @@ html
     integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A=="
     crossorigin="anonymous" referrerpolicy="no-referrer")
     link(rel="stylesheet" href="/css/index.css")
-    link(rel="stylesheet" href="/css/notFound.css")
 
-  body(class="not-found-page")  
+  body(class="page")  
     div(class="header")
-      div(class="heading") Acquire
+      h1 Acquire
     div(class="container")
-      p #{isNotFoundPage ? 'Page' : 'Game'} not found
-      p Go to 
-        a(href="/") home
-      div(class="not-found")
-        img(src="/images/not-found.gif" height="500")
+      p(class="error") 404
+      p(class='not-found-content') Oops! #{isNotFoundPage ? 'Page' : 'Game'} not found...
+        p(class='go-to-home') Go to 
+          a(href="/") home
