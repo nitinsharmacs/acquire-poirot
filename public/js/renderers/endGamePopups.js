@@ -155,6 +155,10 @@ const createGameStats = (players, activeCorporations, winner) => {
     createMoneyTable(sortPlayers([...players])),
     ['div', { class: 'corporation-cards' }, {},
       ...createCorporationCards(players, activeCorporations),
+
+    ],
+    ['div', { style: 'text-align: center;padding:1em;' }, {},
+      ['a', { class: 'btn theme-btn', href: '/' }, {}, 'Home']
     ]
   ];
 
@@ -173,12 +177,12 @@ const createGameStats = (players, activeCorporations, winner) => {
 const showEndGamePopup = (endGameStats, players, winner) => {
   const panel = gameOverPanel(winner);
   const gameStats = createGameStats(players, endGameStats, winner);
-  panel.come();
-
-  setTimeout(() => {
-    panel.hide();
-    gameStats.come();
-  }, 3000);
+  // panel.come();
+  gameStats.come();
+  // setTimeout(() => {
+  //   panel.hide();
+  //   gameStats.come();
+  // }, 3000);
 };
 
 const renderPopups = (endGameStats, players, winner) => {

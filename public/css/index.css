@@ -105,6 +105,7 @@ body {
   box-shadow: 1px 1px 1px 0px black;
   text-align: center;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .theme-btn {
