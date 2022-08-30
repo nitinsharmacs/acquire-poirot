@@ -807,6 +807,7 @@ td {
   width: 100%;
   background-image: linear-gradient(rgb(28, 27, 27), rgb(57, 57, 57));
   margin-top: 1em;
+  flex: 1;
 }
 
 .bonuses tr {

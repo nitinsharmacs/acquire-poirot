@@ -81,14 +81,16 @@ const majorityMinorityStyle = (bonusType) => {
   }
 };
 
+const round = (num) => Math.round(num);
+
 const createBonuses = (cardDetails) => {
   return cardDetails.map(({ name, stock, bonusType, bonus, playerId }) =>
     [
       'tr', { 'data-player-id': playerId }, {},
       ['td', {}, {}, name],
-      ['td', {}, {}, `${stock}`],
+      ['td', {}, {}, `${stock ? stock : '-'}`],
       ['td', {}, {}, bonusType || '-'],
-      ['td', { style: `color: ${majorityMinorityStyle(bonusType)}` }, {}, `${bonus ? `$${bonus}` : '-'}`],
+      ['td', { style: `color: ${majorityMinorityStyle(bonusType)}` }, {}, `${bonus ? `$${round(bonus)}` : '-'}`],
     ]);
 };
 
@@ -152,13 +154,13 @@ const createCorporationCards = (players, activeCorporations) => {
 const createGameStats = (players, activeCorporations, winner) => {
   const gameStats = ['div', { class: 'end-game-stats' }, {},
     ['h2', {}, {}, `${winner.name} Won!`],
+    ['div', { style: 'text-align: center;padding:1em; display: inline-block;position: absolute;top:10px;right:10px;' }, {},
+      ['a', { class: 'btn theme-btn', href: '/' }, {}, 'Home']
+    ],
     createMoneyTable(sortPlayers([...players])),
     ['div', { class: 'corporation-cards' }, {},
       ...createCorporationCards(players, activeCorporations),
 
-    ],
-    ['div', { style: 'text-align: center;padding:1em;' }, {},
-      ['a', { class: 'btn theme-btn', href: '/' }, {}, 'Home']
     ]
   ];
 
@@ -177,12 +179,12 @@ const createGameStats = (players, activeCorporations, winner) => {
 const showEndGamePopup = (endGameStats, players, winner) => {
   const panel = gameOverPanel(winner);
   const gameStats = createGameStats(players, endGameStats, winner);
-  // panel.come();
-  gameStats.come();
-  // setTimeout(() => {
-  //   panel.hide();
-  //   gameStats.come();
-  // }, 3000);
+  panel.come();
+
+  setTimeout(() => {
+    panel.hide();
+    gameStats.come();
+  }, 3000);
 };
 
 const renderPopups = (endGameStats, players, winner) => {
