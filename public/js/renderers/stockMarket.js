@@ -115,12 +115,9 @@ const buySelectedStocks = () => {
   buyStocks(stocksToBuy(form));
 };
 
-const highlightStockMarket = (btnHolder) => {
-  const stockMarketElement = select('#stock-market');
+const highlightStockMarket = () => {
   const highlightComponent = select('.stock-market-component');
   highlight(highlightComponent);
-
-  // stockMarketElement.appendChild(btnHolder);
 };
 
 const attachStockSelectEvent = (corporations) => {
@@ -133,12 +130,12 @@ const attachStockSelectEvent = (corporations) => {
 };
 
 const highlightStockMarketToBuy = (game) => {
-  const btnHolderElement = createBtnHolder({
+  createBtnHolder({
     action: buySelectedStocks,
     skip: skipBuy,
     label: 'Buy'
   });
-  // highlightStockMarket(btnHolderElement);
+  highlightStockMarket();
 
   const canBeBoughtOf = game.availableToBuy();
   attachStockSelectEvent(game.corporations);
@@ -172,13 +169,13 @@ const attachSelectEvent = (corporations, onSelect) => {
 const highlightStockMarketToBuild = (tileId) => {
   let selectedId;
 
-  const btnHolderElement = createBtnHolder({
+  createBtnHolder({
     action: () => buildCorporation(tileId, selectedId),
     skip: skipBuild,
     label: 'Build'
   });
 
-  highlightStockMarket(btnHolderElement);
+  highlightStockMarket();
 
   const corporations = selectAll('.corporation');
   attachSelectEvent(corporations, (corporationId) => {
