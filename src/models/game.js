@@ -341,6 +341,10 @@ class Game {
     return this.#stage === 'end-game';
   }
 
+  isInBuyStage() {
+    return this.#stage === 'buy-stocks';
+  }
+
   isAnyCorporationActive() {
     return this.corporations.some(corporation => corporation.active);
   }

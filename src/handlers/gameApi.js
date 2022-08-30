@@ -110,6 +110,14 @@ const buyStocks = (req, res) => {
     body: { stocks }
   } = req;
 
+  if (!game.isInBuyStage()) {
+    res.status(422).json({
+      message: 'Stocks can not be bought',
+      data: { case: game.stage }
+    });
+    return;
+  }
+
   if (!isValidStockCount(stocks)) {
     res.status(422).json({
       message: 'Can buy maximum 3 stocks',

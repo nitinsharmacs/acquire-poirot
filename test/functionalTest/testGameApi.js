@@ -353,6 +353,7 @@ describe('POST /api/buy-stocks', () => {
 
   it('should buy stocks',
     (done) => {
+      game.buyStocksState();
       const corporation = game.findCorporation('america');
       corporation.active = true;
       corporation.tiles.push('1a', '1b');
@@ -370,6 +371,7 @@ describe('POST /api/buy-stocks', () => {
 
   it('should buy stocks for multiple corporations',
     (done) => {
+      game.buyStocksState();
       let corporation = game.findCorporation('america');
       corporation.active = true;
       corporation.tiles.push('1a', '1b');
