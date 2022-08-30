@@ -60,7 +60,7 @@ const serveLobby = (req, res) => {
 
   const game = req.app.games.find(id);
   if (!game) {
-    return res.status(404).render('gameNotFound');
+    return res.status(404).render('notFound');
   }
 
   const { host } = req.headers;
