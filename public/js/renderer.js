@@ -3,8 +3,9 @@ const renderLogs = ({ logs }) => {
   const logElement = document.querySelector('.logs');
 
   const logsHTML = logs.map(log => ['div', {}, {}, log]);
-
   logElement.replaceChildren(...createElements(logsHTML));
+
+  logElement.scrollTo(0, logElement.scrollHeight);
 };
 
 const selectDefunctStocks = () => {

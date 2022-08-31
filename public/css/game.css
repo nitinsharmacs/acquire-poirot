@@ -297,7 +297,7 @@
 /* PLAYERS ORDER -------------------------------------------- */
 .player-activities {
   display: flex;
-  height: 450px;
+  height: 418px;
   column-gap: var(--component-gap);
   position: relative;
 }
