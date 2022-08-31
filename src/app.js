@@ -24,10 +24,12 @@ const { serveGamePage,
 
 const { createAuthRouter } = require('./routers/authRoutes.js');
 const { createHostRouter } = require('./routers/hostRouter.js');
+const serveFavicon = require('serve-favicon');
 
 const createApp = (config) => {
   const { root, sessionKey, session, games, users } = config;
   const app = express();
+
   app.use(morgan('tiny'));
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
@@ -41,6 +43,7 @@ const createApp = (config) => {
       secret: sessionKey
     }
   ));
+  app.use(serveFavicon('public/favicon.ico'));
 
   // injecting games to app
   app.games = games;
@@ -56,6 +59,7 @@ const createApp = (config) => {
 
   app.get('/game', restrict, injectGame, gameStartRestriction, serveGamePage);
   app.use('/api', restrict, injectGame, apiRoutes);
+
   app.get('/how-to-play', restrict, serveInstructionPage);
 
   // only for developers
