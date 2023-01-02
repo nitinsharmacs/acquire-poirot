@@ -1,7 +1,8 @@
-## __ACQUIRE__
+## **ACQUIRE**
+
 <br>
 
-__ABOUT__
+**ABOUT**
 
 ---
 
@@ -9,93 +10,107 @@ __ABOUT__
 
 <br>
 
-__COMPONENTS OF GAME__
+**COMPONENTS OF GAME**
 
-* Land (board)
-* Corporations 
-* Tiles
-* Stock market
-* Shares
-* Money
-* Information card
-
-<br>
-
-__RULES__
-
-* At the beginning of the game, each player receives $6,000. 
-* To determine who plays first, each player draws one tile and places it in its matching square on the board.
-* The player who has drawn the lowest number-letter combination starts play and players will play in ascending order. 
-* Each player draws six tiles.
-
-* Each player’s turn consists of:
-
-    1. Play a tile onto the gameboard by putting it on its matching space.
-        * Depending upon where a tile is played, it may form a corporation or it may merge two or more corporations.
-
-    2. Buy stocks of any active corporations. There is a limit of three total per turn.
-
-    3. Draw a new tile from the facedown cluster.
-
-* Ending the game
-    When all active corporations are safe or one corporation has 41 or more tiles on the board.
-
+- Land (board)
+- Corporations
+- Tiles
+- Stock market
+- Shares
+- Money
+- Information card
 
 <br>
 
+**RULES**
 
-__INSTALLATION__
+- At the beginning of the game, each player receives $6,000.
+- To determine who plays first, each player draws one tile and places it in its matching square on the board.
+- The player who has drawn the lowest number-letter combination starts play and players will play in ascending order.
+- Each player draws six tiles.
+
+- Each player’s turn consists of:
+
+  1. Play a tile onto the gameboard by putting it on its matching space.
+
+     - Depending upon where a tile is played, it may form a corporation or it may merge two or more corporations.
+
+  2. Buy stocks of any active corporations. There is a limit of three total per turn.
+
+  3. Draw a new tile from the facedown cluster.
+
+- Ending the game
+  When all active corporations are safe or one corporation has 41 or more tiles on the board.
+
+<br>
+
+**INSTALLATION**
 
 ---
 
-  #### __clone the project__
+#### **clone the project**
 
-  ```
-  git clone https://github.com/step-8/acquire-poirot.git
-  ```
-  #### __Execute npm install command__
+```
+git clone https://github.com/step-8/acquire-poirot.git
+```
 
- ```
- npm install
- ```
+#### **Setting up environment**
 
- #### __Execute npm setup command__
- ```
- npm run setup
- ```
+Create `.env` file in the project root with following values
+
+```
+SESSION_KEY = "hello"
+# not required for redis running on localhost
+REDIS_HOST="url-to-redis-host"
+REDIS_PASS="password"
+REDIS_PORT="12861"
+REDIS_USER="user"
+```
+
+#### **Execute npm install command**
+
+```
+npm install
+```
+
+#### **Execute npm setup command**
+
+```
+npm run setup
+```
+
 <br>
 
-
-__RUN__ 
+**RUN**
 
 ---
 
-##### __GAME__
+##### **GAME**
 
-  #### __Execute npm start command to run the server__
+#### **Execute npm start command to run the server**
 
- ```
- npm start
- ```
+```
+npm start
+```
 
-##### __TEST__
+##### **TEST**
 
-  #### __Execute npm test command to run the tests__
+#### **Execute npm test command to run the tests**
 
 ```
  npm test
 ```
+
 <br>
 
-__VISIT HOMEPAGE__
+**VISIT HOMEPAGE**
 
 ---
 
+See the homepage on local machine :
 
-See the homepage on local machine : 
-    
-  step 1 : run the server 
-  
-  step 2 : visit http://localhost:8888/ 
+step 1 : run the server
+
+step 2 : visit http://localhost:8888/
 
 Or visit https://acquire-poirot.herokuapp.com/
