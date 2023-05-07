@@ -61,10 +61,7 @@ Create `.env` file in the project root with following values
 ```
 SESSION_KEY = "hello"
 # not required for redis running on localhost
-REDIS_HOST="url-to-redis-host"
-REDIS_PASS="password"
-REDIS_PORT="12861"
-REDIS_USER="user"
+REDIS_URL="redis_url"
 ```
 
 #### **Execute npm install command**
