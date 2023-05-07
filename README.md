@@ -110,4 +110,4 @@ step 1 : run the server
 
 step 2 : visit http://localhost:8888/
 
-Or visit https://acquire-poirot.herokuapp.com/
+Or visit https://acquire-qag2.onrender.com/
