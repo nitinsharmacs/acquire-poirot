@@ -9,25 +9,14 @@ const { RedisStore } = require('./src/models/redisStore.js');
 const { Users } = require('./src/models/users.js');
 const { UserStore } = require('./src/models/userStore.js');
 
-const {
-  NODE_ENV,
-  REDIS_HOST,
-  REDIS_PORT,
-  REDIS_USER,
-  REDIS_PASS
-} = process.env;
+const { REDIS_URL } = process.env;
 
-let url;
-if (NODE_ENV === 'production') {
-  url = `redis://${REDIS_USER}:${REDIS_PASS}@${REDIS_HOST}:${REDIS_PORT}`;
-}
-
-createClient(url)
+createClient(REDIS_URL)
   .then((client) => {
     const redisStore = new RedisStore(client);
     return {
       gameStore: new GameStore(redisStore),
-      userStore: new UserStore(redisStore)
+      userStore: new UserStore(redisStore),
     };
   })
   .then(({ gameStore, userStore }) => {
@@ -36,15 +25,13 @@ createClient(url)
       sessionKey: process.env.SESSION_KEY,
       session,
       games: new Games([], gameStore),
-      users: new Users(userStore)
+      users: new Users(userStore),
     };
   })
-  .then(appConfig => {
+  .then((appConfig) => {
     const app = createApp(appConfig);
     const port = process.env.PORT || 8888;
 
-    app.listen(port, () =>
-      console.log(`Listening on ${port}`));
+    app.listen(port, () => console.log(`Listening on ${port}`));
   })
-  .catch(err => console.error(err));
-
+  .catch((err) => console.error(err));
