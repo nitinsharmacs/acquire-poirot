@@ -51,7 +51,7 @@
 #### **clone the project**
 
 ```
-git clone https://github.com/step-8/acquire-poirot.git
+git clone https://github.com/nitinsharmacs/acquire-poirot.git
 ```
 
 #### **Setting up environment**
