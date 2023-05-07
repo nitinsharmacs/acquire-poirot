@@ -1,5 +1,6 @@
 ## **ACQUIRE**
 
+![Acquire Board](./screenshots/board.png)
 <br>
 
 **ABOUT**
